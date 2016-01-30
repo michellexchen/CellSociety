@@ -133,6 +133,9 @@ Methods:
 ###User Interface
 The user can start, stop, pause, resume, step forward, speed up and slow down rates, and switch the simulation (this involves loading a new xml file). User interaction will be handled entirely using buttons and input in the format of an XML file. XML file specifications include name of simulation represented, settings for global configuration parameters, grid dimensions, initial configuration of the states for the cells in the grid. Erroneous situations reported to the user include incorrectly formatted XML file input data and empty data.
 
+![Image of UI](https://github.com/duke-compsci308-spring2016/cellsociety_team12/blob/master/UI.jpg)
+
+
 ###Design Details
   The key components in our design are the Simulation class and the Cell class, which are both abstract. These classes house the logic for creating a grid of Cells, updating the state of the grid periodically, and displaying the state of the grid visually. These components were created because their behaviors are common to ANY grid simulation. They were made abstract because simulations could conceivably have lots of complex behaviors and specific rules that don’t apply to other simulations. 
 	For that reason, we created four subclasses of Simulation and Cell. The Simulation subclasses contain rules for updating their Cells, and the Cell subclasses contain fields and methods that are specific to those simulations. For example, SegregationCells have an isSatisfied criteria that does not apply to other simulations. 
