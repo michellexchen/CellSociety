@@ -11,6 +11,8 @@ Group 12: Colette Torres (cft6), Michelle Chen (mmc56), Saumya Jain (sj166)
 	This program aims to solve the problem of consistently simulating the behavior of various cellular automata in a way that is compatible with any simulation. From a design perspective this means that commonalities between simulations (such as the use of cells, periodic updating of these cells, and visual display of cells) will be the backbone of the program. The details of specific simulations will be encapsulated and passed to the “backbone” components, which will display those results to the user. The states of cells will be shared between the specific simulations and the central components that interact with the user, but the rules that control the states of cells will be encapsulated. 
 
 ###Overview
+![Image of UML](https://github.com/duke-compsci308-spring2016/cellsociety_team12/blob/master/UML.jpg)
+
 #####Classes
 Simulation class (abstract)
 * Fields
