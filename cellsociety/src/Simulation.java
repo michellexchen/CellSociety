@@ -25,9 +25,12 @@ public abstract class Simulation {
 		myCells = new Cell[gridSize][gridSize];
 		
 		myScene = new Scene(root);
-		initCells();
 		
 		return myScene; 
+	}
+	
+	public int getGridSize(){
+		return gridSize;
 	}
 	
 	public void initCells(){
@@ -49,6 +52,10 @@ public abstract class Simulation {
 			left += cellSize;
 		}
 		
+	}
+	
+	public Cell[][] getCells(){
+		return myCells;
 	}
 	
 	public void step(){
