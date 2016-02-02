@@ -6,21 +6,21 @@ import javafx.scene.shape.Rectangle;
 
 public abstract class Simulation {
 
-	private Cell[][] myCells;  //Every array in myCells is one COLUMN of cells
+	private GridCell[][] myGridCells;  //Every array in myGridCells is one COLUMN of GridCells
 	private Group root = new Group();
 	private Scene myScene;
 	
-	private int cellSize;
+	private int GridCellSize;
 	private int gridSize;
 	
-	public abstract void update(); //Calculates the NEW state for every cell, then sets current state to new state and new state to null, 
-	public abstract void updateColors(); //Changes the colors of cells based on their new state
+	public abstract void update(); //Calculates the NEW state for every GridCell, then sets current state to new state and new state to null, 
+	public abstract void updateColors(); //Changes the colors of GridCells based on their new state
 	
-	public Scene init(int size, int numCells ){
+	public Scene init(int size, int numGridCells ){
 		
-		cellSize = size/numCells;
-		gridSize = numCells;
-		myCells = new Cell[gridSize][gridSize];
+		GridCellSize = size/numGridCells;
+		gridSize = numGridCells;
+		myGridCells = new GridCell[gridSize][gridSize];
 		
 		myScene = new Scene(root);
 		
@@ -31,76 +31,76 @@ public abstract class Simulation {
 		return gridSize;
 	}
 	
-	public void initCells(){
+	public void initGridCells(){
 		int top = 0;
 		int left = 0;
 		
-		for(Cell[] c: myCells){
-			for(Cell d: c){
+		for(GridCell[] c: myGridCells){
+			for(GridCell d: c){
 				Rectangle temp = d.getMySquare();
 				temp.setX(left);
 				temp.setY(top);
-				temp.setWidth(cellSize);
-				temp.setHeight(cellSize);
+				temp.setWidth(GridCellSize);
+				temp.setHeight(GridCellSize);
 				temp.setFill(d.getMyColor());
 				root.getChildren().add(temp);
-				top += cellSize;
+				top += GridCellSize;
 			}
 			
-			left += cellSize;
+			left += GridCellSize;
 		}
 		
 	}
 	
-	public Cell[][] getCells(){
-		return myCells;
+	public GridCell[][] getGridCells(){
+		return myGridCells;
 	}
 	
 	public void step(){
 		update();
 		updateColors();
 		
-		for(Cell[] c: myCells){
-			for(Cell d: c){
+		for(GridCell[] c: myGridCells){
+			for(GridCell d: c){
 				Rectangle temp = d.getMySquare();
 				temp.setFill(d.getMyColor());	
 			}			
 		}	
 	}
 	
-	public ArrayList<Cell> getCardinalNeighbors(int x, int y){
+	public ArrayList<GridCell> getCardinalNeighbors(int x, int y){
 		
-		ArrayList<Cell> result = new ArrayList<Cell>();
+		ArrayList<GridCell> result = new ArrayList<GridCell>();
 		if(x > 0){
-			result.add(myCells[x-1][y]); //LEFT
+			result.add(myGridCells[x-1][y]); //LEFT
 		}
 		if(x < gridSize -1){
-			result.add(myCells[x+1][y]);//RIGHT
+			result.add(myGridCells[x+1][y]);//RIGHT
 		}
 		if(y > 0){
-			result.add(myCells[x][y-1]);//TOP
+			result.add(myGridCells[x][y-1]);//TOP
 		}
 		if(y < gridSize -1){
-			result.add(myCells[x][y+1]);
+			result.add(myGridCells[x][y+1]);
 		}
 		
 		return result;
 	}
 	
-	public ArrayList<Cell> getAllNeighbors(int x, int y){
-		ArrayList<Cell> result = getCardinalNeighbors(x,y);
+	public ArrayList<GridCell> getAllNeighbors(int x, int y){
+		ArrayList<GridCell> result = getCardinalNeighbors(x,y);
 		
 		if(x > 0 && y > 0){
-			result.add(myCells[x-1][y-1]); //top left
+			result.add(myGridCells[x-1][y-1]); //top left
 		}
 		if(x < gridSize-1 && y > 0){
-			result.add(myCells[x+1][y-1]); //top right
+			result.add(myGridCells[x+1][y-1]); //top right
 		}
 		if(x < gridSize-1 && y < gridSize-1){
-			result.add(myCells[x+1][y+1]); //bottom left
+			result.add(myGridCells[x+1][y+1]); //bottom left
 		}
 		if(x>0 && y < gridSize-1){
-			result.add(myCells[x-1][y+1]); //bottom right
+			result.add(myGridCells[x-1][y+1]); //bottom right
 		}
 		
 		return result;

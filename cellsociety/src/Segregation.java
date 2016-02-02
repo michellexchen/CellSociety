@@ -94,4 +94,10 @@ public class Segregation extends Simulation {
 		return empty;
 	}
 
+	@Override
+	public void updateColors() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
