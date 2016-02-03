@@ -36,7 +36,6 @@ public abstract class Simulation {
 		int top = 0;
 		int left = 0;
 		
-
 		for(GridCell[] c: myCells){
 			for(GridCell d: c){
 				Rectangle temp = d.getMySquare();
@@ -50,8 +49,7 @@ public abstract class Simulation {
 			}
 			
 			left += GridCellSize;
-		}
-		
+		}	
 	}
 
 	public void updateStates(){
@@ -84,16 +82,16 @@ public abstract class Simulation {
 		
 		ArrayList<GridCell> result = new ArrayList<GridCell>();
 		if(x > 0){
-			result.add(myGridCells[x-1][y]); //LEFT
+			result.add(myCells[x-1][y]); //LEFT
 		}
 		if(x < gridSize -1){
-			result.add(myGridCells[x+1][y]);//RIGHT
+			result.add(myCells[x+1][y]);//RIGHT
 		}
 		if(y > 0){
-			result.add(myGridCells[x][y-1]);//TOP
+			result.add(myCells[x][y-1]);//TOP
 		}
 		if(y < gridSize -1){
-			result.add(myGridCells[x][y+1]);
+			result.add(myCells[x][y+1]);
 		}
 		
 		return result;
@@ -103,16 +101,16 @@ public abstract class Simulation {
 		ArrayList<GridCell> result = getCardinalNeighbors(x,y);
 		
 		if(x > 0 && y > 0){
-			result.add(myGridCells[x-1][y-1]); //top left
+			result.add(myCells[x-1][y-1]); //top left
 		}
 		if(x < gridSize-1 && y > 0){
-			result.add(myGridCells[x+1][y-1]); //top right
+			result.add(myCells[x+1][y-1]); //top right
 		}
 		if(x < gridSize-1 && y < gridSize-1){
-			result.add(myGridCells[x+1][y+1]); //bottom left
+			result.add(myCells[x+1][y+1]); //bottom left
 		}
 		if(x>0 && y < gridSize-1){
-			result.add(myGridCells[x-1][y+1]); //bottom right
+			result.add(myCells[x-1][y+1]); //bottom right
 		}
 		
 		return result;

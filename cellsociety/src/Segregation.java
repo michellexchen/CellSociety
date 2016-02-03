@@ -4,8 +4,8 @@ import java.util.Random;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 
-
 public class Segregation extends Simulation {
+	
 	private final static double THRESHOLD = 0.30;
 	private final static int MY_POPULATION = 4;
 	private final static double PERCENT_GROUP1 = 0.25;
@@ -17,7 +17,6 @@ public class Segregation extends Simulation {
 	private ArrayList<GridCell> emptyCells;
 	
 	public Segregation() {
-		// TODO Auto-generated constructor stub
 		gridSize = 4;//getGridSize();
 		myGrid = getCells();
 	}
@@ -31,7 +30,7 @@ public class Segregation extends Simulation {
 		myScene = super.init(gridSize,gridSize);
 		
 		//choosing random coordinates for however many cells need to be populated (as determined by user)
-		HashMap<Integer,ArrayList<Integer>> randCoords = new HashMap<Integer,ArrayList<Integer>>(); 
+		HashMap<Integer,ArrayList<Integer>> randCoords = new HashMap<Integer,ArrayList<Integer>>();  //Maps a column integer (x) to a list of rows (y)
 		Random rnd = new Random();
 		while(population>0){
 			int x = rnd.nextInt(gridSize);
@@ -42,6 +41,7 @@ public class Segregation extends Simulation {
 					population--;
 				}
 			}
+			
 			ArrayList<Integer> ycoords = new ArrayList<Integer>();
 			ycoords.add(y);
 			randCoords.put(x, ycoords);
@@ -82,7 +82,7 @@ public class Segregation extends Simulation {
 			}
 		}
 
-		initCells();
+		super.initGridCells();
 		
 		return myScene;
 	}
