@@ -3,7 +3,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-public abstract class GridCell {
+public class GridCell {
 	
 	private Color myColor;
 	private Rectangle mySquare;
@@ -13,8 +13,6 @@ public abstract class GridCell {
 	public GridCell(String state) {
 		currState = state;
 	}
-
-	public abstract void changeColors(); //Changes colors of cells based on their NEW state
 	
 	public String getState(){
 		return currState;
