@@ -24,7 +24,7 @@ public class Segregation extends Simulation {
 		
 		HashMap<Integer,Integer> randCoords = new HashMap<Integer,Integer>();
 		Random rnd = new Random();
-		while(population>0){ //getting random coordinates
+		while(population>0){ 
 			int x = rnd.nextInt(gridSize);
 			int y = rnd.nextInt(gridSize);
 			if(randCoords.get(x)!=null){
@@ -33,7 +33,7 @@ public class Segregation extends Simulation {
 			population--; 
 		}
 		
-		for(Integer x: randCoords.keySet()){ //assigning half to group 1 and half to group 2
+		for(Integer x: randCoords.keySet()){ 
 			int y = randCoords.get(x);
 			if(rnd.nextInt()%2==0){
 				myGrid[x][y] = new SegregationCell("GROUP1");
@@ -43,7 +43,7 @@ public class Segregation extends Simulation {
 			}
 		}
 		
-		for(GridCell[] row: getCells()){ //assigning the rest of the cells as empty
+		for(GridCell[] row: getCells()){ 
 			for(GridCell c: row){
 				if(c==null){
 					c = new SegregationCell("EMPTY");
