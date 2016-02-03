@@ -2,11 +2,12 @@ import java.util.ArrayList;
 
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public abstract class Simulation {
 
-	private GridCell[][] myGridCells;  //Every array in myGridCells is one COLUMN of GridCells
+	private GridCell[][] myCells;  //Every array in myCells is one COLUMN of cells
 	private Group root = new Group();
 	private Scene myScene;
 	
@@ -17,10 +18,10 @@ public abstract class Simulation {
 	public abstract void updateColors(); //Changes the colors of GridCells based on their new state
 	
 	public Scene init(int size, int numGridCells ){
-		
+
 		GridCellSize = size/numGridCells;
 		gridSize = numGridCells;
-		myGridCells = new GridCell[gridSize][gridSize];
+		myCells = new GridCell[gridSize][gridSize];
 		
 		myScene = new Scene(root);
 		
@@ -35,7 +36,8 @@ public abstract class Simulation {
 		int top = 0;
 		int left = 0;
 		
-		for(GridCell[] c: myGridCells){
+
+		for(GridCell[] c: myCells){
 			for(GridCell d: c){
 				Rectangle temp = d.getMySquare();
 				temp.setX(left);
@@ -51,16 +53,26 @@ public abstract class Simulation {
 		}
 		
 	}
+
+	public void updateStates(){
+		for (int m = 0; m<gridSize; m++) {
+			for (int n = 0; n<gridSize; n++) {
+				GridCell curr = myCells[m][n];
+				curr.setState(curr.getNextState());
+				curr.setNextState(null);
+			}
+		}
+	}
 	
-	public GridCell[][] getGridCells(){
-		return myGridCells;
+	public GridCell[][] getCells(){
+		return myCells;
 	}
 	
 	public void step(){
 		update();
 		updateColors();
-		
-		for(GridCell[] c: myGridCells){
+
+		for(GridCell[] c: myCells){
 			for(GridCell d: c){
 				Rectangle temp = d.getMySquare();
 				temp.setFill(d.getMyColor());	
