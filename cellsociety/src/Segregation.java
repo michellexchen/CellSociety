@@ -2,14 +2,15 @@ import java.util.*;
 import java.util.Random;
 
 import javafx.scene.Scene;
+import javafx.scene.paint.Color;
 
 
 public class Segregation extends Simulation {
 	private final static double THRESHOLD = 0.30;
 	private final static int MY_POPULATION = 4;
-	private final static double PERCENT_GROUP1 = 0.5;
-	private final static double PERCENT_GROUP2 = 0.5;
-	static HashMap<Integer,ArrayList<Integer>> randCoords = new HashMap<Integer,ArrayList<Integer>>();
+	private final static double PERCENT_GROUP1 = 0.25;
+	private final static double PERCENT_GROUP2 = 0.75;
+	
 	private int gridSize;
 	private Scene myScene;
 	private GridCell[][] myGrid;
@@ -22,13 +23,15 @@ public class Segregation extends Simulation {
 	}
 	
 	public Scene init(){
+		//the variables below need to be implemented w parameters from XML
 		int population = MY_POPULATION; 
 		int popGroup1 = (int)(population*PERCENT_GROUP1);
 		int popGroup2 = (int)(population*PERCENT_GROUP2);
 		
-		//myScene = super.init(gridSize,gridSize);
+		myScene = super.init(gridSize,gridSize);
 		
-		//ArrayList<int[]> randCoords = new ArrayList<int[]>(); //make y list of ints 
+		//choosing random coordinates for however many cells need to be populated (as determined by user)
+		HashMap<Integer,ArrayList<Integer>> randCoords = new HashMap<Integer,ArrayList<Integer>>(); 
 		Random rnd = new Random();
 		while(population>0){
 			int x = rnd.nextInt(gridSize);
@@ -43,31 +46,42 @@ public class Segregation extends Simulation {
 			ycoords.add(y);
 			randCoords.put(x, ycoords);
 		}
-
 		
-		for(int i=0; i<randCoords.size(); i++){ 
-			int[] coord = randCoords.get(i);
+		//creating list of coordinate pairs to select from below (because too complicated to just get pair when the y coordinates are in a list)
+		ArrayList<int[]> coordList = new ArrayList<int[]>();
+		for(int x: randCoords.keySet()){
+			for(int y: randCoords.get(x)){
+				int[] coord = {x,y};
+				coordList.add(coord);
+			}
+		}
+
+		//distributing random coordinate pairs among both groups 
+		for(int i=0; i<coordList.size(); i++){ 
+			int[] coord = coordList.get(i);
 			int x = coord[0];
 			int y = coord[1];
 			
-			if(popGroup1>0){ //alternating between group1 and group2 
+			if(popGroup1>0){  
 				myGrid[x][y] = new GridCell("GROUP1");
 				popGroup1--;
 				continue;
 			}
-			myGrid[x][y] = new GridCell("GROUP1");
+			myGrid[x][y] = new GridCell("GROUP2");
 			
 		}
 		
-		for(GridCell[] row: getCells()){
-			for(GridCell c: row){
-				if(c==null){
-					c = new GridCell("EMPTY");
+		//populating the rest of the grid with empty cells
+		for(int x=0; x<gridSize; x++){
+			for(int y=0; y<gridSize; y++){
+				if(myGrid[x][y]==null){
+					GridCell c = new GridCell("EMPTY");
+					myGrid[x][y] = c;
 					emptyCells.add(c);
 				}
 			}
 		}
-		
+
 		initCells();
 		
 		return myScene;
@@ -75,17 +89,12 @@ public class Segregation extends Simulation {
 	
 	@Override
 	public void update(){
-		//go through entire grid and calculate satisfaction
-			//if satisfied: next state = satisfied; 
-			//if dissastisfied: next state = empty
-				//get random empty and change its state, update empty
-			//if empty: if next state != null, next state = empty;
 		for(int x=0; x<gridSize; x++){
 			for(int y=0; y<gridSize; y++){
-				GridCell currCell = myGrid[x][y];
-				String currState = currCell.getState();
+				GridCell cell = myGrid[x][y];
+				String currState = cell.getState();
 				if(currState=="EMPTY"){
-					emptyCells.add(currCell);
+					emptyCells.add(cell);
 				}
 				else{
 					ArrayList<GridCell> neighbors = getAllNeighbors(x,y);
@@ -95,16 +104,19 @@ public class Segregation extends Simulation {
 							num++;
 						}
 					}
-					if(num/neighbors.size()<THRESHOLD){ //make not magic number
+					if(num/neighbors.size()<THRESHOLD){ 
 						GridCell empty = getRandEmpty();
 						empty.setNextState(currState);
 					}
 				}
-				if(currCell.getNextState()!=null){
-					currCell.setNextState(currState);
+				if(cell.getNextState()!=null){
+					cell.setNextState(currState);
 				}
 			}
 		}
+		
+		//setting current state to next state and clearing next state
+		updateStates();
 	}
 	
 	private GridCell getRandEmpty(){
@@ -116,17 +128,22 @@ public class Segregation extends Simulation {
 
 	@Override
 	public void updateColors() {
-		// TODO Auto-generated method stub
+		for(int x=0; x<gridSize; x++){
+			for(int y=0; y<gridSize; y++){
+				GridCell cell = myGrid[x][y];
+				if(cell.getState()=="GROUP1"){
+					cell.setMyColor(Color.BLUE);
+				}
+				else if(cell.getState()=="GROUP2"){
+					cell.setMyColor(Color.RED);
+				}
+				else{
+					cell.setMyColor(Color.WHITE);
+				}
+			}
+		}
 		
 	}
 	
-	public static void main(String[] args){
-		Segregation test = new Segregation();
-		test.init();
-		for(int x: randCoords.keySet()){
-			System.out.print(x);
-			System.out.println(Arrays.toString(randCoords.get(x).toArray()));
-		}
-	}
 
 }
