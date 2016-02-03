@@ -6,7 +6,7 @@ import javafx.scene.shape.Rectangle;
 
 public abstract class Simulation {
 
-	private Cell[][] myCells;  //Every array in myCells is one COLUMN of cells
+	private GridCell[][] myCells;  //Every array in myCells is one COLUMN of cells
 	private Group root = new Group();
 	private Scene myScene;
 	
@@ -20,7 +20,7 @@ public abstract class Simulation {
 		
 		cellSize = size/numCells;
 		gridSize = numCells;
-		myCells = new Cell[gridSize][gridSize];
+		myCells = new GridCell[gridSize][gridSize];
 		
 		myScene = new Scene(root);
 		
@@ -35,8 +35,8 @@ public abstract class Simulation {
 		int top = 0;
 		int left = 0;
 		
-		for(Cell[] c: myCells){
-			for(Cell d: c){
+		for(GridCell[] c: myCells){
+			for(GridCell d: c){
 				Rectangle temp = d.getMySquare();
 				temp.setX(left);
 				temp.setY(top);
@@ -52,7 +52,7 @@ public abstract class Simulation {
 		
 	}
 	
-	public Cell[][] getCells(){
+	public GridCell[][] getCells(){
 		return myCells;
 	}
 	
@@ -60,17 +60,17 @@ public abstract class Simulation {
 		update();
 		updateColors();
 		
-		for(Cell[] c: myCells){
-			for(Cell d: c){
+		for(GridCell[] c: myCells){
+			for(GridCell d: c){
 				Rectangle temp = d.getMySquare();
 				temp.setFill(d.getMyColor());	
 			}			
 		}	
 	}
 	
-	public ArrayList<Cell> getCardinalNeighbors(int x, int y){
+	public ArrayList<GridCell> getCardinalNeighbors(int x, int y){
 		
-		ArrayList<Cell> result = new ArrayList<Cell>();
+		ArrayList<GridCell> result = new ArrayList<GridCell>();
 		if(x > 0){
 			result.add(myCells[x-1][y]); //LEFT
 		}
@@ -87,8 +87,8 @@ public abstract class Simulation {
 		return result;
 	}
 	
-	public ArrayList<Cell> getAllNeighbors(int x, int y){
-		ArrayList<Cell> result = getCardinalNeighbors(x,y);
+	public ArrayList<GridCell> getAllNeighbors(int x, int y){
+		ArrayList<GridCell> result = getCardinalNeighbors(x,y);
 		
 		if(x > 0 && y > 0){
 			result.add(myCells[x-1][y-1]); //top left

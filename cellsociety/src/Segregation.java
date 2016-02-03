@@ -2,9 +2,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
+import javafx.scene.Scene;
+
 
 public class Segregation extends Simulation {
-	private int threshold = .30;
+	private double threshold = 0.30;
 	private int population = 50;
 	private int gridSize;
 	private Scene myScene;
@@ -34,14 +36,14 @@ public class Segregation extends Simulation {
 		for(Integer x: randCoords.keySet()){
 			int y = randCoords.get(x);
 			if(rnd.nextInt()%2==0){
-				grid[x][y] = new SegregationCell("GROUP1");
+				myGrid[x][y] = new SegregationCell("GROUP1");
 			}
 			else{
-				grid[x][y] = new SegregationCell("GROUP2");
+				myGrid[x][y] = new SegregationCell("GROUP2");
 			}
 		}
 		
-		for(GridCell[] row: myCells){
+		for(GridCell[] row: getCells()){
 			for(GridCell c: row){
 				if(c==null){
 					c = new SegregationCell("EMPTY");
@@ -64,10 +66,10 @@ public class Segregation extends Simulation {
 			//if empty: if next state != null, next state = empty;
 		for(int x=0; x<gridSize; x++){
 			for(int y=0; y<gridSize; y++){
-				GridCell currCell = grid[x][y];
+				GridCell currCell = myGrid[x][y];
 				String currState = currCell.getState();
 				if(currState=="EMPTY"){
-					emptyCell.add(currCell);
+					emptyCells.add(currCell);
 				}
 				ArrayList<GridCell> neighbors = getAllNeighbors(x,y);
 				int num = 0;
@@ -76,11 +78,11 @@ public class Segregation extends Simulation {
 						num++;
 					}
 				}
-				if(!currState=="EMPTY" && num/8<threshold){ //make not magic number
+				if(currState!="EMPTY" && num/8<threshold){ //make not magic number
 					GridCell empty = getRandEmpty();
 					empty.setNextState(currState);
 				}
-				if(currCell.getNextState!=null){
+				if(currCell.getNextState()!=null){
 					currCell.setNextState(currState);
 				}
 			}
@@ -92,6 +94,12 @@ public class Segregation extends Simulation {
 		GridCell empty = emptyCells.get(rnd.nextInt(emptyCells.size()));
 		emptyCells.remove(empty);
 		return empty;
+	}
+
+	@Override
+	public void updateColors() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
