@@ -17,7 +17,7 @@ public class Main extends Application {
 		myStage  = gameStage;
 		myStage.setTitle("Simulation");
 		
-		myStage.setScene(currentSim.init(SIZE, SIZE));
+		myStage.setScene(currentSim.init(SIZE,SIZE));
 		myStage.show();
 				
 		KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY),
