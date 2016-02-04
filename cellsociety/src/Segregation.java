@@ -16,7 +16,7 @@ public class Segregation extends Simulation {
 	private ArrayList<GridCell> emptyCells;
 	private ArrayList<GridCell> nextEmpty = new ArrayList<GridCell>();
 	
-	public Segregation(int size, int numCells, int population, double group1, double group2, double threshold) {
+	public Segregation(int population, double group1, double group2, double threshold) {
 		myGrid = getCells();
 		myPopulation = population;
 		percentGroup1 = group1;

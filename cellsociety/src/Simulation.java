@@ -24,12 +24,6 @@ public abstract class Simulation {
 		gridSize = numGridCells;
 		gridCellSize = size/numGridCells;
 		myCells = new GridCell[gridSize][gridSize];
-		for(int x=0; x<gridSize; x++){
-			for(int y=0; y<gridSize; y++){
-				myCells[x][y].setX(x);
-				myCells[x][y].setY(y);
-			}
-		}
 		myScene = new Scene(root,size,size);
 		
 		return myScene; 
