@@ -23,7 +23,7 @@ public abstract class Simulation {
 		gridSize = numGridCells;
 		myCells = new GridCell[gridSize][gridSize];
 		
-		myScene = new Scene(root);
+		myScene = new Scene(root, size, size);
 		
 		return myScene; 
 	}
@@ -32,22 +32,20 @@ public abstract class Simulation {
 		return gridSize;
 	}
 	
-	public void initGridCells(){
+	public void initGridCells(){ //Puts grid cells into the Scene
 		int top = 0;
 		int left = 0;
 		
-		for(GridCell[] c: myCells){
-			for(GridCell d: c){
-				Rectangle temp = d.getMySquare();
-				temp.setX(left);
-				temp.setY(top);
-				temp.setWidth(GridCellSize);
-				temp.setHeight(GridCellSize);
+		for(int i = 0; i < this.gridSize; i++){
+			for(int j = 0; j < this.gridSize; j++){
+				GridCell d = myCells[i][j];
+				Rectangle temp = new Rectangle(left, top, GridCellSize, GridCellSize);
 				temp.setFill(d.getMyColor());
+				d.setMySquare(temp);
 				root.getChildren().add(temp);
 				top += GridCellSize;
 			}
-			
+			top = 0;
 			left += GridCellSize;
 		}	
 	}
@@ -114,5 +112,11 @@ public abstract class Simulation {
 		}
 		
 		return result;
+	}
+	public Scene getMyScene() {
+		return myScene;
+	}
+	public void setMyScene(Scene myScene) {
+		this.myScene = myScene;
 	}
 }

@@ -1,3 +1,6 @@
+//TODOS: 
+//Error - All cells are being updated to empty
+
 import java.util.*;
 import java.util.Random;
 
@@ -10,41 +13,36 @@ public class Segregation extends Simulation {
 	private final static int MY_POPULATION = 4;
 	private final static double PERCENT_GROUP1 = 0.25;
 	private final static double PERCENT_GROUP2 = 0.75;
+
+	private ArrayList<GridCell> emptyCells = new ArrayList<GridCell>();
 	
-	private int gridSize;
-	private Scene myScene;
-	private GridCell[][] myGrid;
-	private ArrayList<GridCell> emptyCells;
-	
-	public Segregation() {
-		gridSize = 4;//getGridSize();
-		myGrid = getCells();
-	}
-	
-	public Scene init(){
+	@Override
+	public Scene init(int size, int numGridCells){
+
 		//the variables below need to be implemented w parameters from XML
 		int population = MY_POPULATION; 
 		int popGroup1 = (int)(population*PERCENT_GROUP1);
 		int popGroup2 = (int)(population*PERCENT_GROUP2);
 		
-		myScene = super.init(gridSize,gridSize);
+		super.init(size,numGridCells);
 		
 		//choosing random coordinates for however many cells need to be populated (as determined by user)
 		HashMap<Integer,ArrayList<Integer>> randCoords = new HashMap<Integer,ArrayList<Integer>>();  //Maps a column integer (x) to a list of rows (y)
 		Random rnd = new Random();
 		while(population>0){
-			int x = rnd.nextInt(gridSize);
-			int y = rnd.nextInt(gridSize);
+			int x = rnd.nextInt(super.getGridSize());
+			int y = rnd.nextInt(super.getGridSize());
 			if(randCoords.keySet().contains(x)){
 				if(!randCoords.get(x).contains(y)){
 					randCoords.get(x).add(y);
-					population--;
 				}
 			}
-			
+						
 			ArrayList<Integer> ycoords = new ArrayList<Integer>();
 			ycoords.add(y);
 			randCoords.put(x, ycoords);
+			population--;
+
 		}
 		
 		//creating list of coordinate pairs to select from below (because too complicated to just get pair when the y coordinates are in a list)
@@ -55,6 +53,15 @@ public class Segregation extends Simulation {
 				coordList.add(coord);
 			}
 		}
+		
+		//populating the entire grid with empty cells at first
+		for(int x=0; x<super.getGridSize(); x++){
+			for(int y=0; y<super.getGridSize(); y++){
+					GridCell c = new GridCell("EMPTY", Color.GRAY);
+					getCells()[x][y] = c;
+					emptyCells.add(c);
+			}
+		}
 
 		//distributing random coordinate pairs among both groups 
 		for(int i=0; i<coordList.size(); i++){ 
@@ -63,35 +70,24 @@ public class Segregation extends Simulation {
 			int y = coord[1];
 			
 			if(popGroup1>0){  
-				myGrid[x][y] = new GridCell("GROUP1");
+				super.getCells()[x][y] = new GridCell("GROUP1", Color.BLUE);
 				popGroup1--;
 				continue;
 			}
-			myGrid[x][y] = new GridCell("GROUP2");
-			
+			getCells()[x][y] = new GridCell("GROUP2", Color.RED);
 		}
 		
-		//populating the rest of the grid with empty cells
-		for(int x=0; x<gridSize; x++){
-			for(int y=0; y<gridSize; y++){
-				if(myGrid[x][y]==null){
-					GridCell c = new GridCell("EMPTY");
-					myGrid[x][y] = c;
-					emptyCells.add(c);
-				}
-			}
-		}
-
 		super.initGridCells();
 		
-		return myScene;
+		return super.getMyScene();
 	}
 	
 	@Override
 	public void update(){
-		for(int x=0; x<gridSize; x++){
-			for(int y=0; y<gridSize; y++){
-				GridCell cell = myGrid[x][y];
+		
+		for(int x=0; x<super.getGridSize(); x++){
+			for(int y=0; y<super.getGridSize(); y++){
+				GridCell cell = getCells()[x][y];
 				String currState = cell.getState();
 				if(currState=="EMPTY"){
 					emptyCells.add(cell);
@@ -107,9 +103,10 @@ public class Segregation extends Simulation {
 					if(num/neighbors.size()<THRESHOLD){ 
 						GridCell empty = getRandEmpty();
 						empty.setNextState(currState);
+						cell.setNextState("EMPTY");
 					}
 				}
-				if(cell.getNextState()!=null){
+				if(cell.getNextState()==null){
 					cell.setNextState(currState);
 				}
 			}
@@ -129,9 +126,9 @@ public class Segregation extends Simulation {
 	@Override
 	public void updateColors() {
 
-		for(int x=0; x<gridSize; x++){
-			for(int y=0; y<gridSize; y++){
-				GridCell cell = myGrid[x][y];
+		for(int x=0; x<super.getGridSize(); x++){
+			for(int y=0; y<super.getGridSize(); y++){
+				GridCell cell = getCells()[x][y];
 				if(cell.getState()=="GROUP1"){
 					cell.setMyColor(Color.BLUE);
 				}
@@ -139,7 +136,7 @@ public class Segregation extends Simulation {
 					cell.setMyColor(Color.RED);
 				}
 				else{
-					cell.setMyColor(Color.WHITE);
+					cell.setMyColor(Color.GRAY);
 				}
 			}
 		}

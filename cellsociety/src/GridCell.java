@@ -4,13 +4,14 @@ import javafx.scene.shape.Rectangle;
 
 public class GridCell {
 	
-	private Color myColor;
+	private Color myColor = Color.BLACK;
 	private Rectangle mySquare;
 	private String currState;
 	private String nextState;
 	
-	public GridCell(String state) {
+	public GridCell(String state, Color color) {
 		currState = state;
+		myColor = color;
 	}
 	
 	public String getState(){
@@ -39,6 +40,10 @@ public class GridCell {
 	
 	public void setMyColor(Color myColor) {
 		this.myColor = myColor;
+	}
+
+	public void setMySquare(Rectangle mySquare) {
+		this.mySquare = mySquare;
 	}
 
 }
