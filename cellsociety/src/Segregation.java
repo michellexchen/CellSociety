@@ -22,13 +22,13 @@ public class Segregation extends Simulation {
 		percentGroup1 = group1;
 		percentGroup2 = group2;
 		myThreshold = threshold;
-		//emptyCells = getEmptyCells();
+		emptyCells = getEmptyCells();
 	}
 	
 	@Override
 	public Scene init(int size, int numGridCells){
 		super.init(size,numGridCells);
-		//randomInit(myGrid, myPopulation, percentGroup1, percentGroup2, "GROUP1", "GROUP2",Color.RED, Color.BLUE, Color.GRAY); //use constants, not these magic strings
+		randomInit(myGrid, myPopulation, percentGroup1, percentGroup2, "GROUP1", "GROUP2",Color.RED, Color.BLUE, Color.GRAY); //use constants, not these magic strings
 		initGridCells();
 		return super.getMyScene();
 	}
