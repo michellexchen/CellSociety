@@ -10,7 +10,7 @@ public class Main extends Application {
 	private final int MILLISECOND_DELAY = 1000/2;
 	private Stage myStage;
 	private final int SIZE = 800;
-	private final int NUMCELLS = 20;
+	private final int NUMCELLS = 100;
 	private Simulation currentSim = new Segregation();
 	
 	@Override
