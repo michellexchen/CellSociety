@@ -7,17 +7,18 @@ import javafx.util.Duration;
 
 public class Main extends Application {
 
-	private final int MILLISECOND_DELAY = 1000/60;
+	private final int MILLISECOND_DELAY = 1000/2;
 	private Stage myStage;
 	private final int SIZE = 800;
-	private Simulation currentSim;
+	private final int NUMCELLS = 100;
+	private Simulation currentSim = new Segregation(5000,0.25,0.75,0.50);
 	
 	@Override
 	public void start(Stage gameStage) {
 		myStage  = gameStage;
 		myStage.setTitle("Simulation");
 		
-		myStage.setScene(currentSim.init(SIZE, SIZE));
+		myStage.setScene(currentSim.init(SIZE, NUMCELLS));
 		myStage.show();
 				
 		KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY),

@@ -1,7 +1,7 @@
 import java.util.ArrayList;
-
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
+
 
 public class Fire extends Simulation {
 	private final static double probCatch = .2;
