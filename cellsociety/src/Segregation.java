@@ -7,84 +7,29 @@ import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 
 public class Segregation extends Simulation {
-	
-	private final static double THRESHOLD = 0.50;
-	private final static int MY_POPULATION = 5000;
-	private final static double PERCENT_GROUP1 = 0.25;
-	private final static double PERCENT_GROUP2 = 0.75;
-
-	private ArrayList<GridCell> emptyCells = new ArrayList<GridCell>();
+	private int myPopulation;
+	private double percentGroup1;
+	private double percentGroup2;
+	private double myThreshold;
+	private Scene myScene;
+	private GridCell[][] myGrid;
+	private ArrayList<GridCell> emptyCells;
 	private ArrayList<GridCell> nextEmpty = new ArrayList<GridCell>();
+	
+	public Segregation(int population, double group1, double group2, double threshold) {
+		myGrid = getCells();
+		myPopulation = population;
+		percentGroup1 = group1;
+		percentGroup2 = group2;
+		myThreshold = threshold;
+		emptyCells = getEmptyCells();
+	}
 	
 	@Override
 	public Scene init(int size, int numGridCells){
-
-		//the variables below need to be implemented w parameters from XML
-		int population = MY_POPULATION; 
-		int popGroup1 = (int)(population*PERCENT_GROUP1);
-		int popGroup2 = (int)(population*PERCENT_GROUP2);
-		
 		super.init(size,numGridCells);
-		
-		//choosing random coordinates for however many cells need to be populated (as determined by user)
-		HashMap<Integer,ArrayList<Integer>> randCoords = new HashMap<Integer,ArrayList<Integer>>();  //Maps a column integer (x) to a list of rows (y)
-		Random rnd = new Random();
-		while(population>0){
-			int x = rnd.nextInt(super.getGridSize());
-			int y = rnd.nextInt(super.getGridSize());
-			
-			if(randCoords.keySet().contains(x)){
-				if(!randCoords.get(x).contains(y)){
-					randCoords.get(x).add(y);
-					population--;
-				}
-				continue;
-			}
-						
-			ArrayList<Integer> ycoords = new ArrayList<Integer>();
-			ycoords.add(y);
-			randCoords.put(x, ycoords);
-			population--;
-		}
-		
-		//creating list of coordinate pairs to select from below (because too complicated to just get pair when the y coordinates are in a list)
-		ArrayList<int[]> coordList = new ArrayList<int[]>();
-		for(int x: randCoords.keySet()){
-			for(int y: randCoords.get(x)){
-				int[] coord = {x,y};
-				coordList.add(coord);
-			}
-		}
-
-		Collections.shuffle(coordList);
-		//distributing random coordinate pairs among both groups 
-		for(int i=0; i<coordList.size(); i++){ 
-			int[] coord = coordList.get(i);
-			int x = coord[0];
-			int y = coord[1];
-			
-			if(popGroup1>0){  
-				GridCell temp = new GridCell("GROUP1", Color.BLUE);
-				super.getCells()[x][y] = temp;
-				popGroup1--;
-				continue;
-			}
-			 GridCell temp= new GridCell("GROUP2", Color.RED);
-			 getCells()[x][y] = temp;
-		}
-		
-		//populating the entire grid with empty cells at first
-		for(int x=0; x<super.getGridSize(); x++){
-			for(int y=0; y<super.getGridSize(); y++){
-				if(getCells()[x][y] == null){	
-					GridCell c = new GridCell("EMPTY", Color.GRAY);
-					getCells()[x][y] = c;
-					emptyCells.add(c);
-				}	
-			}
-		}
-		super.initGridCells();
-		
+		randomInit(myGrid, myPopulation, percentGroup1, percentGroup2, "GROUP1", "GROUP2",Color.RED, Color.BLUE, Color.GRAY); //use constants, not these magic strings
+		initGridCells();
 		return super.getMyScene();
 	}
 	
@@ -111,7 +56,7 @@ public class Segregation extends Simulation {
 							numDiff++;
 						}
 					}
-					if(numSame/(numSame+numDiff)<THRESHOLD){ //if not satisfied and can move, move
+					if(numSame/(numSame+numDiff)<myThreshold){ //if not satisfied and can move, move
 						GridCell empty = getRandEmpty();
 						if(empty != null){
 							empty.setNextState(currState);
@@ -145,7 +90,6 @@ public class Segregation extends Simulation {
 
 	@Override
 	public void updateColors() {
-
 		for(int x=0; x<super.getGridSize(); x++){
 			for(int y=0; y<super.getGridSize(); y++){
 				GridCell cell = getCells()[x][y];
@@ -167,5 +111,4 @@ public class Segregation extends Simulation {
 		}
 	}	
 }		
-	
 	
