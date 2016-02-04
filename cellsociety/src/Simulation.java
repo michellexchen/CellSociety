@@ -134,15 +134,6 @@ public abstract class Simulation {
 		}
 	}
 	
-	public void updateStates(){
-		for (int m = 0; m<gridSize; m++) {
-			for (int n = 0; n<gridSize; n++) {
-				GridCell curr = myCells[m][n];
-				curr.setState(curr.getNextState());
-				curr.setNextState(null);
-			}
-		}
-	}
 	
 	public GridCell[][] getCells(){
 		return myCells;
