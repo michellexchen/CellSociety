@@ -11,7 +11,7 @@ public class Main extends Application {
 	private Stage myStage;
 	private final int SIZE = 800;
 	private final int NUMCELLS = 100;
-	private Simulation currentSim = new Segregation();
+	private Simulation currentSim = new Life();
 	
 	@Override
 	public void start(Stage gameStage) {

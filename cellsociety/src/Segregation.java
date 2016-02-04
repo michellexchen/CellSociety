@@ -8,7 +8,7 @@ import javafx.scene.paint.Color;
 
 public class Segregation extends Simulation {
 	
-	private final static double THRESHOLD = 0.50;
+	private final static double THRESHOLD = 0.7;
 	private final static int MY_POPULATION = 5000;
 	private final static double PERCENT_GROUP1 = 0.25;
 	private final static double PERCENT_GROUP2 = 0.75;
@@ -73,7 +73,7 @@ public class Segregation extends Simulation {
 			 getCells()[x][y] = temp;
 		}
 		
-		//populating the entire grid with empty cells at first
+		//populating the rest of the grid with empty cells
 		for(int x=0; x<super.getGridSize(); x++){
 			for(int y=0; y<super.getGridSize(); y++){
 				if(getCells()[x][y] == null){	
