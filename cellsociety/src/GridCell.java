@@ -9,7 +9,7 @@ public class GridCell {
 	private Rectangle mySquare;
 	private String currState;
 	private String nextState;
-	private int[] myCoordinates;
+	private int[] myCoordinates = new int[2];
 	
 	public GridCell(String state, Color color) {
 		currState = state;

@@ -15,11 +15,7 @@ public class Predator extends Simulation {
 	private int sharkDieTime;
 	private int fishBreedTime;
 	
-	public Predator(int size, int numCells, int fishBreed, int sharkBreed, int sharkDie, int population, double fish, double shark) {
-		myGrid = getCells();
-		gridSize = super.getGridSize();
-		breedGrid = new int[gridSize][gridSize];
-		dieGrid = new int[gridSize][gridSize];
+	public Predator(int fishBreed, int sharkBreed, int sharkDie, int population, double fish, double shark) {
 		myPopulation = population;
 		percentFish = fish;
 		percentShark = shark;
@@ -31,8 +27,12 @@ public class Predator extends Simulation {
 	@Override
 	public Scene init(int size, int numCells){
 		myScene = super.init(size,numCells);
-		randomInit(myGrid, myPopulation, percentFish, percentShark, "FISH", "SHARK", Color.GREEN, Color.GREEN, Color.BLUE); //make not magic strings
+		gridSize = super.getGridSize();
+		breedGrid = new int[gridSize][gridSize];
+		dieGrid = new int[gridSize][gridSize];
+		randomInit(myGrid, myPopulation, percentFish, percentShark, "FISH", "SHARK", Color.GREEN, Color.YELLOW, Color.BLUE); //make not magic strings
 		initGridCells();
+		myGrid = getCells();
 		return myScene;
 	}
 
@@ -41,7 +41,7 @@ public class Predator extends Simulation {
 		updateEmpty();
 		updateSharks();
 		updateFish();
-
+		updateStates();
 	}
 	
 	private void updateEmpty(){
@@ -57,11 +57,13 @@ public class Predator extends Simulation {
 	private void updateSharks(){
 		for(int x=0; x<gridSize; x++){
 			for(int y=0; y<gridSize; y++){
+				System.out.println("fail");
 				if(myGrid[x][y].getState()=="SHARK"){
 					ArrayList<GridCell> neighbors = getCardinalNeighbors(x,y);
 					ArrayList<GridCell> emptyNeighbors = getSpecialNeighbors(neighbors,"EMPTY");
 					ArrayList<GridCell> fishNeighbors = getSpecialNeighbors(neighbors,"FISH");
 					if(fishNeighbors.size()>0){
+						System.out.println("fail");
 						eatFish(x,y,emptyNeighbors,fishNeighbors);
 					}
 					else if(dieGrid[x][y]+1==sharkDieTime){
