@@ -11,19 +11,19 @@ public abstract class Simulation {
 	private Group root = new Group();
 	private Scene myScene;
 	
-	private int cellSize;
+	private int GridCellSize;
 	private int gridSize;
 	
-	public abstract void update(); //Calculates the NEW state for every cell, then sets current state to new state and new state to null, 
-	public abstract void updateColors(); //Changes the colors of cells based on their new state
+	public abstract void update(); //Calculates the NEW state for every GridCell, then sets current state to new state and new state to null, 
+	public abstract void updateColors(); //Changes the colors of GridCells based on their new state
 	
-	public Scene init(int size, int numCells ){
-		
-		cellSize = size/numCells;
-		gridSize = numCells;
+	public Scene init(int size, int numGridCells ){
+
+		GridCellSize = size/numGridCells;
+		gridSize = numGridCells;
 		myCells = new GridCell[gridSize][gridSize];
 		
-		myScene = new Scene(root);
+		myScene = new Scene(root, size, size);
 		
 		return myScene; 
 	}
@@ -32,27 +32,24 @@ public abstract class Simulation {
 		return gridSize;
 	}
 	
-	public void initCells(){
+	public void initGridCells(){ //Puts grid cells into the Scene
 		int top = 0;
 		int left = 0;
 		
-		for(GridCell[] c: myCells){
-			for(GridCell d: c){
-				Rectangle temp = d.getMySquare();
-				temp.setX(left);
-				temp.setY(top);
-				temp.setWidth(cellSize);
-				temp.setHeight(cellSize);
+		for(int i = 0; i < this.gridSize; i++){
+			for(int j = 0; j < this.gridSize; j++){
+				GridCell d = myCells[i][j];
+				Rectangle temp = new Rectangle(left, top, GridCellSize, GridCellSize);
 				temp.setFill(d.getMyColor());
+				d.setMySquare(temp);
 				root.getChildren().add(temp);
-				top += cellSize;
+				top += GridCellSize;
 			}
-			
-			left += cellSize;
-		}
-		
+			top = 0;
+			left += GridCellSize;
+		}	
 	}
-	
+
 	public void updateStates(){
 		for (int m = 0; m<gridSize; m++) {
 			for (int n = 0; n<gridSize; n++) {
@@ -63,6 +60,7 @@ public abstract class Simulation {
 		}
 	}
 	
+	
 	public GridCell[][] getCells(){
 		return myCells;
 	}
@@ -70,7 +68,7 @@ public abstract class Simulation {
 	public void step(){
 		update();
 		updateColors();
-		
+
 		for(GridCell[] c: myCells){
 			for(GridCell d: c){
 				Rectangle temp = d.getMySquare();
@@ -115,5 +113,11 @@ public abstract class Simulation {
 		}
 		
 		return result;
+	}
+	public Scene getMyScene() {
+		return myScene;
+	}
+	public void setMyScene(Scene myScene) {
+		this.myScene = myScene;
 	}
 }
