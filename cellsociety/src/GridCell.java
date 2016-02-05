@@ -15,6 +15,11 @@ public class GridCell {
 		myColor = color;
 	}
 	
+	public GridCell(String state, Color color, int x, int y){
+		this(state, color);
+		myCoordinates[0] = x;
+		myCoordinates[1] = y;
+	}
 	public String getState(){
 		return currState;
 	}
