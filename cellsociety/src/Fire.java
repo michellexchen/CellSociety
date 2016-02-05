@@ -4,19 +4,24 @@ import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 
 public class Fire extends Simulation {
-	private double probCatch;
+	private double myProbCatch;
 	private int gridSize;
+	private int myNumCells;
+	private int mySize;
 	private Scene myScene;
+	private GridCell[][] myCells;
 	private static final String TITLE = "Fire";
 	
-	public Fire(double pc) {
+	public Fire(double probCatch, int numCells, int size) {
 		super(TITLE);
-		probCatch = pc;
+		myProbCatch = probCatch;
+		myNumCells = numCells;
+		mySize = size;
 	}
 
 	
-	public Scene init(int size, int numCells){
-		super.init(size,numCells);
+	public Scene init(){
+		super.init(mySize,myNumCells);
 		myCells = super.getCells();
 		gridSize = super.getGridSize();
 		//fill
@@ -63,7 +68,7 @@ public class Fire extends Simulation {
 						blah.add(cell.getState());
 					}
 					if (blah.contains("BURNING")) {
-						if (Math.random()<probCatch) {
+						if (Math.random()<myProbCatch) {
 							curr.setNextState("BURNING");
 						}
 						else {
