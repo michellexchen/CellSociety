@@ -7,8 +7,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public abstract class Simulation {
-
-	private GridCell[][] myCells;  //Every array in myCells is one COLUMN of cells
+	//made gridcell public
+	public GridCell[][] myCells;  //Every array in myCells is one COLUMN of cells
 	private Group root = new Group();
 	private Scene myScene;
 
