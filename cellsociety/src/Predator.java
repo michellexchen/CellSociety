@@ -48,14 +48,14 @@ public class Predator extends Simulation {
 			}
 			System.out.println();
 		}
-		/*
+		System.out.println();
 		for(int i=0; i<gridSize; i++){
 			for(int j=0; j<gridSize; j++){
 				System.out.print(breedGrid[i][j]);
 			}
 			System.out.println();
 		}
-		*/
+		
 		updateEmpty();
 		updateSharks();
 		/*
