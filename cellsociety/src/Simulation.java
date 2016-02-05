@@ -71,12 +71,12 @@ public abstract class Simulation {
 			int y = coord[1];
 			
 			if(popGroup1>0){  
-				GridCell temp = new GridCell(type1, color1);
+				GridCell temp = new GridCell(type1, color1, x, y);
 				myCells[x][y] = temp;
 				popGroup1--;
 				continue;
 			}
-			 GridCell temp= new GridCell(type2, color2);
+			 GridCell temp= new GridCell(type2, color2, x, y);
 			 getCells()[x][y] = temp;
 		}
 		
@@ -84,7 +84,7 @@ public abstract class Simulation {
 		for(int x=0; x<gridSize; x++){
 			for(int y=0; y<gridSize; y++){
 				if(getCells()[x][y] == null){	
-					GridCell c = new GridCell("EMPTY", empty);
+					GridCell c = new GridCell("EMPTY", empty, x, y);
 					getCells()[x][y] = c;
 					emptyCells.add(c);
 				}	
@@ -146,7 +146,6 @@ public abstract class Simulation {
 	}
 	
 	public ArrayList<GridCell> getCardinalNeighbors(int x, int y){
-		
 		ArrayList<GridCell> result = new ArrayList<GridCell>();
 		if(x > 0){
 			result.add(myCells[x-1][y]); //LEFT
@@ -160,13 +159,14 @@ public abstract class Simulation {
 		if(y < gridSize -1){
 			result.add(myCells[x][y+1]);
 		}
-		
+		System.out.println();
 		return result;
 	}
 	
 	public ArrayList<GridCell> getAllNeighbors(int x, int y){
 		ArrayList<GridCell> result = getCardinalNeighbors(x,y);
-		
+
+		System.out.println();
 		if(x > 0 && y > 0){
 			result.add(myCells[x-1][y-1]); //top left
 		}

@@ -9,11 +9,12 @@ public class GridCell {
 	private Rectangle mySquare;
 	private String currState;
 	private String nextState;
-	private int[] myCoordinates = new int[2];
+	private int[] myCoordinates;
 	
-	public GridCell(String state, Color color) {
+	public GridCell(String state, Color color, int x, int y) {
 		currState = state;
 		myColor = color;
+		myCoordinates = new int[]{x,y};
 	}
 	
 	public String getState(){
