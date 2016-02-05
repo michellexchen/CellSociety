@@ -16,11 +16,10 @@ public class Main extends Application {
 	@Override
 	public void start(Stage gameStage) {
 		myStage  = gameStage;
-		myStage.setTitle("Simulation");
+		myStage.setTitle("Fire");
 		
 		myStage.setScene(currentSim.init(SIZE, NUMCELLS));
 		myStage.show();
-				
 		KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY),
                 e -> currentSim.step());
 		Timeline animation = new Timeline();

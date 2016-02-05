@@ -20,13 +20,13 @@ public class Fire extends Simulation {
 		for (int a = 0; a<gridSize; a++) { //row
 			for (int b = 0; b<gridSize; b++) {
 				if (a == (gridSize-1)/2&& b == (gridSize-1)/2) {
-					myCells[a][b] = new GridCell("BURNING", Color.RED);
+					myCells[a][b] = new GridCell("BURNING", Color.RED,a,b);
 				}
 				else if (a == 0 || b == 0 || a == gridSize-1 || b == gridSize-1){
-					myCells[a][b] = new GridCell("EMPTY", Color.YELLOW);
+					myCells[a][b] = new GridCell("EMPTY", Color.YELLOW,a,b);
 				}
 				else {
-					myCells[a][b] = new GridCell("TREE", Color.GREEN);
+					myCells[a][b] = new GridCell("TREE", Color.GREEN,a,b);
 				}
 			}
 		}
