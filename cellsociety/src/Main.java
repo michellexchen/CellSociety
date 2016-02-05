@@ -13,7 +13,7 @@ public class Main extends Application {
 	private final int SIZE = 800;
 
 	private final int NUMCELLS = 100;
-	private Simulation currentSim = new Predator(3,6,2,200,0.75,0.25);//new Segregation(5000,0.25,0.75,0.50);
+	private Simulation currentSim = new XMLReader("predator.txt").getSimulation();//new Predator(3,6,2,200,0.75,0.25);//new Segregation(5000,0.25,0.75,0.50);
 	private Timeline animation;
 	
 	@Override

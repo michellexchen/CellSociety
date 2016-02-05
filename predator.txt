@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<predator>
+	<fishbreed>2</fishbreed>
+	<sharkbreed>2</sharkbreed>
+	<sharkdie>3</sharkdie>
+	<population>200</population>
+	<fishpercent>0.5</fishpercent>
+	<sharkpercent>0.5</sharkpercent>
+</predator>
