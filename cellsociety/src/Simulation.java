@@ -11,11 +11,12 @@ public abstract class Simulation {
 	private GridCell[][] myCells;  //Every array in myCells is one COLUMN of cells
 	private Group root = new Group();
 	private Scene myScene;
-	
+
 	private int gridCellSize;
 	private int gridSize;
 	
 	private ArrayList<GridCell> emptyCells = new ArrayList<GridCell>();
+	private Color EMPTYCOLOR = Color.GRAY;
 	
 	public abstract void update(); //Calculates the NEW state for every cell, then sets current state to new state and new state to null, 
 	public abstract void updateColors(); //Changes the colors of cells based on their new state
@@ -76,16 +77,21 @@ public abstract class Simulation {
 				popGroup1--;
 				continue;
 			}
+			
 			 GridCell temp= new GridCell(type2, color2, x, y);
+
 			 getCells()[x][y] = temp;
 		}
 		
-		//populating the entire grid with empty cells at first
+		initEmpty();
+	}
+	public void initEmpty(){
+		//populating the rest of the grid with empty cells
 		for(int x=0; x<gridSize; x++){
 			for(int y=0; y<gridSize; y++){
 				if(getCells()[x][y] == null){	
-					GridCell c = new GridCell("EMPTY", empty, x, y);
-					getCells()[x][y] = c;
+					GridCell c = new GridCell("EMPTY", EMPTYCOLOR, x, y);
+					myCells[x][y] = c;
 					emptyCells.add(c);
 				}	
 			}
@@ -116,9 +122,8 @@ public abstract class Simulation {
 			top = 0;
 			left += gridCellSize;
 		}	
-		
 	}
-	
+
 	public void updateStates(){
 		for (int m = 0; m<gridSize; m++) {
 			for (int n = 0; n<gridSize; n++) {
@@ -129,6 +134,7 @@ public abstract class Simulation {
 		}
 	}
 	
+	
 	public GridCell[][] getCells(){
 		return myCells;
 	}
@@ -136,7 +142,7 @@ public abstract class Simulation {
 	public void step(){
 		update();
 		updateColors();
-		
+
 		for(GridCell[] c: myCells){
 			for(GridCell d: c){
 				Rectangle temp = d.getMySquare();
@@ -180,5 +186,11 @@ public abstract class Simulation {
 		}
 		
 		return result;
+	}
+	public Scene getMyScene() {
+		return myScene;
+	}
+	public void setMyScene(Scene myScene) {
+		this.myScene = myScene;
 	}
 }

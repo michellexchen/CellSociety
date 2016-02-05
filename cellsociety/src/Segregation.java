@@ -1,17 +1,17 @@
+//TODOS: 
+//Error - All cells are being updated to empty
+
 import java.util.*;
-import java.util.Random;
 
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 
-
 public class Segregation extends Simulation {
+
 	private int myPopulation;
 	private double percentGroup1;
 	private double percentGroup2;
 	private double myThreshold;
-	private int gridSize;
-	private Scene myScene;
 	private GridCell[][] myGrid;
 	private ArrayList<GridCell> emptyCells;
 	private ArrayList<GridCell> nextEmpty = new ArrayList<GridCell>();
@@ -27,10 +27,11 @@ public class Segregation extends Simulation {
 	
 	@Override
 	public Scene init(int size, int numGridCells){
-		myScene = super.init(size,numGridCells);
+		super.init(size,numGridCells);
+
 		randomInit(myGrid, myPopulation, percentGroup1, percentGroup2, "GROUP1", "GROUP2",Color.RED, Color.BLUE, Color.GRAY); //use constants, not these magic strings
 		initGridCells();
-		return myScene;
+		return super.getMyScene();
 	}
 	
 	@Override
@@ -80,9 +81,12 @@ public class Segregation extends Simulation {
 	
 	private GridCell getRandEmpty(){
 		Random rnd = new Random();
-		GridCell rndEmpty = emptyCells.get(rnd.nextInt(emptyCells.size()));
-		emptyCells.remove(rndEmpty);
-		return rndEmpty;
+		if(emptyCells.size() == 0){
+			return null;
+		}
+		GridCell empty = emptyCells.get(rnd.nextInt(emptyCells.size()));
+		emptyCells.remove(empty);
+		return empty;
 	}
 
 	@Override
@@ -106,6 +110,6 @@ public class Segregation extends Simulation {
 				}
 			}
 		}
-	}
-
-}
+	}	
+}		
+	

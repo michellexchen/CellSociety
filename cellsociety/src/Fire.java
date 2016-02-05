@@ -1,7 +1,7 @@
 import java.util.ArrayList;
+
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
-
 
 public class Fire extends Simulation {
 	private final static double probCatch = .2;
@@ -21,17 +21,16 @@ public class Fire extends Simulation {
 		for (int a = 0; a<gridSize; a++) { //row
 			for (int b = 0; b<gridSize; b++) {
 				if (a == (gridSize-1)/2&& b == (gridSize-1)/2) {
-					myGrid[a][b] = new GridCell("BURNING");
+					myGrid[a][b] = new GridCell("BURNING", Color.RED);
 				}
 				if (a == 0 || b == 0 || a == gridSize-1 || b == gridSize-1){
-					myGrid[a][b] = new GridCell("EMPTY");
+					myGrid[a][b] = new GridCell("EMPTY", Color.YELLOW);
 				}
-				myGrid[a][b] = new GridCell("TREE");
+				myGrid[a][b] = new GridCell("TREE", Color.GREEN);
 			}
 		}
 		
-		initCells();
-		
+		initGridCells();		
 		return myScene;
 	}
 		
