@@ -7,7 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 
 public class Segregation extends Simulation {
-
+	private static final String TITLE = "Segregation";
 	private int myPopulation;
 	private double percentGroup1;
 	private double percentGroup2;
@@ -17,6 +17,7 @@ public class Segregation extends Simulation {
 	private ArrayList<GridCell> nextEmpty = new ArrayList<GridCell>();
 	
 	public Segregation(int population, double group1, double group2, double threshold) {
+		super(TITLE);
 		myGrid = getCells();
 		myPopulation = population;
 		percentGroup1 = group1;

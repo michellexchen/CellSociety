@@ -3,6 +3,7 @@ import javafx.scene.paint.Color;
 import java.util.*;
 
 public class Predator extends Simulation {
+	private static final String TITLE = "WA-TOR";
 	private int gridSize;
 	private Scene myScene;
 	private GridCell[][] myGrid;
@@ -18,6 +19,7 @@ public class Predator extends Simulation {
 	
 	
 	public Predator(int fishBreed, int sharkBreed, int sharkDie, int population, double fish, double shark) {
+		super(TITLE);
 		myPopulation = population;
 		percentFish = fish;
 		percentShark = shark;

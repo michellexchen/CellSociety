@@ -4,7 +4,7 @@ import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 
 public class Life extends Simulation {
-
+	private static final String TITLE = "Game of Life";
 	private final String DEAD = "DEAD";
 	private final String ALIVE = "ALIVE";
 	private final Color DEADCOLOR = Color.GRAY;
@@ -12,7 +12,7 @@ public class Life extends Simulation {
 	private int[][] liveCells = {{3,1}, {3,2},{3,3}, {2,3}, {1,2}};
 	
 	public Life() {
-		// TODO Auto-generated constructor stub
+		super(TITLE);
 	}
 	
 	@Override
