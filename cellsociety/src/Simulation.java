@@ -16,6 +16,7 @@ public abstract class Simulation {
 	private int gridSize;
 	
 	private ArrayList<GridCell> emptyCells = new ArrayList<GridCell>();
+	private Color EMPTYCOLOR = Color.GRAY;
 	
 	public abstract void update(); //Calculates the NEW state for every cell, then sets current state to new state and new state to null, 
 	public abstract void updateColors(); //Changes the colors of cells based on their new state
@@ -84,11 +85,14 @@ public abstract class Simulation {
 			 getCells()[x][y] = temp;
 		}
 		
-		//populating the entire grid with empty cells at first
+		initEmpty();
+	}
+	public void initEmpty(){
+		//populating the rest of the grid with empty cells
 		for(int x=0; x<gridSize; x++){
 			for(int y=0; y<gridSize; y++){
 				if(getCells()[x][y] == null){	
-					GridCell c = new GridCell("EMPTY", empty);
+					GridCell c = new GridCell("EMPTY", EMPTYCOLOR);
 					c.setX(x);
 					c.setY(y);
 					myCells[x][y] = c;
