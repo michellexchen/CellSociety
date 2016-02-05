@@ -11,6 +11,7 @@ public abstract class Simulation {
 	public GridCell[][] myCells;  //Every array in myCells is one COLUMN of cells
 	private Group root = new Group();
 	private Scene myScene;
+	private String myTitle;
 
 	private int gridCellSize;
 	private int gridSize;
@@ -20,6 +21,14 @@ public abstract class Simulation {
 	
 	public abstract void update(); //Calculates the NEW state for every cell, then sets current state to new state and new state to null, 
 	public abstract void updateColors(); //Changes the colors of cells based on their new state
+	
+	public Simulation(String title){
+		myTitle = title;
+	}
+	
+	public String getTitle(){
+		return myTitle;
+	}
 	
 	public Scene init(int size, int numGridCells){
 		gridSize = numGridCells;
@@ -100,6 +109,10 @@ public abstract class Simulation {
 	
 	public int getGridSize(){
 		return gridSize;
+	}
+	
+	public Group getRoot(){
+		return root;
 	}
 	
 	public ArrayList<GridCell> getEmptyCells(){

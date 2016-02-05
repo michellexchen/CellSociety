@@ -7,10 +7,13 @@ public class Fire extends Simulation {
 	private double probCatch;
 	private int gridSize;
 	private Scene myScene;
+	private static final String TITLE = "Fire";
 	
-	public Fire(int size, int numCells, double pc) {
+	public Fire(double pc) {
+		super(TITLE);
 		probCatch = pc;
 	}
+
 	
 	public Scene init(int size, int numCells){
 		super.init(size,numCells);
