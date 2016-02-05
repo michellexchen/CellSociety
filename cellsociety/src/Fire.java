@@ -6,7 +6,10 @@ import javafx.scene.paint.Color;
 public class Fire extends Simulation {
 	private double myProbCatch;
 	private int gridSize;
+	private int myNumCells;
+	private int mySize;
 	private Scene myScene;
+	private GridCell[][] myCells;
 	private static final String TITLE = "Fire";
 	
 	public Fire(int size, int numCells, double probCatch) {
