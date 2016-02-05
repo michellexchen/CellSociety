@@ -1,33 +1,84 @@
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.scene.control.Button;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class Main extends Application {
 
-	private final int MILLISECOND_DELAY = 1000/10;
+	private final int MILLISECOND_DELAY = 1000/2;
 	private Stage myStage;
 	private final int SIZE = 800;
 
 	private final int NUMCELLS = 100;
 	private Simulation currentSim = new Predator(3,6,2,200,0.75,0.25);//new Segregation(5000,0.25,0.75,0.50);
+	private Timeline animation;
 	
 	@Override
 	public void start(Stage gameStage) {
 		myStage  = gameStage;
-		myStage.setTitle("Fire");
-		
+		myStage.setTitle(currentSim.getTitle());
+
 		myStage.setScene(currentSim.init(SIZE, NUMCELLS));
 		myStage.show();
 		KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY),
                 e -> currentSim.step());
-		Timeline animation = new Timeline();
+		animation = new Timeline();
 		animation.setCycleCount(Timeline.INDEFINITE);
 		animation.getKeyFrames().add(frame);
 		
+		addButtons();	
+	}
+	
+	private void addButtons(){
+    	Button start = new Button("Start");
+        start.setOnMouseClicked(e->playSim());
+        
+        Button stop = new Button("Stop");
+        stop.setOnMouseClicked(e->stopSim());
+     
+        Button pause = new Button("Pause");
+        pause.setOnMouseClicked(e->pauseSim());
+        
+        Button step = new Button("Step");
+        step.setOnMouseClicked(e->step());
+        
+        Button speedUp = new Button("Speed Up");
+        speedUp.setOnMouseClicked(e->speedUp());
+        
+        Button slowDown = new Button("Slow Down");
+        slowDown.setOnMouseClicked(e->slowDown());
+        
+        HBox buttons = new HBox(2,start,stop,pause,step,speedUp,slowDown);
+        
+        currentSim.getRoot().getChildren().add(buttons);
+        
+	}
+	
+	private void playSim(){
 		animation.play();
-		
+	}
+	
+	private void stopSim(){ 
+		animation.stop();
+	}
+	
+	private void pauseSim(){
+		animation.pause();
+	}
+	
+	private void step(){
+		currentSim.step();
+	}
+	
+	private void speedUp(){
+		animation.setRate(2.0);
+	}
+	
+	private void slowDown(){
+		animation.setRate(0.5);
 	}
 	
 	 public static void main(String[] args) {
