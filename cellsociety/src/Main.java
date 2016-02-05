@@ -87,12 +87,13 @@ public class Main extends Application {
 	}
 	
 	 public static void main(String[] args) {
-		 XMLParser xmlParser = new XMLParser("./cellsociety/src/FireXML");
+		 XMLParser xmlParser = new XMLParser("./cellsociety/src/FireXML.txt");
 		 Document doc = xmlParser.getDocument();
 		 Element root = doc.getDocumentElement();
-		 Double probCatch = Double.parseDouble(root.getAttribute("probCatch"));
-		 Integer row = Integer.parseInt(root.getAttribute("rows"));
-		 currentSim = new Fire(probCatch);
+		 Double probCatch = Double.parseDouble(root.getAttribute("probcatch"));
+		 Integer size = Integer.parseInt(root.getAttribute("size"));
+		 Integer numCells = Integer.parseInt(root.getAttribute("numcells"));
+		 currentSim = new Fire(probCatch, numCells, size);
 		 
 		// currentSim = SimulationFactory.makeSimulation(filepath, simulationType);
 		 launch(args);

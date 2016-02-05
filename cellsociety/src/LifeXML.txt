@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding = "UTF-8"?>
+<life numalive = "200" size = "800" numcells = "100"> </life>
