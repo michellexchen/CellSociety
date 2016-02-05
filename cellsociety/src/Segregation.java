@@ -12,7 +12,6 @@ public class Segregation extends Simulation {
 	private double percentGroup1;
 	private double percentGroup2;
 	private double myThreshold;
-	private Scene myScene;
 	private GridCell[][] myGrid;
 	private ArrayList<GridCell> emptyCells;
 	private ArrayList<GridCell> nextEmpty = new ArrayList<GridCell>();

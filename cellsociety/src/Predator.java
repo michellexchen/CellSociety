@@ -14,12 +14,10 @@ public class Predator extends Simulation {
 	private int sharkBreedTime;
 	private int sharkDieTime;
 	private int fishBreedTime;
+	private ArrayList<GridCell> taken = new ArrayList<GridCell>();
 	
-	public Predator(int size, int numCells, int fishBreed, int sharkBreed, int sharkDie, int population, double fish, double shark) {
-		myGrid = getCells();
-		gridSize = super.getGridSize();
-		breedGrid = new int[gridSize][gridSize];
-		dieGrid = new int[gridSize][gridSize];
+	
+	public Predator(int fishBreed, int sharkBreed, int sharkDie, int population, double fish, double shark) {
 		myPopulation = population;
 		percentFish = fish;
 		percentShark = shark;
@@ -31,8 +29,12 @@ public class Predator extends Simulation {
 	@Override
 	public Scene init(int size, int numCells){
 		myScene = super.init(size,numCells);
-		randomInit(myGrid, myPopulation, percentFish, percentShark, "FISH", "SHARK", Color.GREEN, Color.GREEN, Color.BLUE); //make not magic strings
+		gridSize = super.getGridSize();
+		breedGrid = new int[gridSize][gridSize];
+		dieGrid = new int[gridSize][gridSize];
+		randomInit(myGrid, myPopulation, percentFish, percentShark, "FISH", "SHARK", Color.GREEN, Color.YELLOW, Color.BLUE); //make not magic strings
 		initGridCells();
+		myGrid = getCells();
 		return myScene;
 	}
 
@@ -41,7 +43,8 @@ public class Predator extends Simulation {
 		updateEmpty();
 		updateSharks();
 		updateFish();
-
+		updateStates();
+		taken.clear();
 	}
 	
 	private void updateEmpty(){
@@ -58,21 +61,25 @@ public class Predator extends Simulation {
 		for(int x=0; x<gridSize; x++){
 			for(int y=0; y<gridSize; y++){
 				if(myGrid[x][y].getState()=="SHARK"){
+					GridCell cell = myGrid[x][y];
 					ArrayList<GridCell> neighbors = getCardinalNeighbors(x,y);
 					ArrayList<GridCell> emptyNeighbors = getSpecialNeighbors(neighbors,"EMPTY");
 					ArrayList<GridCell> fishNeighbors = getSpecialNeighbors(neighbors,"FISH");
-					if(fishNeighbors.size()>0){
-						eatFish(x,y,emptyNeighbors,fishNeighbors);
+					GridCell fish = getRandomCell(fishNeighbors);
+					GridCell empty = getRandomCell(emptyNeighbors);
+					if(fish!=null){
+						eatFish(cell,fish,emptyNeighbors);
 					}
 					else if(dieGrid[x][y]+1==sharkDieTime){
-						myGrid[x][y].setNextState("EMPTY");
+						cell.setNextState("EMPTY");
 						breedGrid[x][y]=0;
 						dieGrid[x][y]=0;
 					}
-					else if(emptyNeighbors.size()>0){
-						moveShark(x,y,emptyNeighbors);
+					else if(empty!=null){
+						moveShark(cell,empty);
 					}
 					else{
+						cell.setNextState("SHARK");
 						breedGrid[x][y]=0;
 						dieGrid[x][y]++;
 					}
@@ -87,65 +94,75 @@ public class Predator extends Simulation {
 		for(int x=0; x<gridSize; x++){
 			for(int y=0; y<gridSize; y++){
 				if(myGrid[x][y].getState()=="FISH"){
+					GridCell cell = myGrid[x][y];
 					ArrayList<GridCell> neighbors = getCardinalNeighbors(x,y);
 					ArrayList<GridCell> emptyNeighbors = getSpecialNeighbors(neighbors,"EMPTY");
-					if(emptyNeighbors.size()>0){
-						moveFish(x,y,emptyNeighbors);
+					GridCell empty = getRandomCell(emptyNeighbors);
+					if(breedGrid[x][y]+1>=fishBreedTime){
+						breedAnimal(cell,emptyNeighbors);
+					}
+					if(empty!=null){
+						moveFish(cell,empty);
 					}
 					else{
+						cell.setNextState("FISH");
 						breedGrid[x][y]++;
-					}
-					if(breedGrid[x][y]+1>=fishBreedTime){
-						breedAnimal("FISH",x,y,emptyNeighbors);
 					}
 				}
 			}
 		}
 	}
 	
-	private void moveShark(int sourceX, int sourceY, ArrayList<GridCell> emptyNeighbors) {
-		GridCell empty = getRandomCell(emptyNeighbors);
+	private void moveShark(GridCell shark, GridCell empty) {
 		empty.setNextState("SHARK");
+		shark.setNextState("EMPTY");
 		breedGrid[empty.getX()][empty.getY()] = 0;
-		dieGrid[empty.getX()][empty.getY()] = dieGrid[sourceX][sourceY]+1;
-		breedGrid[sourceX][sourceY] = 0;
-		dieGrid[sourceX][sourceY] = 0;
+		dieGrid[empty.getX()][empty.getY()] = dieGrid[shark.getX()][shark.getY()]+1;
+		breedGrid[shark.getX()][shark.getY()] = 0;
+		dieGrid[shark.getX()][shark.getY()] = 0;
 	}
 
-	private void eatFish(int sourceX, int sourceY, ArrayList<GridCell> emptyNeighbors, ArrayList<GridCell> fishNeighbors) {
-		GridCell fish = getRandomCell(fishNeighbors);
+	private void eatFish(GridCell shark, GridCell fish, ArrayList<GridCell> emptyNeighbors) {
+		fish.setState("EMPTY");
 		fish.setNextState("SHARK");
-		if(breedGrid[sourceX][sourceY]+1>=sharkBreedTime){ 
-			breedAnimal("SHARK",sourceX,sourceY,emptyNeighbors);
+		shark.setNextState("EMPTY");
+		if(breedGrid[shark.getX()][shark.getY()]+1>=sharkBreedTime){ 
+			breedAnimal(shark,emptyNeighbors);
 		}
 		else{
-			breedGrid[sourceX][sourceY]++;
+			breedGrid[shark.getX()][shark.getY()]++;
 		}
-		breedGrid[fish.getX()][fish.getY()] = breedGrid[sourceX][sourceY];
-		breedGrid[sourceX][sourceY] = 0;
-		dieGrid[sourceX][sourceY] = 0;
+		breedGrid[fish.getX()][fish.getY()] = breedGrid[shark.getX()][shark.getY()];
+		breedGrid[shark.getX()][shark.getY()] = 0;
+		dieGrid[shark.getX()][shark.getY()] = 0;
 	}
 	
-	private void moveFish(int sourceX, int sourceY, ArrayList<GridCell> emptyNeighbors){
-		GridCell empty = getRandomCell(emptyNeighbors);
-		emptyNeighbors.remove(empty);
+	private void moveFish(GridCell fish, GridCell empty){
 		empty.setNextState("FISH");
-		breedGrid[empty.getX()][empty.getY()]++;
-		breedGrid[sourceX][sourceY]=0;
+		fish.setNextState("EMPTY");
+		breedGrid[empty.getX()][empty.getY()]=breedGrid[fish.getX()][fish.getY()];
+		breedGrid[fish.getX()][fish.getY()]=0;	
 	}
-	private void breedAnimal(String animal, int sourceX, int sourceY, ArrayList<GridCell> emptyNeighbors) {
-		if(emptyNeighbors.size()>0){ 
-			GridCell newAnimal = getRandomCell(emptyNeighbors);
-			emptyNeighbors.remove(newAnimal);
-			newAnimal.setNextState(animal);
-			breedGrid[sourceX][sourceY]=0;
+	
+	private void breedAnimal(GridCell animal, ArrayList<GridCell> emptyNeighbors) {
+		GridCell newAnimal = getRandomCell(emptyNeighbors);
+		if(newAnimal!=null){ 
+			newAnimal.setNextState(animal.getState());
+			breedGrid[animal.getX()][animal.getY()]=0;
 		}
 	}
 	
 	private GridCell getRandomCell(ArrayList<GridCell> selections){
 		Random rnd = new Random();
-		if(selections.size()>0){
-			return selections.get(rnd.nextInt(selections.size()));
+		while(selections.size()>0){
+			GridCell chosen = selections.get(rnd.nextInt(selections.size()));
+			if(!taken.contains(chosen)){
+				taken.add(chosen);
+				return chosen;
+			}
+			else{
+				selections.remove(chosen);
+			}
 		}
 		return null;
 	}
