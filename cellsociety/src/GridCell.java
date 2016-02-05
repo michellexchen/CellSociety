@@ -10,9 +10,10 @@ public class GridCell {
 	private String nextState;
 	private int[] myCoordinates = new int[2];
 	
-	public GridCell(String state, Color color) {
+	public GridCell(String state, Color color, int x, int y) {
 		currState = state;
 		myColor = color;
+		myCoordinates = new int[]{x,y};
 	}
 	
 	public String getState(){
@@ -49,14 +50,6 @@ public class GridCell {
 	
 	public void setMyColor(Color myColor) {
 		this.myColor = myColor;
-	}
-
-	public void setX(int x){
-		myCoordinates[0] = x;
-	}
-	
-	public void setY(int y){
-		myCoordinates[1] = y;
 	}
 	
 	public void setMySquare(Rectangle mySquare) {

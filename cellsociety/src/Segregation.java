@@ -7,11 +7,11 @@ import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 
 public class Segregation extends Simulation {
+
 	private int myPopulation;
 	private double percentGroup1;
 	private double percentGroup2;
 	private double myThreshold;
-	private Scene myScene;
 	private GridCell[][] myGrid;
 	private ArrayList<GridCell> emptyCells;
 	private ArrayList<GridCell> nextEmpty = new ArrayList<GridCell>();
@@ -28,6 +28,7 @@ public class Segregation extends Simulation {
 	@Override
 	public Scene init(int size, int numGridCells){
 		super.init(size,numGridCells);
+
 		randomInit(myGrid, myPopulation, percentGroup1, percentGroup2, "GROUP1", "GROUP2",Color.RED, Color.BLUE, Color.GRAY); //use constants, not these magic strings
 		initGridCells();
 		return super.getMyScene();

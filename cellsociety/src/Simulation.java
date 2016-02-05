@@ -16,6 +16,7 @@ public abstract class Simulation {
 	private int gridSize;
 	
 	private ArrayList<GridCell> emptyCells = new ArrayList<GridCell>();
+	private Color EMPTYCOLOR = Color.GRAY;
 	
 	public abstract void update(); //Calculates the NEW state for every cell, then sets current state to new state and new state to null, 
 	public abstract void updateColors(); //Changes the colors of cells based on their new state
@@ -71,26 +72,25 @@ public abstract class Simulation {
 			int y = coord[1];
 			
 			if(popGroup1>0){  
-				GridCell temp = new GridCell(type1, color1);
+				GridCell temp = new GridCell(type1, color1, x, y);
 				myCells[x][y] = temp;
-				temp.setX(x);
-				temp.setY(y);
 				popGroup1--;
 				continue;
 			}
-			 GridCell temp= new GridCell(type2, color2);
-			temp.setX(x);
-			temp.setY(y);
+			
+			 GridCell temp= new GridCell(type2, color2, x, y);
+
 			 getCells()[x][y] = temp;
 		}
 		
-		//populating the entire grid with empty cells at first
+		initEmpty();
+	}
+	public void initEmpty(){
+		//populating the rest of the grid with empty cells
 		for(int x=0; x<gridSize; x++){
 			for(int y=0; y<gridSize; y++){
 				if(getCells()[x][y] == null){	
-					GridCell c = new GridCell("EMPTY", empty);
-					c.setX(x);
-					c.setY(y);
+					GridCell c = new GridCell("EMPTY", EMPTYCOLOR, x, y);
 					myCells[x][y] = c;
 					emptyCells.add(c);
 				}	
@@ -152,7 +152,6 @@ public abstract class Simulation {
 	}
 	
 	public ArrayList<GridCell> getCardinalNeighbors(int x, int y){
-		
 		ArrayList<GridCell> result = new ArrayList<GridCell>();
 		if(x > 0){
 			result.add(myCells[x-1][y]); //LEFT
@@ -166,13 +165,13 @@ public abstract class Simulation {
 		if(y < gridSize -1){
 			result.add(myCells[x][y+1]);
 		}
-		
 		return result;
 	}
 	
 	public ArrayList<GridCell> getAllNeighbors(int x, int y){
 		ArrayList<GridCell> result = getCardinalNeighbors(x,y);
-		
+
+		System.out.println();
 		if(x > 0 && y > 0){
 			result.add(myCells[x-1][y-1]); //top left
 		}
