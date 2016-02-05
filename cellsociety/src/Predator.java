@@ -40,31 +40,8 @@ public class Predator extends Simulation {
 
 	@Override
 	public void update() {
-		System.out.println();
-		System.out.println();
-		for(int i=0; i<gridSize; i++){
-			for(int j=0; j<gridSize; j++){
-				System.out.print(myGrid[i][j].getState());
-			}
-			System.out.println();
-		}
-		System.out.println();
-		for(int i=0; i<gridSize; i++){
-			for(int j=0; j<gridSize; j++){
-				System.out.print(breedGrid[i][j]);
-			}
-			System.out.println();
-		}
-		
 		updateEmpty();
 		updateSharks();
-		/*
-		for(int i=0; i<gridSize; i++){
-			for(int j=0; j<gridSize; j++){
-				System.out.print(myGrid[i][j].getNextState());
-			}
-			System.out.println();
-		}*/
 		updateFish();
 		updateStates();
 		taken.clear();
@@ -84,31 +61,25 @@ public class Predator extends Simulation {
 		for(int x=0; x<gridSize; x++){
 			for(int y=0; y<gridSize; y++){
 				if(myGrid[x][y].getState()=="SHARK"){
+					GridCell cell = myGrid[x][y];
 					ArrayList<GridCell> neighbors = getCardinalNeighbors(x,y);
-					/*
-					System.out.printf("Coordinates for shark at (%d,%d)",x,y);
-					System.out.println();
-					for(int i=0; i<neighbors.size();i++){
-						System.out.printf("(%d,%d)",neighbors.get(i).getX(),neighbors.get(i).getY());
-					}
-					System.out.println();*/
 					ArrayList<GridCell> emptyNeighbors = getSpecialNeighbors(neighbors,"EMPTY");
 					ArrayList<GridCell> fishNeighbors = getSpecialNeighbors(neighbors,"FISH");
 					GridCell fish = getRandomCell(fishNeighbors);
 					GridCell empty = getRandomCell(emptyNeighbors);
 					if(fish!=null){
-						eatFish(x,y,emptyNeighbors,fish);
+						eatFish(cell,fish,emptyNeighbors);
 					}
 					else if(dieGrid[x][y]+1==sharkDieTime){
-						myGrid[x][y].setNextState("EMPTY");
+						cell.setNextState("EMPTY");
 						breedGrid[x][y]=0;
 						dieGrid[x][y]=0;
 					}
 					else if(empty!=null){
-						moveShark(x,y,empty);
+						moveShark(cell,empty);
 					}
 					else{
-						myGrid[x][y].setNextState("SHARK");
+						cell.setNextState("SHARK");
 						breedGrid[x][y]=0;
 						dieGrid[x][y]++;
 					}
@@ -123,17 +94,18 @@ public class Predator extends Simulation {
 		for(int x=0; x<gridSize; x++){
 			for(int y=0; y<gridSize; y++){
 				if(myGrid[x][y].getState()=="FISH"){
+					GridCell cell = myGrid[x][y];
 					ArrayList<GridCell> neighbors = getCardinalNeighbors(x,y);
 					ArrayList<GridCell> emptyNeighbors = getSpecialNeighbors(neighbors,"EMPTY");
 					GridCell empty = getRandomCell(emptyNeighbors);
 					if(breedGrid[x][y]+1>=fishBreedTime){
-						breedAnimal("FISH",x,y,emptyNeighbors);
+						breedAnimal(cell,emptyNeighbors);
 					}
 					if(empty!=null){
-						moveFish(x,y,empty);
+						moveFish(cell,empty);
 					}
 					else{
-						myGrid[x][y].setNextState("FISH");
+						cell.setNextState("FISH");
 						breedGrid[x][y]++;
 					}
 				}
@@ -141,45 +113,42 @@ public class Predator extends Simulation {
 		}
 	}
 	
-	private void moveShark(int sourceX, int sourceY, GridCell empty) {
+	private void moveShark(GridCell shark, GridCell empty) {
 		empty.setNextState("SHARK");
-		myGrid[sourceX][sourceY].setNextState("EMPTY");
-		System.out.printf("Moved shark from (%d, %d) to (%d, %d)",sourceX,sourceY,empty.getX(),empty.getY());
-		System.out.println();
+		shark.setNextState("EMPTY");
 		breedGrid[empty.getX()][empty.getY()] = 0;
-		dieGrid[empty.getX()][empty.getY()] = dieGrid[sourceX][sourceY]+1;
-		breedGrid[sourceX][sourceY] = 0;
-		dieGrid[sourceX][sourceY] = 0;
+		dieGrid[empty.getX()][empty.getY()] = dieGrid[shark.getX()][shark.getY()]+1;
+		breedGrid[shark.getX()][shark.getY()] = 0;
+		dieGrid[shark.getX()][shark.getY()] = 0;
 	}
 
-	private void eatFish(int sourceX, int sourceY, ArrayList<GridCell> emptyNeighbors, GridCell fish) {
-		System.out.printf("Moved shark from (%d, %d) to (%d, %d)",sourceX,sourceY,fish.getX(),fish.getY());
-		System.out.println();
+	private void eatFish(GridCell shark, GridCell fish, ArrayList<GridCell> emptyNeighbors) {
 		fish.setState("EMPTY");
 		fish.setNextState("SHARK");
-		myGrid[sourceX][sourceY].setNextState("EMPTY");
-		if(breedGrid[sourceX][sourceY]+1>=sharkBreedTime){ 
-			breedAnimal("SHARK",sourceX,sourceY,emptyNeighbors);
+		shark.setNextState("EMPTY");
+		if(breedGrid[shark.getX()][shark.getY()]+1>=sharkBreedTime){ 
+			breedAnimal(shark,emptyNeighbors);
 		}
 		else{
-			breedGrid[sourceX][sourceY]++;
+			breedGrid[shark.getX()][shark.getY()]++;
 		}
-		breedGrid[fish.getX()][fish.getY()] = breedGrid[sourceX][sourceY];
-		breedGrid[sourceX][sourceY] = 0;
-		dieGrid[sourceX][sourceY] = 0;
+		breedGrid[fish.getX()][fish.getY()] = breedGrid[shark.getX()][shark.getY()];
+		breedGrid[shark.getX()][shark.getY()] = 0;
+		dieGrid[shark.getX()][shark.getY()] = 0;
 	}
 	
-	private void moveFish(int sourceX, int sourceY, GridCell empty){
+	private void moveFish(GridCell fish, GridCell empty){
 		empty.setNextState("FISH");
-		myGrid[sourceX][sourceY].setNextState("EMPTY");
-		breedGrid[empty.getX()][empty.getY()]=breedGrid[sourceX][sourceY];
-		breedGrid[sourceX][sourceY]=0;	
+		fish.setNextState("EMPTY");
+		breedGrid[empty.getX()][empty.getY()]=breedGrid[fish.getX()][fish.getY()];
+		breedGrid[fish.getX()][fish.getY()]=0;	
 	}
-	private void breedAnimal(String animal, int sourceX, int sourceY, ArrayList<GridCell> emptyNeighbors) {
+	
+	private void breedAnimal(GridCell animal, ArrayList<GridCell> emptyNeighbors) {
 		GridCell newAnimal = getRandomCell(emptyNeighbors);
 		if(newAnimal!=null){ 
-			newAnimal.setNextState(animal);
-			breedGrid[sourceX][sourceY]=0;
+			newAnimal.setNextState(animal.getState());
+			breedGrid[animal.getX()][animal.getY()]=0;
 		}
 	}
 	
