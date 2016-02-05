@@ -16,8 +16,8 @@ public class Segregation extends Simulation {
 	private ArrayList<GridCell> emptyCells;
 	private ArrayList<GridCell> nextEmpty = new ArrayList<GridCell>();
 	
-	public Segregation(int population, double group1, double group2, double threshold) {
-		super(TITLE);
+	public Segregation(int size, int numCells, int population, double group1, double group2, double threshold) {
+		super(TITLE,size,numCells);
 		myGrid = getCells();
 		myPopulation = population;
 		percentGroup1 = group1;
@@ -27,8 +27,8 @@ public class Segregation extends Simulation {
 	}
 	
 	@Override
-	public Scene init(int size, int numGridCells){
-		super.init(size,numGridCells);
+	public Scene init(){
+		super.init();
 
 		randomInit(myGrid, myPopulation, percentGroup1, percentGroup2, "GROUP1", "GROUP2",Color.RED, Color.BLUE, Color.GRAY); //use constants, not these magic strings
 		initGridCells();

@@ -12,16 +12,14 @@ public class Fire extends Simulation {
 	private GridCell[][] myCells;
 	private static final String TITLE = "Fire";
 	
-	public Fire(double probCatch, int numCells, int size) {
-		super(TITLE);
+	public Fire(int size, int numCells, double probCatch) {
+		super(TITLE,size,numCells);
 		myProbCatch = probCatch;
-		myNumCells = numCells;
-		mySize = size;
 	}
 
 	
 	public Scene init(){
-		super.init(mySize,myNumCells);
+		super.init();
 		myCells = super.getCells();
 		gridSize = super.getGridSize();
 		//fill

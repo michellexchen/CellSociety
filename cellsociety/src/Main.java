@@ -17,8 +17,7 @@ public class Main extends Application {
 	private final int SIZE = 800;
 
 	private final int NUMCELLS = 100;
-	private static Simulation currentSim;
-	//private Simulation currentSim = new XMLReader("predator.txt").getSimulation();
+	private static Simulation currentSim = new XMLReader("predator.txt").getSimulation();
 	private Timeline animation;
 	
 	@Override
@@ -26,7 +25,7 @@ public class Main extends Application {
 		myStage  = gameStage;
 		myStage.setTitle(currentSim.getTitle());
 
-		myStage.setScene(currentSim.init(SIZE, NUMCELLS));
+		myStage.setScene(currentSim.init());
 		myStage.show();
 		KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY),
                 e -> currentSim.step());
@@ -87,15 +86,6 @@ public class Main extends Application {
 	}
 	
 	 public static void main(String[] args) {
-		 XMLParser xmlParser = new XMLParser("./cellsociety/src/FireXML.txt");
-		 Document doc = xmlParser.getDocument();
-		 Element root = doc.getDocumentElement();
-		 Double probCatch = Double.parseDouble(root.getAttribute("probcatch"));
-		 Integer size = Integer.parseInt(root.getAttribute("size"));
-		 Integer numCells = Integer.parseInt(root.getAttribute("numcells"));
-		 currentSim = new Fire(probCatch, numCells, size);
-		 
-		// currentSim = SimulationFactory.makeSimulation(filepath, simulationType);
 		 launch(args);
      }
 }
