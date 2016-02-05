@@ -1,7 +1,4 @@
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -14,10 +11,7 @@ public class Main extends Application {
 
 	private final int MILLISECOND_DELAY = 1000/2;
 	private Stage myStage;
-	private final int SIZE = 800;
-
-	private final int NUMCELLS = 100;
-	private static Simulation currentSim = new XMLReader("predator.txt").getSimulation();
+	private static Simulation currentSim = new XMLReader("./cellsociety/src/XML/LifeXML.txt").getSimulation();
 	private Timeline animation;
 	
 	@Override
