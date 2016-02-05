@@ -159,7 +159,6 @@ public abstract class Simulation {
 		if(y < gridSize -1){
 			result.add(myCells[x][y+1]);
 		}
-		System.out.println();
 		return result;
 	}
 	
