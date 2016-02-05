@@ -4,14 +4,16 @@ import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 
 public class Fire extends Simulation {
-	private final static String TITLE = "FIRE";
-	private final static double probCatch = .6;
+	private double probCatch;
 	private int gridSize;
 	private Scene myScene;
+	private static final String TITLE = "Fire";
 	
-	public Fire() {
+	public Fire(double pc) {
 		super(TITLE);
+		probCatch = pc;
 	}
+
 	
 	public Scene init(int size, int numCells){
 		super.init(size,numCells);
