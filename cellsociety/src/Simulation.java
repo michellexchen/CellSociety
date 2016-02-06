@@ -33,15 +33,17 @@ public abstract class Simulation {
 		return myTitle;
 	}
 	
+	public int getSceneSize(){
+		return sceneSize;
+	}
+	
 	public Scene init(){
 		myCells = new GridCell[gridSize][gridSize];
 		myScene = new Scene(root,sceneSize,sceneSize);
 		return myScene; 
 	}
 	
-	public void randomInit(GridCell[][] grid, int population, double percent1, double percent2, String type1, String type2, String defaultType, Color color1, Color color2, Color empty){
-		int myPopulation = population;
-		
+	private ArrayList<int[]> getRandomCoordinates(int population){
 		HashMap<Integer,ArrayList<Integer>> randCoords = new HashMap<Integer,ArrayList<Integer>>();  //Maps a column integer (x) to a list of rows (y)
 		Random rnd = new Random();
 		while(population>0){
@@ -72,39 +74,44 @@ public abstract class Simulation {
 		}
 
 		Collections.shuffle(coordList);
-		//distributing random coordinate pairs among both groups 
-		
-		int popGroup1 = (int)(myPopulation*percent1);
-		for(int i=0; i<coordList.size(); i++){ 
-			int[] coord = coordList.get(i);
+		return coordList;
+	}
+	
+	private void populateGrid(ArrayList<int[]> coordinates, int populationType1, String type1, String type2, Color color1, Color color2){
+		for(int i=0; i<coordinates.size(); i++){ 
+			int[] coord = coordinates.get(i);
 			int x = coord[0];
 			int y = coord[1];
 			
-			if(popGroup1>0){  
+			if(populationType1>0){  
 				GridCell temp = new GridCell(type1, color1, x, y);
 				myCells[x][y] = temp;
-				popGroup1--;
+				populationType1--;
 				continue;
 			}
 			
 			 GridCell temp= new GridCell(type2, color2, x, y);
 
-			 getCells()[x][y] = temp;
+			 myCells[x][y] = temp;
 		}
-		
-		initEmpty(defaultType, empty);
 	}
 	
-	public void initEmpty(String defState, Color defaultColor){		//Any cells that haven't been initialized are set to some default state and colr eg. empty/gray
+	public void initEmpty(String defaultState, Color defaultColor){		//Any cells that haven't been initialized are set to some default state and colr eg. empty/gray
 		for(int x=0; x<gridSize; x++){
 			for(int y=0; y<gridSize; y++){
 				if(getCells()[x][y] == null){	
-					GridCell c = new GridCell(defState, defaultColor, x, y);
+					GridCell c = new GridCell(defaultState, defaultColor, x, y);
 					myCells[x][y] = c;
 					emptyCells.add(c);
 				}	
 			}
 		}
+	}
+	
+	public void randomInit(int population, double percent1, String type1, String type2, String defaultType, Color color1, Color color2, Color defaultColor){
+		ArrayList<int[]> coordinates = getRandomCoordinates(population);
+		populateGrid(coordinates,(int)(population*percent1),type1,type2,color1,color2);
+		initEmpty(defaultType, defaultColor);
 	}
 	
 	public int getGridSize(){
@@ -183,7 +190,6 @@ public abstract class Simulation {
 	public ArrayList<GridCell> getAllNeighbors(int x, int y){
 		ArrayList<GridCell> result = getCardinalNeighbors(x,y);
 
-		System.out.println();
 		if(x > 0 && y > 0){
 			result.add(myCells[x-1][y-1]); //top left
 		}
