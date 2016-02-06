@@ -8,21 +8,27 @@ import javafx.scene.paint.Color;
 
 public class Segregation extends Simulation {
 	private static final String TITLE = "Segregation";
+	private static final String GROUP1 = "GROUP1";
+	private static final String GROUP2 = "GROUP2";
+	private static final String EMPTY = "EMPTY";
+	private static final Color GROUP1COLOR = Color.RED;
+	private static final Color GROUP2COLOR = Color.BLUE;
+	private static final Color BACKGROUND = Color.GAINSBORO;
 	private int myPopulation;
 	private double percentGroup1;
-	private double percentGroup2;
 	private double myThreshold;
-	private GridCell[][] myGrid;
+	private GridCell[][] myCells;
+	private int gridSize;
 	private ArrayList<GridCell> emptyCells;
 	private ArrayList<GridCell> nextEmpty = new ArrayList<GridCell>();
 	
-	public Segregation(int size, int numCells, int population, double group1, double group2, double threshold) {
+	public Segregation(int size, int numCells, int population, double group1population, double threshold) {
 		super(TITLE,size,numCells);
-		myGrid = getCells();
 		myPopulation = population;
-		percentGroup1 = group1;
-		percentGroup2 = group2;
+		percentGroup1 = group1population;
 		myThreshold = threshold;
+		myCells = getCells();
+		gridSize = super.getGridSize();
 		emptyCells = getEmptyCells();
 	}
 	
@@ -30,7 +36,7 @@ public class Segregation extends Simulation {
 	public Scene init(){
 		super.init();
 
-		randomInit(myGrid, myPopulation, percentGroup1, percentGroup2, "GROUP1", "GROUP2", "EMPTY", Color.RED, Color.BLUE, Color.GRAY); //use constants, not these magic strings
+		randomInit(myPopulation, percentGroup1, GROUP1, GROUP2, EMPTY, GROUP1COLOR, GROUP2COLOR, BACKGROUND); //use constants, not these magic strings
 		initGridCells();
 		return super.getMyScene();
 	}
@@ -38,31 +44,20 @@ public class Segregation extends Simulation {
 	@Override
 	public void update(){
 		for(GridCell e: emptyCells){
-			e.setNextState("EMPTY");
+			e.setNextState(EMPTY);
 		}
-		for(int x=0; x<super.getGridSize(); x++){
-			for(int y=0; y<super.getGridSize(); y++){
-				GridCell cell = getCells()[x][y];
+		
+		for(int x=0; x<gridSize; x++){
+			for(int y=0; y<gridSize; y++){
+				GridCell cell = myCells[x][y];
 				String currState = cell.getState();
-				
-				if(currState != "EMPTY")
+				if(currState != EMPTY)
 				{
-					ArrayList<GridCell> neighbors = getAllNeighbors(x,y);
-					double numSame = 0;
-					double numDiff = 0;
-					for(GridCell n: neighbors){
-						if(currState==n.getState()){
-							numSame++;
-						}
-						else if(n.getState() != "EMPTY"){
-							numDiff++;
-						}
-					}
-					if(numSame/(numSame+numDiff)<myThreshold){ //if not satisfied and can move, move
+					if(isSatisfied(cell)){ //if not satisfied and can move, move
 						GridCell empty = getRandEmpty();
 						if(empty != null){
 							empty.setNextState(currState);
-							cell.setNextState("EMPTY");
+							cell.setNextState(EMPTY);
 							nextEmpty.add(cell);
 						}	
 					}
@@ -80,6 +75,22 @@ public class Segregation extends Simulation {
 		updateStates();
 	}
 	
+	private boolean isSatisfied(GridCell cell){
+		ArrayList<GridCell> neighbors = getAllNeighbors(cell.getX(),cell.getY());
+		double numSame = 0;
+		double numDiff = 0;
+		for(GridCell n: neighbors){
+			if(cell.getState()==n.getState()){
+				numSame++;
+			}
+			else if(n.getState() != EMPTY){
+				numDiff++;
+			}
+		}
+		
+		return (numSame/(numSame+numDiff)<myThreshold);
+	}
+	
 	private GridCell getRandEmpty(){
 		Random rnd = new Random();
 		if(emptyCells.size() == 0){
@@ -95,16 +106,15 @@ public class Segregation extends Simulation {
 		for(int x=0; x<super.getGridSize(); x++){
 			for(int y=0; y<super.getGridSize(); y++){
 				GridCell cell = getCells()[x][y];
-				if(cell.getState()=="GROUP1"){
-					cell.setMyColor(Color.BLUE);
+				if(cell.getState()==GROUP1){
+					cell.setMyColor(GROUP2COLOR);
 				}
-				else if(cell.getState()=="GROUP2"){
-					cell.setMyColor(Color.RED);
+				else if(cell.getState()==GROUP2){
+					cell.setMyColor(GROUP1COLOR);
 				}
-				else if(cell.getState() == "EMPTY"){
-					cell.setMyColor(Color.GRAY);
+				else if(cell.getState() == EMPTY){
+					cell.setMyColor(BACKGROUND);
 				}
-				
 				else{
 					System.out.println(cell.getState());
 					cell.setMyColor(Color.WHITE);
