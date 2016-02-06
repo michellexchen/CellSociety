@@ -7,9 +7,10 @@
 	-fx-effect: dropshadow(gaussian, rgba(67,96,156,0.25) , 0,0,2,2 );
 }
 
-.hbox {
+.vbox {
     -fx-background-color: #F9F9F9;
     -fx-padding: 10;
     -fx-spacing: 10;
     -fx-alignment: center;
+
 }

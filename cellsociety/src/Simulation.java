@@ -96,7 +96,7 @@ public abstract class Simulation {
 		}
 	}
 	
-	public void initEmpty(String defaultState, Color defaultColor){		//Any cells that haven't been initialized are set to some default state and colr eg. empty/gray
+	public void initEmpty(String defaultState, Color defaultColor){		//Any cells that haven't been initialized are set to some default state and color eg. empty/gray
 		for(int x=0; x<gridSize; x++){
 			for(int y=0; y<gridSize; y++){
 				if(getCells()[x][y] == null){	

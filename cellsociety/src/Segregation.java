@@ -21,6 +21,7 @@ public class Segregation extends Simulation {
 	private int gridSize;
 	private ArrayList<GridCell> emptyCells;
 	private ArrayList<GridCell> nextEmpty = new ArrayList<GridCell>();
+	private ArrayList<GridCell> allCells = new ArrayList<GridCell>();
 	
 	public Segregation(int size, int numCells, int population, double group1population, double threshold) {
 		super(TITLE,size,numCells);
@@ -35,8 +36,16 @@ public class Segregation extends Simulation {
 	public Scene init(){
 		super.init();
 		myCells = super.getCells();
-		randomInit(myPopulation, percentGroup1, GROUP1, GROUP2, EMPTY, GROUP1COLOR, GROUP2COLOR, BACKGROUND); //use constants, not these magic strings
+		randomInit(myPopulation, percentGroup1, GROUP1, GROUP2, EMPTY, GROUP1COLOR, GROUP2COLOR, BACKGROUND); 
 		initGridCells();
+		
+		for(int x=0; x<gridSize; x++){
+			for(int y=0; y<gridSize; y++){
+				GridCell cell = myCells[x][y];
+				allCells.add(cell);
+			}
+		}
+		
 		return super.getMyScene();
 	}
 	
@@ -45,14 +54,12 @@ public class Segregation extends Simulation {
 		for(GridCell e: emptyCells){
 			e.setNextState(EMPTY);
 		}
-		
-		for(int x=0; x<gridSize; x++){
-			for(int y=0; y<gridSize; y++){
-				GridCell cell = myCells[x][y];
+			Collections.shuffle(allCells);
+			for(GridCell cell: allCells){
 				String currState = cell.getState();
 				if(currState != EMPTY)
 				{
-					if(isSatisfied(cell)){ //if not satisfied and can move, move
+					if(isDissatisfied(cell)){ //if not satisfied and can move, move
 						GridCell empty = getRandEmpty();
 						if(empty != null){
 							empty.setNextState(currState);
@@ -66,7 +73,6 @@ public class Segregation extends Simulation {
 					}
 				}
 			}
-		}
 		
 		emptyCells.addAll(nextEmpty);
 		nextEmpty.clear();
@@ -74,7 +80,7 @@ public class Segregation extends Simulation {
 		updateStates();
 	}
 	
-	private boolean isSatisfied(GridCell cell){
+	private boolean isDissatisfied(GridCell cell){
 		ArrayList<GridCell> neighbors = getAllNeighbors(cell.getX(),cell.getY());
 		double numSame = 0;
 		double numDiff = 0;
@@ -113,10 +119,6 @@ public class Segregation extends Simulation {
 				}
 				else if(cell.getState() == EMPTY){
 					cell.setMyColor(BACKGROUND);
-				}
-				else{
-					System.out.println(cell.getState());
-					cell.setMyColor(Color.WHITE);
 				}
 			}
 		}
