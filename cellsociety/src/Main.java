@@ -77,7 +77,6 @@ public class Main extends Application {
 		buttons.setPrefSize(currentSim.getSceneSize(), BUTTONHEIGHT);
 		buttons.setLayoutY(currentSim.getSceneSize());
 		buttons.getStyleClass().add("hbox");
-
 		myScene.getStylesheets().add("style.css");
 
 		currentSim.getRoot().getChildren().add(buttons);
