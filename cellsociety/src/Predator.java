@@ -18,6 +18,9 @@ public class Predator extends Simulation {
 	private int sharkDieTime;
 	private int fishBreedTime;
 	private ArrayList<GridCell> taken = new ArrayList<GridCell>();
+	private Color FISHCOLOR = Color.GREEN;
+	private Color SHARKCOLOR = Color.YELLOW;
+	private Color BACKGROUND = Color.BLUE;
 	
 	
 	public Predator(int size, int numCells, int fishBreed, int sharkBreed, int sharkDie, int population, double fish, double shark) {
@@ -35,7 +38,8 @@ public class Predator extends Simulation {
 		gridSize = super.getGridSize();
 		breedGrid = new int[gridSize][gridSize];
 		dieGrid = new int[gridSize][gridSize];
-		randomInit(myGrid, myPopulation, percentFish, percentShark, FISH, SHARK, Color.GREEN, Color.YELLOW, Color.BLUE); //make not magic strings
+		randomInit(myGrid, myPopulation, percentFish, percentShark, "FISH", "SHARK", "EMPTY", FISHCOLOR, SHARKCOLOR, BACKGROUND); //make these constants
+
 		initGridCells();
 		myGrid = getCells();
 		return super.getMyScene();
