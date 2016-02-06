@@ -4,8 +4,10 @@ import java.util.*;
 
 public class Predator extends Simulation {
 	private static final String TITLE = "WA-TOR";
+	private static final String SHARK = "SHARK";
+	private static final String FISH = "FISH";
+	private static final String EMPTY = "EMPTY";
 	private int gridSize;
-	private Scene myScene;
 	private GridCell[][] myGrid;
 	private int[][] breedGrid;
 	private int[][] dieGrid;
@@ -21,8 +23,8 @@ public class Predator extends Simulation {
 	private Color BACKGROUND = Color.BLUE;
 	
 	
-	public Predator(int fishBreed, int sharkBreed, int sharkDie, int population, double fish, double shark) {
-		super(TITLE);
+	public Predator(int size, int numCells, int fishBreed, int sharkBreed, int sharkDie, int population, double fish, double shark) {
+		super(TITLE, size, numCells);
 		myPopulation = population;
 		percentFish = fish;
 		percentShark = shark;
@@ -31,16 +33,16 @@ public class Predator extends Simulation {
 		fishBreedTime = fishBreed;
 	}
 	
-	@Override
-	public Scene init(int size, int numCells){
-		myScene = super.init(size,numCells);
+	public Scene init(){
+		super.init();
 		gridSize = super.getGridSize();
 		breedGrid = new int[gridSize][gridSize];
 		dieGrid = new int[gridSize][gridSize];
-		randomInit(myGrid, myPopulation, percentFish, percentShark, "FISH", "SHARK", "EMPTY", FISHCOLOR, SHARKCOLOR, BACKGROUND);
+		randomInit(myGrid, myPopulation, percentFish, percentShark, "FISH", "SHARK", "EMPTY", FISHCOLOR, SHARKCOLOR, BACKGROUND); //make these constants
+
 		initGridCells();
 		myGrid = getCells();
-		return myScene;
+		return super.getMyScene();
 	}
 
 	@Override

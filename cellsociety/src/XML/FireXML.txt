@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fire probcatch="0.6" size="800" numcells = "100"></fire>

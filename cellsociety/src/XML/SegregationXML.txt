@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding = "UTF-8"?>
+<segregation popsize = "7500" satisfaction = "0.3" percentone = "0.5" percenttwo = "0.5" size = "800" numcells = "100" ></segregation>

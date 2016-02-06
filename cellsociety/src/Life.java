@@ -11,14 +11,14 @@ public class Life extends Simulation {
 	private final Color ALIVECOLOR = Color.BLUE;
 	private int[][] liveCells = {{3,1}, {3,2},{3,3}, {2,3}, {1,2}};
 	
-	public Life() {
-		super(TITLE);
+	public Life(int size, int numCells, int numAlive) {
+		super(TITLE, size, numCells);
 	}
 	
 	@Override
-	public Scene init(int size, int numGridCells){
+	public Scene init(){
 		
-		super.init(size,numGridCells);
+		super.init();
 		for(int[] c: liveCells){
 			int x = c[0];
 			int y = c[1];

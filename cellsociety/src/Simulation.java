@@ -8,11 +8,12 @@ import javafx.scene.shape.Rectangle;
 
 public abstract class Simulation {
 	//made gridcell public
-	public GridCell[][] myCells;  //Every array in myCells is one COLUMN of cells
+	private GridCell[][] myCells;  //Every array in myCells is one COLUMN of cells
 	private Group root = new Group();
 	private Scene myScene;
 	private String myTitle;
 
+	private int sceneSize;
 	private int gridCellSize;
 	private int gridSize;
 	
@@ -21,7 +22,10 @@ public abstract class Simulation {
 	public abstract void update(); //Calculates the NEW state for every cell, then sets current state to new state and new state to null, 
 	public abstract void updateColors(); //Changes the colors of cells based on their new state
 	
-	public Simulation(String title){
+	public Simulation(String title, int size, int numGridCells){
+		sceneSize = size;
+		gridSize = numGridCells;
+		gridCellSize = size/numGridCells;
 		myTitle = title;
 	}
 	
@@ -29,11 +33,9 @@ public abstract class Simulation {
 		return myTitle;
 	}
 	
-	public Scene init(int size, int numGridCells){
-		gridSize = numGridCells;
-		gridCellSize = size/numGridCells;
+	public Scene init(){
 		myCells = new GridCell[gridSize][gridSize];
-		myScene = new Scene(root,size,size);
+		myScene = new Scene(root,sceneSize,sceneSize);
 		
 		return myScene; 
 	}

@@ -1,3 +1,4 @@
+
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -13,24 +14,25 @@ public class Main extends Application {
 
 	private final int MILLISECOND_DELAY = 1000/2;
 	private final double SPEED = .5;	
-	private final int SIZE = 700;
+	private int SIZE = 700;
 	private final int NUMCELLS = 100;
 	private final int BUTTONHEIGHT = 100;
 	private final int BUTTONCENTER = 157;
 	private final double BUTTONINSET = 17.5;
 	private final Color BUTTONCOLOR = Color.GRAY;
 
-	private Simulation currentSim = new Predator(3,6,2,200,0.75,0.25);//new Segregation(5000,0.25,0.75,0.50);//new Fire();//new Predator(3,6,2,4000,0.5,0.5);////new Segregation(5000,0.25,0.75,0.50);//
-	private Timeline animation;
 	private Stage myStage;
+	private static Simulation currentSim = new XMLReader("./src/XML/FireXML.txt").getSimulation();
+	private Timeline animation;
+
 	
 	@Override
 	public void start(Stage gameStage) {
 		myStage  = gameStage;
 		myStage.setTitle(currentSim.getTitle());
-
-		myStage.setScene(currentSim.init(SIZE, NUMCELLS));
+		myStage.setScene(currentSim.init());
 		myStage.setHeight(SIZE + BUTTONHEIGHT);
+
 		myStage.show();
 		
 		KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY),
@@ -77,6 +79,7 @@ public class Main extends Application {
 	}
 	
 	 public static void main(String[] args) {
-	        launch(args);
-	 }
+
+		 launch(args);
+     }
 }
