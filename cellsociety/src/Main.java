@@ -10,6 +10,8 @@ import java.util.ResourceBundle;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -17,6 +19,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -26,11 +30,12 @@ public class Main extends Application {
 	private final double SPEED = .5;
 	private final int BUTTONHEIGHT = 50;
 	private final int BUTTONPADDING = 40;
-	private final int SPLASHSIZE = 300;
+	private final int SPLASHSIZE = 400;
 	private final int SIZE = 500;
 	private ResourceBundle labels;
 	private Stage myStage;
 	private Scene myScene;
+	private static Popup popup;
 	private Simulation currentSim;
 	private Timeline animation;
 	private Group splashGroup = new Group();
@@ -113,12 +118,19 @@ public class Main extends Application {
 			temp.setMinWidth(120);
 
 			temp.setOnMouseClicked(e -> {
-				currentSim = new XMLReader("cellsociety/src/XML/" + temp.getText() + "XML.txt").getSimulation();
-				myStage.setTitle(currentSim.getTitle());
-				myScene = currentSim.init();
-				myStage.setHeight(currentSim.getSceneSize() + BUTTONHEIGHT + BUTTONPADDING);
-				addButtons();
-				myStage.setScene(myScene);
+				SimulationOptional simOption = new XMLReader("cellsociety/src/XML/" + temp.getText() + "XML.txt").getSimulation();
+				if (!simOption.hasException()) {
+					currentSim = simOption.getSimulation();
+					myStage.setTitle(currentSim.getTitle());
+					myScene = currentSim.init();
+					myStage.setHeight(currentSim.getSceneSize() + BUTTONHEIGHT + BUTTONPADDING);
+					addButtons();
+					myStage.setScene(myScene);
+				} else {
+					String errorMessage = simOption.getExceptionMessage();
+					handleError(errorMessage);
+				
+				}
 			});
 		}
 		menu.getStyleClass().add("hbox");
@@ -127,6 +139,33 @@ public class Main extends Application {
 		return splash;
 	}
 
+	public void handleError(String errorMessage) {
+		Text msg = new Text(labels.getString("Error"));
+        Button ok = new Button(labels.getString("OK"));
+        ok.setMinWidth(375);
+
+        VBox popUpVBox = new VBox();
+        popUpVBox.getChildren().add(msg);
+        popUpVBox.getChildren().add(ok);
+		
+        popup = new Popup();
+        popup.setAutoFix(false);
+        popup.setHideOnEscape(true);
+        popup.getContent().addAll(popUpVBox);
+        popup.setX(530);
+        popup.setY(260);        
+        
+        ok.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent t) {
+                popup.hide();
+            }
+        });
+
+		popup.show(myStage);
+		
+	}
 	public static void main(String[] args) throws MalformedURLException {
 		
 		launch(args);
