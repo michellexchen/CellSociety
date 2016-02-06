@@ -1,4 +1,3 @@
-
 public class SimulationOptional {
 	private Simulation simulation;
 	private Exception exception;
