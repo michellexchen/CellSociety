@@ -17,7 +17,7 @@ public class Main extends Application {
 
 	private Stage myStage;
 	private Scene myScene;
-	private static Simulation currentSim = new XMLReader("./cellsociety/src/XML/PredatorXML.txt").getSimulation();
+	private static Simulation currentSim = new XMLReader("./cellsociety/src/XML/SegregationXML3.txt").getSimulation();
 	private Timeline animation;
 
 	
