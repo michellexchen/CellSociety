@@ -9,23 +9,25 @@ public class Life extends Simulation {
 	private final String ALIVE = "ALIVE";
 	private final Color DEADCOLOR = Color.GRAY;
 	private final Color ALIVECOLOR = Color.BLUE;
-	private int[][] liveCells = {{3,1}, {3,2},{3,3}, {2,3}, {1,2}};
+	private int cellsAlive;
 	
 	public Life(int size, int numCells, int numAlive) {
 		super(TITLE, size, numCells);
+		cellsAlive = numAlive;
 	}
 	
 	@Override
 	public Scene init(){
 		
 		super.init();
-		for(int[] c: liveCells){
+		/*for(int[] c: liveCells){
 			int x = c[0];
 			int y = c[1];
 			GridCell temp = new GridCell(ALIVE, ALIVECOLOR, x, y);
 			getCells()[x][y] = temp;
-		}
+		}*/
 		
+		super.randomInit(cellsAlive, 1, ALIVE, DEAD, DEAD, ALIVECOLOR, DEADCOLOR, DEADCOLOR); 
 		super.initEmpty(DEAD, DEADCOLOR);
 		super.initGridCells();
 		return super.getMyScene();

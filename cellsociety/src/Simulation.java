@@ -40,7 +40,6 @@ public abstract class Simulation {
 	public Scene init(){
 		myCells = new GridCell[gridSize][gridSize];
 		myScene = new Scene(root,sceneSize,sceneSize);
-		
 		return myScene; 
 	}
 	
@@ -97,7 +96,7 @@ public abstract class Simulation {
 		}
 	}
 	
-	public void initEmpty(String defaultState, Color defaultColor){		//Any cells that haven't been initialized are set to some default state and colr eg. empty/gray
+	public void initEmpty(String defaultState, Color defaultColor){		//Any cells that haven't been initialized are set to some default state and color eg. empty/gray
 		for(int x=0; x<gridSize; x++){
 			for(int y=0; y<gridSize; y++){
 				if(myCells[x][y] == null){	
