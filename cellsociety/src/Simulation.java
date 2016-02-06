@@ -13,16 +13,19 @@ public abstract class Simulation {
 	private Scene myScene;
 	private String myTitle;
 
+	private int sceneSize;
 	private int gridCellSize;
 	private int gridSize;
 	
 	private ArrayList<GridCell> emptyCells = new ArrayList<GridCell>();
-	private Color EMPTYCOLOR = Color.GRAY;
 	
 	public abstract void update(); //Calculates the NEW state for every cell, then sets current state to new state and new state to null, 
 	public abstract void updateColors(); //Changes the colors of cells based on their new state
 	
-	public Simulation(String title){
+	public Simulation(String title, int size, int numGridCells){
+		sceneSize = size;
+		gridSize = numGridCells;
+		gridCellSize = size/numGridCells;
 		myTitle = title;
 	}
 	
@@ -30,15 +33,13 @@ public abstract class Simulation {
 		return myTitle;
 	}
 	
-	public Scene init(int size, int numGridCells){
-		gridSize = numGridCells;
-		gridCellSize = size/numGridCells;
+	public Scene init(){
 		myCells = new GridCell[gridSize][gridSize];
-		myScene = new Scene(root,size,size);
+		myScene = new Scene(root,sceneSize,sceneSize);
 		return myScene; 
 	}
 	
-	public void randomInit(GridCell[][] grid, int population, double percent1, double percent2, String type1, String type2, Color color1, Color color2, Color empty){
+	public void randomInit(GridCell[][] grid, int population, double percent1, double percent2, String type1, String type2, String defaultType, Color color1, Color color2, Color empty){
 		int myPopulation = population;
 		
 		HashMap<Integer,ArrayList<Integer>> randCoords = new HashMap<Integer,ArrayList<Integer>>();  //Maps a column integer (x) to a list of rows (y)
@@ -52,13 +53,13 @@ public abstract class Simulation {
 					randCoords.get(x).add(y);
 					population--;
 				}
-				continue;
 			}
-						
-			ArrayList<Integer> ycoords = new ArrayList<Integer>();
-			ycoords.add(y);
-			randCoords.put(x, ycoords);
-			population--;
+			else{			
+				ArrayList<Integer> ycoords = new ArrayList<Integer>();
+				ycoords.add(y);
+				randCoords.put(x, ycoords);
+				population--;
+			}	
 		}
 		
 		//creating list of coordinate pairs to select from below (because too complicated to just get pair when the y coordinates are in a list)
@@ -91,14 +92,14 @@ public abstract class Simulation {
 			 getCells()[x][y] = temp;
 		}
 		
-		initEmpty();
+		initEmpty(defaultType, empty);
 	}
-	public void initEmpty(){
-		//populating the rest of the grid with empty cells
+	
+	public void initEmpty(String defState, Color defaultColor){		//Any cells that haven't been initialized are set to some default state and colr eg. empty/gray
 		for(int x=0; x<gridSize; x++){
 			for(int y=0; y<gridSize; y++){
 				if(getCells()[x][y] == null){	
-					GridCell c = new GridCell("EMPTY", EMPTYCOLOR, x, y);
+					GridCell c = new GridCell(defState, defaultColor, x, y);
 					myCells[x][y] = c;
 					emptyCells.add(c);
 				}	
@@ -145,7 +146,6 @@ public abstract class Simulation {
 			}
 		}
 	}
-	
 	
 	public GridCell[][] getCells(){
 		return myCells;
