@@ -17,7 +17,8 @@ public class Main extends Application {
 	private final int SIZE = 800;
 
 	private final int NUMCELLS = 100;
-	private static Simulation currentSim;
+	//private static Simulation currentSim;
+	private Simulation currentSim = new Fire(.6, SIZE, NUMCELLS);
 	//private Simulation currentSim = new XMLReader("predator.txt").getSimulation();
 	private Timeline animation;
 	
@@ -87,14 +88,14 @@ public class Main extends Application {
 	}
 	
 	 public static void main(String[] args) {
-		 XMLParser xmlParser = new XMLParser("./cellsociety/src/FireXML.txt");
-		 Document doc = xmlParser.getDocument();
-		 Element root = doc.getDocumentElement();
-		 Double probCatch = Double.parseDouble(root.getAttribute("probcatch"));
-		 Integer size = Integer.parseInt(root.getAttribute("size"));
-		 Integer numCells = Integer.parseInt(root.getAttribute("numcells"));
-		 currentSim = new Fire(probCatch, numCells, size);
-		 
+//		 XMLParser xmlParser = new XMLParser("./cellsociety/src/FireXML.txt");
+//		 Document doc = xmlParser.getDocument();
+//		 Element root = doc.getDocumentElement();
+//		 Double probCatch = Double.parseDouble(root.getAttribute("probcatch"));
+//		 Integer size = Integer.parseInt(root.getAttribute("size"));
+//		 Integer numCells = Integer.parseInt(root.getAttribute("numcells"));
+//		 currentSim = new Fire(probCatch, numCells, size);
+//		 
 		// currentSim = SimulationFactory.makeSimulation(filepath, simulationType);
 		 launch(args);
      }

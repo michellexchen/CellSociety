@@ -35,7 +35,6 @@ public abstract class Simulation {
 		gridCellSize = size/numGridCells;
 		myCells = new GridCell[gridSize][gridSize];
 		myScene = new Scene(root,size,size);
-		
 		return myScene; 
 	}
 	
