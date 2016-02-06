@@ -33,6 +33,10 @@ public abstract class Simulation {
 		return myTitle;
 	}
 	
+	public int getSceneSize(){
+		return sceneSize;
+	}
+	
 	public Scene init(){
 		myCells = new GridCell[gridSize][gridSize];
 		myScene = new Scene(root,sceneSize,sceneSize);

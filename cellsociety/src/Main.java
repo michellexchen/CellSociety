@@ -2,11 +2,9 @@
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.geometry.Insets;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -14,14 +12,12 @@ public class Main extends Application {
 
 	private final int MILLISECOND_DELAY = 1000/2;
 	private final double SPEED = .5;	
-	private int SIZE = 500;
-	private final int BUTTONHEIGHT = 100;
-	private final int BUTTONCENTER = 157;
-	private final double BUTTONINSET = 17.5;
-	private final Color BUTTONCOLOR = Color.GRAY;
+	private final int BUTTONHEIGHT = 50;
+	private final int BUTTONPADDING = 20;
 
 	private Stage myStage;
-	private static Simulation currentSim = new XMLReader("./cellsociety/src/XML/PredatorXML.txt").getSimulation();
+	private Scene myScene;
+	private static Simulation currentSim = new XMLReader("./cellsociety/src/XML/FireXML.txt").getSimulation();
 	private Timeline animation;
 
 	
@@ -29,8 +25,10 @@ public class Main extends Application {
 	public void start(Stage gameStage) {
 		myStage  = gameStage;
 		myStage.setTitle(currentSim.getTitle());
-		myStage.setScene(currentSim.init());
-		myStage.setHeight(SIZE + BUTTONHEIGHT);
+		myScene = currentSim.init();
+		addButtons();
+        myStage.setHeight(currentSim.getSceneSize()+BUTTONHEIGHT+BUTTONPADDING);
+		myStage.setScene(myScene);
 
 		myStage.show();
 		
@@ -40,10 +38,9 @@ public class Main extends Application {
 		animation.setCycleCount(Timeline.INDEFINITE);
 		animation.getKeyFrames().add(frame);
 		
-		addButtons(0, SIZE);
 	}
 	
-	private void addButtons(int x, int y){
+	private void addButtons(){
     	Button start = new Button("Start");
         start.setOnMouseClicked(e->animation.play());
         
@@ -64,17 +61,19 @@ public class Main extends Application {
 			animation.setRate(animation.getCurrentRate()-SPEED);
 		}});
         
-        HBox buttons = new HBox(5,start,stop,pause,step,speedUp,slowDown);
-        buttons.setPrefSize(SIZE, BUTTONHEIGHT);
-        buttons.setPadding(new Insets(BUTTONINSET));
-        buttons.setLayoutX(BUTTONCENTER);
-        buttons.setLayoutY(SIZE);  		
+        Button switchSim = new Button("Switch");
+        switchSim.setOnMouseClicked(e->{});
         
-        Rectangle bg = new Rectangle(0,SIZE,SIZE,BUTTONHEIGHT);
-		bg.setFill(BUTTONCOLOR);
-		
-		currentSim.getRoot().getChildren().add(bg);
+        
+        HBox buttons = new HBox(start,stop,pause,step,speedUp,slowDown,switchSim);
+        buttons.setPrefSize(currentSim.getSceneSize(), BUTTONHEIGHT);
+        buttons.setLayoutY(currentSim.getSceneSize());  		
+        buttons.getStyleClass().add("hbox");
+        
+        myScene.getStylesheets().add("style.css");
+        
         currentSim.getRoot().getChildren().add(buttons);
+        
 	}
 	
 	 public static void main(String[] args) {
