@@ -27,7 +27,6 @@ public class Segregation extends Simulation {
 		myPopulation = population;
 		percentGroup1 = group1population;
 		myThreshold = threshold;
-		myCells = getCells();
 		gridSize = super.getGridSize();
 		emptyCells = getEmptyCells();
 	}
@@ -35,7 +34,7 @@ public class Segregation extends Simulation {
 	@Override
 	public Scene init(){
 		super.init();
-
+		myCells = super.getCells();
 		randomInit(myPopulation, percentGroup1, GROUP1, GROUP2, EMPTY, GROUP1COLOR, GROUP2COLOR, BACKGROUND); //use constants, not these magic strings
 		initGridCells();
 		return super.getMyScene();

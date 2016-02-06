@@ -191,7 +191,6 @@ public abstract class Simulation {
 	public ArrayList<GridCell> getAllNeighbors(int x, int y){
 		ArrayList<GridCell> result = getCardinalNeighbors(x,y);
 
-		System.out.println();
 		if(x > 0 && y > 0){
 			result.add(myCells[x-1][y-1]); //top left
 		}
