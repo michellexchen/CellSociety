@@ -30,7 +30,7 @@ public class Segregation extends Simulation {
 	public Scene init(int size, int numGridCells){
 		super.init(size,numGridCells);
 
-		randomInit(myGrid, myPopulation, percentGroup1, percentGroup2, "GROUP1", "GROUP2",Color.RED, Color.BLUE, Color.GRAY); //use constants, not these magic strings
+		randomInit(myGrid, myPopulation, percentGroup1, percentGroup2, "GROUP1", "GROUP2", "EMPTY", Color.RED, Color.BLUE, Color.GRAY); //use constants, not these magic strings
 		initGridCells();
 		return super.getMyScene();
 	}

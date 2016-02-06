@@ -7,7 +7,6 @@ public class Fire extends Simulation {
 	private final static String TITLE = "FIRE";
 	private final static double probCatch = .6;
 	private int gridSize;
-	private Scene myScene;
 	
 	public Fire() {
 		super(TITLE);

@@ -26,7 +26,7 @@ public class Life extends Simulation {
 			getCells()[x][y] = temp;
 		}
 		
-		super.initEmpty();
+		super.initEmpty(DEAD, DEADCOLOR);
 		super.initGridCells();
 		return super.getMyScene();
 	}
