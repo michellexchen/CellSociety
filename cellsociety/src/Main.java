@@ -1,7 +1,6 @@
 
 import java.net.MalformedURLException;
 import java.util.ArrayList;
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javafx.animation.KeyFrame;
@@ -21,7 +20,9 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 /**
  * 
- * @author colettetorres, saumyajain, michellechen
+ * @author colettetorres
+ * @author saumyajain
+ * @author michellechen
  * 
  * This class is responsible for running the simulation application.
  * A menu screen is displayed to allow the user to select an XML file specifying details about the simulation they wish to run.
@@ -38,7 +39,7 @@ public class Main extends Application {
 	private final int BUTTONPADDING = 40;
 	private final int SPLASHSIZE = 400;
 	private final int SIZE = 500;
-	private ResourceBundle labels;
+	private ResourceBundle myResources;
 	private Stage myStage;
 	private Scene myScene;
 	private static Popup popup;
@@ -54,7 +55,7 @@ public class Main extends Application {
 	 */
 	@Override
 	public void start(Stage gameStage) {
-		labels = ResourceBundle.getBundle("labels", Locale.getDefault());
+		myResources = ResourceBundle.getBundle("Resources/English");
 		
 		myStage = gameStage;
 		splashScene = splashScene();
@@ -73,29 +74,29 @@ public class Main extends Application {
 	 * It handles user input to control the simulation timeline (whether it's playing, stopped, or its speed is changed)
 	 */
 	private void addButtons() {
-		Button start = new Button(labels.getString("Start"));
+		Button start = new Button(myResources.getString("Start"));
 		start.setOnMouseClicked(e -> animation.play());
 
-		Button stop = new Button(labels.getString("Stop"));
+		Button stop = new Button(myResources.getString("Stop"));
 		stop.setOnMouseClicked(e -> animation.stop());
 
-		Button pause = new Button(labels.getString("Pause"));
+		Button pause = new Button(myResources.getString("Pause"));
 		pause.setOnMouseClicked(e -> animation.pause());
 
-		Button step = new Button(labels.getString("Step"));
+		Button step = new Button(myResources.getString("Step"));
 		step.setOnMouseClicked(e -> currentSim.step());
 
-		Button speedUp = new Button(labels.getString("Speed"));
+		Button speedUp = new Button(myResources.getString("Speed"));
 		speedUp.setOnMouseClicked(e -> animation.setRate(animation.getCurrentRate() + SPEED));
 
-		Button slowDown = new Button(labels.getString("Slow"));
+		Button slowDown = new Button(myResources.getString("Slow"));
 		slowDown.setOnMouseClicked(e -> {
 			if (animation.getCurrentRate() > SPEED) {
 				animation.setRate(animation.getCurrentRate() - SPEED);
 			}
 		});
 
-		Button switchSim = new Button(labels.getString("Switch"));
+		Button switchSim = new Button(myResources.getString("Switch"));
 		switchSim.setOnMouseClicked(e -> {
 			myStage.setScene(splashScene);
 			animation.stop();
@@ -106,7 +107,7 @@ public class Main extends Application {
 		buttons.setPrefSize(currentSim.getSceneSize(), BUTTONHEIGHT);
 		buttons.setLayoutY(currentSim.getSceneSize());
 		buttons.getStyleClass().add("hbox");
-		myScene.getStylesheets().add("style.css");
+		myScene.getStylesheets().add("Resources/style.css");
 
 		currentSim.getRoot().getChildren().add(buttons);
 
@@ -120,16 +121,16 @@ public class Main extends Application {
 		Scene splash = new Scene(splashGroup, SIZE, SIZE);
 		splash.setFill(Color.SLATEBLUE);
 		ArrayList<Button> buttons = new ArrayList<Button>();
-		buttons.add(new Button(labels.getString("Fire")));
-		buttons.add(new Button(labels.getString("Segregation")));
-		buttons.add(new Button(labels.getString("Predator")));
-		buttons.add(new Button(labels.getString("Life")));
+		buttons.add(new Button(myResources.getString("Fire")));
+		buttons.add(new Button(myResources.getString("Segregation")));
+		buttons.add(new Button(myResources.getString("Predator")));
+		buttons.add(new Button(myResources.getString("Life")));
 
 		VBox menu = new VBox();
 		menu.setPrefSize(SPLASHSIZE, SPLASHSIZE);
 		menu.setLayoutX((SIZE - SPLASHSIZE) / 2);
 		menu.setLayoutY((SIZE - SPLASHSIZE) / 2);
-		Text welcome = new Text(labels.getString("Select"));
+		Text welcome = new Text(myResources.getString("Select"));
 		menu.getChildren().add(welcome);
 
 		for (Button temp : buttons) {
@@ -153,7 +154,7 @@ public class Main extends Application {
 			});
 		}
 		menu.getStyleClass().add("hbox");
-		splash.getStylesheets().add("style.css");
+		splash.getStylesheets().add("Resources/style.css");
 		splashGroup.getChildren().add(menu);
 		return splash;
 	}
@@ -163,8 +164,8 @@ public class Main extends Application {
 	 * @param errorMessage the error message to be displayed to the user
 	 */
 	public void handleError(String errorMessage) {
-		Text msg = new Text(labels.getString("Error"));
-        Button ok = new Button(labels.getString("OK"));
+		Text msg = new Text(myResources.getString("Error"));
+        Button ok = new Button(myResources.getString("OK"));
         ok.setMinWidth(375);
 
         VBox popUpVBox = new VBox();
