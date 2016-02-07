@@ -115,7 +115,6 @@ public class Main extends Application {
 			animation.stop();
 			animation.setRate(1);
 			myStage.setHeight(SIZE+BUTTONHEIGHT-BUTTONPADDING);
-			myStage.setWidth(SIZE);
 
 		});
 

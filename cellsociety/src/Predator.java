@@ -204,7 +204,6 @@ public class Predator extends Simulation {
 	private void breedAnimal(GridCell animal, ArrayList<GridCell> emptyNeighbors) { 
 		GridCell newAnimal = getRandomCell(emptyNeighbors);
 		if(newAnimal!=null){ 
-			System.out.println("breed");
 			newAnimal.setNextState(animal.getState());
 			breedGrid[animal.getX()][animal.getY()]=0;
 		}
