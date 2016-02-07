@@ -166,14 +166,14 @@ public class Main extends Application {
 		number.setPromptText("Configuration");
 		number.getItems().addAll(configs);
 		number.setOnAction(e -> {
-			address2 = sims.getSelectionModel().getSelectedItem().toString();
+			address2 = number.getSelectionModel().getSelectedItem().toString();
 		});
 		
 		Button start = new Button("Start");
 		start.setMinWidth(115);
 		start.setOnMouseClicked(e -> {
 			if(address1 != null && address2 != null){
-				simOption = new XMLReader("./src/XML/" + address1+address2+ "XML.txt").getSimulation();
+				simOption = new XMLReader("./cellsociety/src/XML/" + address1+ "XML"+address2+".txt").getSimulation();
 				if(!simOption.hasException()){
 					currentSim = simOption.getSimulation();
 					myStage.setTitle(currentSim.getTitle());
