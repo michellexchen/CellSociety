@@ -55,6 +55,7 @@ public class Main extends Application {
 	 */
 	@Override
 	public void start(Stage gameStage) {
+		
 		myResources = ResourceBundle.getBundle("Resources/English");
 		
 		myStage = gameStage;
