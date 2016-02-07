@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding = "UTF-8"?>
-<predator fishbreed = "1" sharkbreed = "5" sharkdie = "10" population = "20" fishpercent = ".8" size = "500" numcells = "5" title = "Predator" author = "Group 12" ></predator>
+<predator fishbreed = "15" sharkbreed = "5" sharkdie = "10" population = "20" fishpercent = "0.80" size = "500" numcells = "5" title = "Predator" author = "Group 12" ></predator>

@@ -24,8 +24,6 @@ public class Segregation extends Simulation {
 	private int myPopulation;
 	private double percentGroup1;
 	private double myThreshold;
-	private GridCell[][] myCells;
-	private int gridSize;
 	private ArrayList<GridCell> emptyCells;
 	private ArrayList<GridCell> nextEmpty = new ArrayList<GridCell>();
 	private ArrayList<GridCell> cellList = new ArrayList<GridCell>();
@@ -43,7 +41,6 @@ public class Segregation extends Simulation {
 		myPopulation = population;
 		percentGroup1 = group1population;
 		myThreshold = threshold;
-		gridSize = super.getGridSize();
 	}
 	/**
 	 * Initializes a Scene with randomly distributed members of group1 and group 2
@@ -51,7 +48,6 @@ public class Segregation extends Simulation {
 	@Override
 	public Scene init(){
 		super.init();
-		myCells = super.getCells();
 		randomInit(myPopulation, percentGroup1, GROUP1, GROUP2, EMPTY, GROUP1COLOR, GROUP2COLOR, BACKGROUND); 
 		emptyCells = getEmptyCells();
 		initGridCells();
