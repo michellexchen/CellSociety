@@ -6,6 +6,7 @@ import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -21,6 +22,9 @@ public class Main extends Application {
 	private final int BUTTONPADDING = 40;
 	private final int SPLASHSIZE = 300;
 	private final int SIZE = 500;
+	
+	private String address1;
+	private String address2;
 
 	private Stage myStage;
 	private Scene myScene;
@@ -71,6 +75,8 @@ public class Main extends Application {
 			myStage.setScene(splashScene);
 			animation.stop();
 			animation.setRate(1);
+			address1 = null;
+			address2 = null;
 		});
 
 		HBox buttons = new HBox(start, stop, pause, step, speedUp, slowDown, switchSim);
@@ -86,11 +92,15 @@ public class Main extends Application {
 	private Scene splashScene() {
 		Scene splash = new Scene(splashGroup, SIZE, SIZE);
 		splash.setFill(Color.GRAY);
-		ArrayList<Button> buttons = new ArrayList<Button>();
-		buttons.add(new Button("Fire"));
-		buttons.add(new Button("Segregation"));
-		buttons.add(new Button("Predator"));
-		buttons.add(new Button("Life"));
+		ArrayList<String> options = new ArrayList<String>();
+		options.add("Fire");
+		options.add("Segregation");
+		options.add("Predator");
+		options.add("Life");
+		
+		ArrayList<String> configs = new ArrayList<String>();
+		configs.add("1");
+		configs.add("2");
 
 		VBox menu = new VBox();
 		menu.setPrefSize(SPLASHSIZE, SPLASHSIZE);
@@ -98,8 +108,37 @@ public class Main extends Application {
 		menu.setLayoutY((SIZE - SPLASHSIZE) / 2);
 		Text welcome = new Text("Select a simulation below!");
 		menu.getChildren().add(welcome);
+		
 
-		for (Button temp : buttons) {
+		
+		ComboBox sims = new ComboBox();
+		sims.setPromptText("Simulation");
+		sims.getItems().addAll(options);
+		sims.setOnAction(e -> {
+			 address1 = sims.getSelectionModel().getSelectedItem().toString();
+		});
+		
+		ComboBox number = new ComboBox();
+		number.setPromptText("Configuration");
+		number.getItems().addAll(configs);
+		number.setOnAction(e -> {
+			address2 = sims.getSelectionModel().getSelectedItem().toString();
+		});
+		
+		Button start = new Button("Start");
+		start.setMinWidth(115);
+		start.setOnMouseClicked(e -> {
+			if(address1 != null){
+				currentSim = new XMLReader("./src/XML/" + address1+ "XML.txt").getSimulation();
+				myStage.setTitle(currentSim.getTitle());
+				myScene = currentSim.init();
+				myStage.setHeight(currentSim.getSceneSize() + BUTTONHEIGHT + BUTTONPADDING);
+				addButtons();
+				myStage.setScene(myScene);
+			}
+		});
+		
+		/*for (Button temp : buttons) {
 			menu.getChildren().add(temp);
 			temp.setMinWidth(120);
 
@@ -111,8 +150,11 @@ public class Main extends Application {
 				addButtons();
 				myStage.setScene(myScene);
 			});
-		}
-
+		}*/
+		
+		menu.getChildren().add(sims);
+		menu.getChildren().add(number);
+		menu.getChildren().add(start);
 		menu.getStyleClass().add("hbox");
 		splash.getStylesheets().add("style.css");
 		splashGroup.getChildren().add(menu);

@@ -22,7 +22,7 @@ public class Predator extends Simulation {
 	private ArrayList<GridCell> taken = new ArrayList<GridCell>();
 	
 	
-	public Predator(int size, int numCells, int fishBreed, int sharkBreed, int sharkDie, int population, double fish) {
+	public Predator(int size, int numCells, int fishBreed, int sharkBreed, int sharkDie, int population, double fish) { //Initializes simulation constants
 		super(TITLE, size, numCells);
 		myPopulation = population;
 		percentFish = fish;
@@ -31,12 +31,12 @@ public class Predator extends Simulation {
 		fishBreedTime = fishBreed;
 	}
 	
-	public Scene init(){
+	public Scene init(){ //Assigns fish, sharks, and empty cells - returns a Scene with these attributes
 		super.init();
 		gridSize = super.getGridSize();
 		breedGrid = new int[gridSize][gridSize];
 		dieGrid = new int[gridSize][gridSize];
-		randomInit(myPopulation, percentFish, FISH, SHARK, EMPTY, FISHCOLOR, SHARKCOLOR, BACKGROUND); //make these constants
+		randomInit(myPopulation, percentFish, FISH, SHARK, EMPTY, FISHCOLOR, SHARKCOLOR, BACKGROUND);
 		initGridCells();
 		myCells = getCells();
 		return super.getMyScene();
@@ -51,7 +51,7 @@ public class Predator extends Simulation {
 		taken.clear();
 	}
 	
-	private void updateEmpty(){
+	private void updateEmpty(){ //Sets default next state to empty
 		for(int x=0; x<gridSize; x++){
 			for(int y=0; y<gridSize; y++){
 				if(myCells[x][y].getState()==EMPTY){
@@ -61,7 +61,7 @@ public class Predator extends Simulation {
 		}
 	}
 	
-	private void updateSharks(){
+	private void updateSharks(){  //Applies rulse for shark death/breeding/eating
 		for(int x=0; x<gridSize; x++){
 			for(int y=0; y<gridSize; y++){
 				if(myCells[x][y].getState()==SHARK){
@@ -87,14 +87,12 @@ public class Predator extends Simulation {
 						breedGrid[x][y]=0;
 						dieGrid[x][y]++;
 					}
-					
-					
 				}
 			}
 		}
 	}
 
-	private void updateFish(){
+	private void updateFish(){ //applies rules for fish breeding and dying time
 		for(int x=0; x<gridSize; x++){
 			for(int y=0; y<gridSize; y++){
 				if(myCells[x][y].getState()==FISH){
@@ -126,7 +124,7 @@ public class Predator extends Simulation {
 		dieGrid[shark.getX()][shark.getY()] = 0;
 	}
 
-	private void eatFish(GridCell shark, GridCell fish, ArrayList<GridCell> emptyNeighbors) {
+	private void eatFish(GridCell shark, GridCell fish, ArrayList<GridCell> emptyNeighbors) { //Updates grid when sharks eat fish
 		fish.setState(EMPTY); //so you don't look at it when iterating through fish
 		fish.setNextState(SHARK);
 		shark.setNextState(EMPTY);
@@ -141,14 +139,14 @@ public class Predator extends Simulation {
 		dieGrid[shark.getX()][shark.getY()] = 0;
 	}
 	
-	private void moveFish(GridCell fish, GridCell empty){
+	private void moveFish(GridCell fish, GridCell empty){ //Controls fish movements
 		empty.setNextState(FISH);
 		fish.setNextState(EMPTY);
 		breedGrid[empty.getX()][empty.getY()]=breedGrid[fish.getX()][fish.getY()]+1;
 		breedGrid[fish.getX()][fish.getY()]=0;	
 	}
 	
-	private void breedAnimal(GridCell animal, ArrayList<GridCell> emptyNeighbors) {
+	private void breedAnimal(GridCell animal, ArrayList<GridCell> emptyNeighbors) { //Creates a new shark or fish
 		GridCell newAnimal = getRandomCell(emptyNeighbors);
 		if(newAnimal!=null){ 
 			newAnimal.setNextState(animal.getState());
@@ -156,7 +154,7 @@ public class Predator extends Simulation {
 		}
 	}
 	
-	private GridCell getRandomCell(ArrayList<GridCell> selections){
+	private GridCell getRandomCell(ArrayList<GridCell> selections){ //Returns a random gridcell
 		Random rnd = new Random();
 		while(selections.size()>0){
 			GridCell chosen = selections.get(rnd.nextInt(selections.size()));
@@ -171,7 +169,7 @@ public class Predator extends Simulation {
 		return null;
 	}
 	
-	private ArrayList<GridCell> getSpecialNeighbors(ArrayList<GridCell> neighbors, String type){
+	private ArrayList<GridCell> getSpecialNeighbors(ArrayList<GridCell> neighbors, String type){ //Returns all neighbors of a specific type
 		ArrayList<GridCell> special = new ArrayList<GridCell>();
 		for(GridCell n: neighbors){
 			if(n.getState()==type){
@@ -182,7 +180,7 @@ public class Predator extends Simulation {
 	}
 
 	@Override
-	public void updateColors() {
+	public void updateColors() { //Updates grid colors to reflect changes in state
 		for(int x=0; x<gridSize; x++){
 			for(int y=0; y<gridSize; y++){
 				GridCell cell = myCells[x][y];
