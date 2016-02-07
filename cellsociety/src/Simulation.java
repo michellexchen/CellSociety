@@ -34,12 +34,12 @@ public abstract class Simulation {
 	/**
 	 * This method is generally responsible for determining the next state for each cell based on certain parameters, as defined by each type of simulation 
 	 */
-	public abstract void update(); //Calculates the NEW state for every cell, then sets current state to new state and new state to null, 
+	public abstract void update(); 
 	
 	/** 
 	 * This method is generally responsible for setting the color that is to be displayed to reflect the current state of a cell
 	 */
-	public abstract void updateColors(); //Changes the colors of cells based on their new state
+	public abstract void updateColors(); 
 	
 	/**
 	 * This method is responsible for creating a simulation with a title, specific grid and cell dimension
@@ -87,7 +87,7 @@ public abstract class Simulation {
 	 * @return a list of a specified amount of random coordinates 
 	 */
 	private ArrayList<int[]> getRandomCoordinates(int population){
-		HashMap<Integer,ArrayList<Integer>> randCoords = new HashMap<Integer,ArrayList<Integer>>();  //Maps a column integer (x) to a list of rows (y)
+		HashMap<Integer,ArrayList<Integer>> randCoords = new HashMap<Integer,ArrayList<Integer>>();  
 		Random rnd = new Random();
 		while(population>0){
 			int x = rnd.nextInt(gridSize);
@@ -152,7 +152,7 @@ public abstract class Simulation {
 	 * @param defaultState the default state of cells in the grid not populated
 	 * @param defaultColor the default color of cells in the grid not populated 
 	 */
-	public void initEmpty(String defaultState, Color defaultColor){		//Any cells that haven't been initialized are set to some default state and color eg. empty/gray
+	public void initEmpty(String defaultState, Color defaultColor){		
 		for(int x=0; x<gridSize; x++){
 			for(int y=0; y<gridSize; y++){
 				if(myCells[x][y] == null){	
@@ -167,13 +167,13 @@ public abstract class Simulation {
 	/**
 	 * This method randomly populates a grid with cells of two types as well as empty cells based on the given parameters
 	 * @param population the total population of non-empty cells to be populated
-	 * @param percent1
-	 * @param type1
-	 * @param type2
-	 * @param defaultType
-	 * @param color1
-	 * @param color2
-	 * @param defaultColor
+	 * @param percent1 the percent of the population to be populated as the first type 
+	 * @param type1 the label of the first type of cell to be populated
+	 * @param type2 the label of the second type of cell to be populated
+	 * @param defaultType the label of the default type of cell (typically empty)
+	 * @param color1 the color of the first type of cell to be populated
+	 * @param color2 the color of the second type of cell to be populated
+	 * @param defaultColor the color of the second type of cell to be populated 
 	 */
 	public void randomInit(int population, double percent1, String type1, String type2, String defaultType, Color color1, Color color2, Color defaultColor){
 		ArrayList<int[]> coordinates = getRandomCoordinates(population);
@@ -181,18 +181,33 @@ public abstract class Simulation {
 		initEmpty(defaultType, defaultColor);
 	}
 	
+	/**
+	 * This method returns the cell dimension of the grid 
+	 * @return the cell dimension of the grid 
+	 */
 	public int getGridSize(){
 		return gridSize;
 	}
 	
+	/**
+	 * This method returns the root node of the simulation scene 
+	 * @return the root node of the simulation scene
+	 */
 	public Group getRoot(){
 		return root;
 	}
 	
+	/**
+	 * This method returns the unpopulated cells in the grid
+	 * @return a list of unpopulated cells in the grid 
+	 */
 	public ArrayList<GridCell> getEmptyCells(){
 		return emptyCells;
 	}
 	
+	/**
+	 * This method initializes the cells to be displayed such that they appear on the grid as colored squares 
+	 */
 	public void initGridCells(){
 		int top = 0;
 		int left = 0;
@@ -211,6 +226,9 @@ public abstract class Simulation {
 		}	
 	}
 
+	/**
+	 * This method updates the current states of each cell to the next determined state of each cell
+	 */
 	public void updateStates(){
 		for (int m = 0; m<gridSize; m++) {
 			for (int n = 0; n<gridSize; n++) {
@@ -221,6 +239,10 @@ public abstract class Simulation {
 		}
 	}
 	
+	/**
+	 * This method returns the 2-D array representing the simulation's grid 
+	 * @return
+	 */
 	public GridCell[][] getCells(){
 		return myCells;
 	}
@@ -237,16 +259,22 @@ public abstract class Simulation {
 		}	
 	}
 	
+	/**
+	 * This method returns the neighbors to the North, South, East, and West of the cell at the specified coordinates 
+	 * @param x the x-coordinate of the cell
+	 * @param y the y-coordinate of the cell
+	 * @return a list of cells neighboring a specified cell in the cardinal directions
+	 */
 	public ArrayList<GridCell> getCardinalNeighbors(int x, int y){
 		ArrayList<GridCell> result = new ArrayList<GridCell>();
 		if(x > 0){
-			result.add(myCells[x-1][y]); //LEFT
+			result.add(myCells[x-1][y]); 
 		}
 		if(x < gridSize -1){
-			result.add(myCells[x+1][y]);//RIGHT
+			result.add(myCells[x+1][y]);
 		}
 		if(y > 0){
-			result.add(myCells[x][y-1]);//TOP
+			result.add(myCells[x][y-1]);
 		}
 		if(y < gridSize -1){
 			result.add(myCells[x][y+1]);
@@ -254,28 +282,36 @@ public abstract class Simulation {
 		return result;
 	}
 	
+	/**
+	 * This method returns all the neighbors surrounding a specified cell 
+	 * @param x the x-coordinate of the cell
+	 * @param y the y-coordinate of the cell
+	 * @return a list of all the cells surrounding a specified cell 
+	 */
 	public ArrayList<GridCell> getAllNeighbors(int x, int y){
 		ArrayList<GridCell> result = getCardinalNeighbors(x,y);
 
 		if(x > 0 && y > 0){
-			result.add(myCells[x-1][y-1]); //top left
+			result.add(myCells[x-1][y-1]); 
 		}
 		if(x < gridSize-1 && y > 0){
-			result.add(myCells[x+1][y-1]); //top right
+			result.add(myCells[x+1][y-1]); 
 		}
 		if(x < gridSize-1 && y < gridSize-1){
-			result.add(myCells[x+1][y+1]); //bottom left
+			result.add(myCells[x+1][y+1]); 
 		}
 		if(x>0 && y < gridSize-1){
-			result.add(myCells[x-1][y+1]); //bottom right
+			result.add(myCells[x-1][y+1]); 
 		}
 		
 		return result;
 	}
+	
+	/**
+	 * This method returns the scene of the simulation
+	 * @return the simulation scene
+	 */
 	public Scene getMyScene() {
 		return myScene;
-	}
-	public void setMyScene(Scene myScene) {
-		this.myScene = myScene;
 	}
 }

@@ -66,7 +66,7 @@ public class Fire extends Simulation {
 	 */
 	@Override
 	public void update() {
-		for (int x = 0; x<gridSize; x++) { //assigning next state
+		for (int x = 0; x<gridSize; x++) { 
 			for (int y = 0; y<gridSize; y++) {
 				GridCell curr = myCells[x][y];
 				String currState = curr.getState();
