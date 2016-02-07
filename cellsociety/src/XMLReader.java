@@ -11,6 +11,11 @@ import org.w3c.dom.Element;
  * This class reads in XML files and passes the user input to the simulations.
  * In the case of faulty user input, XMLReader utilizes the SimulationOptional class to throw an error message on the scene in the main class.
  * 
+ * XML files contain the following info:
+ * --name of the simulation it represents, as well as a title for the simulation and the simulation's "author"
+ * --settings for global configuration parameters specific to the simulation
+ * --dimensions of the grid and the initial configuration of the states for the cells in the grid
+ * 
  */
 
 public class XMLReader {
