@@ -3,7 +3,16 @@ import java.util.ArrayList;
 
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
-
+/**
+ * 
+ * @author Michelle
+ *
+ * This class is responsible for setting up the Fire simulation.
+ * The fire simulation takes in a user inputed probability probCatch of a tree burning down and simulates the spread of fire in a forest.
+ * Every time a tree next to a healthy tree catches on fire, the healthy tree has probCatch probability of catching on fire at the next step.
+ * The forest is surrounded by empty spaces; when no more trees are on fire the simulation ends.
+ * 
+ */
 public class Fire extends Simulation {
 	private static final String TITLE = "Fire";
 	private static final String BURNING = "BURNING";
@@ -22,12 +31,14 @@ public class Fire extends Simulation {
 		myProbCatch = probCatch;
 	}
 
-	
+	/**
+	 *  Initializes the scene and sets up the grid with a burning tree in the middle, surrounded by healthy trees. 
+	 *  The grid is bordered by empty cells.
+	 */
 	public Scene init(){
 		super.init();
 		myCells = super.getCells();
 		gridSize = super.getGridSize();
-		//fill
 		for (int a = 0; a<gridSize; a++) { //row
 			for (int b = 0; b<gridSize; b++) {
 				if (a == (gridSize-1)/2&& b == (gridSize-1)/2) {
@@ -45,7 +56,14 @@ public class Fire extends Simulation {
 		initGridCells();		
 		return super.getMyScene();
 	}
-		
+	
+	/**
+	 * Goes through the entire grid and updates cells to their next state. 
+	 * If the cell is currently empty, its next state is empty.
+	 * If the cell is currently burning, its next state is empty.
+	 * If the cell contains a healthy tree, if its neighbor is burning and a random number between 0 and 1 < probCatch, its next state is burning.
+	 * Otherwise (if the neighbor is a tree or the random number > probCatch), the cell's next state is still a healthy tree.
+	 */
 	@Override
 	public void update() {
 		for (int x = 0; x<gridSize; x++) { 
@@ -82,12 +100,16 @@ public class Fire extends Simulation {
 		updateStates();		
 	}
 
+	/**
+	 * Updates cell color based on previously updated state. 
+	 */
+	
 	@Override
 	public void updateColors() {
 		for(int c = 0; c<super.getGridSize(); c++) {
 			for(int d = 0; d<super.getGridSize(); d++) {
 				GridCell current = myCells[c][d]; 
-				if (current.getState().equals(EMPTY)) { //is it getnextState??? or getState?? confused bc of update call
+				if (current.getState().equals(EMPTY)) {
 					current.setMyColor(BACKGROUND);
 				}
 				else if (current.getState().equals(TREE)){

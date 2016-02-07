@@ -40,7 +40,6 @@ public class XMLReader {
 	        return new SimulationOptional(simulation, null);
         }
 		catch(Exception e){
-			System.out.println("THROWING");
 
 			return new SimulationOptional(null, e);
 		}

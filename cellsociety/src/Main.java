@@ -44,7 +44,8 @@ public class Main extends Application {
 	private final int BUTTONPADDING = 40;
 	private final int SPLASHSIZE = 400;
 	private final int SIZE = 500;
-
+	
+	private VBox menu;
 	private String address1;
 	private String address2;
 	private ResourceBundle myResources;
@@ -65,8 +66,8 @@ public class Main extends Application {
 	 * 
 	 */
 	@Override
-	public void start(Stage gameStage) {
 
+	public void start(Stage gameStage) {
 		myResources = ResourceBundle.getBundle("Resources/English");
 
 		myStage = gameStage;
@@ -115,8 +116,9 @@ public class Main extends Application {
 			myStage.setScene(splashScene);
 			animation.stop();
 			animation.setRate(1);
-			address1 = null;
-			address2 = null;
+			myStage.setHeight(SIZE+BUTTONHEIGHT-BUTTONPADDING);
+			myStage.setWidth(SIZE);
+
 		});
 
 		HBox buttons = new HBox(start, stop, pause, step, speedUp, slowDown, switchSim);
@@ -146,9 +148,10 @@ public class Main extends Application {
 		ArrayList<String> configs = new ArrayList<String>();
 		configs.add("1");
 		configs.add("2");
+		configs.add("3");
 		splash.setFill(Color.SLATEBLUE);
 
-		VBox menu = new VBox();
+		menu = new VBox();
 		menu.setPrefSize(SPLASHSIZE, SPLASHSIZE);
 		menu.setLayoutX((SIZE - SPLASHSIZE) / 2);
 		menu.setLayoutY((SIZE - SPLASHSIZE) / 2);
@@ -168,6 +171,7 @@ public class Main extends Application {
 		number.setOnAction(e -> {
 			address2 = number.getSelectionModel().getSelectedItem().toString();
 		});
+		
 		
 		Button start = new Button("Start");
 		start.setMinWidth(115);
@@ -210,28 +214,16 @@ public class Main extends Application {
 	public void handleError(String errorMessage) {
 		Text msg = new Text(myResources.getString("Error"));
 		Button ok = new Button(myResources.getString("OK"));
-		ok.setMinWidth(375);
-
-		VBox popUpVBox = new VBox();
-		popUpVBox.getChildren().add(msg);
-		popUpVBox.getChildren().add(ok);
-
-		popup = new Popup();
-		popup.setAutoFix(false);
-		popup.setHideOnEscape(true);
-		popup.getContent().addAll(popUpVBox);
-		popup.setX(530);
-		popup.setY(260);
+		menu.getChildren().addAll(msg, ok);
 
 		ok.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent t) {
-				popup.hide();
+				menu.getChildren().removeAll(msg, ok);
 			}
 		});
 
-		popup.show(myStage);
 
 	}
 
