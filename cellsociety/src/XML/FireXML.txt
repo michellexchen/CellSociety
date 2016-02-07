@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<fire probcatch=".6" size="500" numcells = "100"></fire>
+<fire probcatch=".65" size="500" numcells = "100" title = "Fire" author = "Group 12"></fire>
