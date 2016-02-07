@@ -66,12 +66,6 @@ public class Fire extends Simulation {
 	 */
 	@Override
 	public void update() {
-		//go through entire grid 
-			//if empty: next state = empty
-			//if burning: next state = burning
-			//if tree: if neighbor burning: if random number between 0 and 1 < probCatch
-						//return burning, else tree
-					//if neighbor tree: next state = tree
 		for (int x = 0; x<gridSize; x++) { //assigning next state
 			for (int y = 0; y<gridSize; y++) {
 				GridCell curr = myCells[x][y];
@@ -106,6 +100,10 @@ public class Fire extends Simulation {
 		updateStates();		
 	}
 
+	/**
+	 * Updates cell color based on previously updated state. 
+	 */
+	
 	@Override
 	public void updateColors() {
 		for(int c = 0; c<super.getGridSize(); c++) {
