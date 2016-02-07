@@ -28,7 +28,7 @@ public class Segregation extends Simulation {
 	private int gridSize;
 	private ArrayList<GridCell> emptyCells;
 	private ArrayList<GridCell> nextEmpty = new ArrayList<GridCell>();
-	private ArrayList<GridCell> allCells = new ArrayList<GridCell>();
+	private ArrayList<GridCell> cellList = new ArrayList<GridCell>();
 	
 	/**
 	 * 
@@ -55,13 +55,7 @@ public class Segregation extends Simulation {
 		randomInit(myPopulation, percentGroup1, GROUP1, GROUP2, EMPTY, GROUP1COLOR, GROUP2COLOR, BACKGROUND); 
 		emptyCells = getEmptyCells();
 		initGridCells();
-		
-		for(int x=0; x<gridSize; x++){
-			for(int y=0; y<gridSize; y++){
-				GridCell cell = myCells[x][y];
-				allCells.add(cell);
-			}
-		}
+		cellList = getCloneList();
 		
 		return super.getMyScene();
 	}
@@ -77,8 +71,8 @@ public class Segregation extends Simulation {
 		for(GridCell e: emptyCells){
 			e.setNextState(EMPTY);
 		}
-			Collections.shuffle(allCells);
-			for(GridCell cell: allCells){
+			Collections.shuffle(cellList);
+			for(GridCell cell: cellList){
 				String currState = cell.getState();
 				if(currState != EMPTY)
 				{

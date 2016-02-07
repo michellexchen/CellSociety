@@ -4,7 +4,7 @@ import javafx.scene.paint.Color;
 import java.util.*;
 /**
  * 
- * @author Group 12: Saumya Jain, Collette Torres, Michelle Chen
+ * @author Group 12: Saumya Jain, Colette Torres, Michelle Chen
  * This class creates, populates, and updates a Scene representing the Wa-Tor predator/prey simulation
  * The class populates a grid with fish, sharks, and empty space
  * It applies rules about movement, eating, dying, and breeding of sharks and fish as per the rules online
@@ -29,6 +29,7 @@ public class Predator extends Simulation {
 	private int sharkDieTime;
 	private int fishBreedTime;
 	private ArrayList<GridCell> taken = new ArrayList<GridCell>();
+	private ArrayList<GridCell> cellList = new ArrayList<GridCell>();
 	
 	/**
 	 * Initializes fields
@@ -58,7 +59,9 @@ public class Predator extends Simulation {
 		dieGrid = new int[gridSize][gridSize];
 		randomInit(myPopulation, percentFish, FISH, SHARK, EMPTY, FISHCOLOR, SHARKCOLOR, BACKGROUND);
 		initGridCells();
-		myCells = getCells();
+		myCells = super.getCells();
+		cellList = getCloneList();
+		
 		return super.getMyScene();
 	}
 	/**
@@ -72,18 +75,20 @@ public class Predator extends Simulation {
 		updateStates();
 		taken.clear();
 	}
+
 	/**
 	 * Sets default next state to empty
 	 */
-	private void updateEmpty(){ 
-		for(int x=0; x<gridSize; x++){
-			for(int y=0; y<gridSize; y++){
-				if(myCells[x][y].getState()==EMPTY){
-					myCells[x][y].setNextState(EMPTY);
-				}
+	private void updateEmpty(){ //Sets default next state to empty
+		for(GridCell cell: cellList){
+			if(cell.getState()==EMPTY){
+				cell.setNextState(EMPTY);
+
 			}
 		}
+
 	}
+
 	/**
 	 * Applies rules for shark death/breeding/eating
 	 * Sharks eat available fish
@@ -120,6 +125,7 @@ public class Predator extends Simulation {
 			}
 		}
 	}
+
 	/**
 	 * applies rules for fish movement and breeding
 	 */
@@ -197,6 +203,7 @@ public class Predator extends Simulation {
 	private void breedAnimal(GridCell animal, ArrayList<GridCell> emptyNeighbors) { 
 		GridCell newAnimal = getRandomCell(emptyNeighbors);
 		if(newAnimal!=null){ 
+			System.out.println("breed");
 			newAnimal.setNextState(animal.getState());
 			breedGrid[animal.getX()][animal.getY()]=0;
 		}

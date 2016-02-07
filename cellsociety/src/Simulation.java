@@ -314,4 +314,15 @@ public abstract class Simulation {
 	public Scene getMyScene() {
 		return myScene;
 	}
+	
+	public ArrayList<GridCell> getCloneList(){
+		ArrayList<GridCell> cellList = new ArrayList<GridCell>();
+		for(int x=0; x<gridSize; x++){
+			for(int y=0; y<gridSize; y++){
+				GridCell cell = myCells[x][y];
+				cellList.add(cell);
+			}
+		}
+		return cellList;
+	}
 }

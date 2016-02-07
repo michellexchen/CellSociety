@@ -15,7 +15,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -52,7 +51,6 @@ public class Main extends Application {
 
 	private Stage myStage;
 	private Scene myScene;
-	private static Popup popup;
 	private Simulation currentSim;
 	private SimulationOptional simOption;
 	private Timeline animation;
