@@ -12,7 +12,7 @@ public class XMLReader {
 		file = filename;
 	}
 	
-	public Simulation getSimulation(){
+	public SimulationOptional getSimulation(){
 		try{
 			File inputFile = new File(file);
 	        DocumentBuilderFactory dbFactory 
@@ -20,22 +20,27 @@ public class XMLReader {
 	        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 	        Document doc = dBuilder.parse(inputFile);
 	        String simulationType = doc.getDocumentElement().getNodeName();
+	        Simulation simulation;
 	        switch(simulationType){
 	        case "predator":
-	        	return getPredator(doc);
+	        	simulation = getPredator(doc);
+	        	break;
 	        case "fire":
-	        	return getFire(doc);
+	        	simulation = getFire(doc);
+	        	break;
 	        case "segregation":
-	        	return getSegregation(doc);
+	        	simulation = getSegregation(doc);
+	        	break;
 	        case "life":
-	        	return getLife(doc);
+	        	simulation = getLife(doc);
+	        	break;
 	        default:
 	        	return null; // throw exception?
 	        }
+	        return new SimulationOptional(simulation, null);
         }
 		catch(Exception e){
-			e.printStackTrace();
-			return null;
+			return new SimulationOptional(null, e);
 		}
 	}
 	
