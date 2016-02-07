@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding = "UTF-8"?>
-<life numalive = "5000" size = "500" numcells = "100"> </life>
+<life numalive = "5000" size = "500" numcells = "100" title = "Life" author = "Group 12"> </life>
