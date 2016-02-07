@@ -28,7 +28,6 @@ public class Segregation extends Simulation {
 		percentGroup1 = group1population;
 		myThreshold = threshold;
 		gridSize = super.getGridSize();
-		emptyCells = getEmptyCells();
 	}
 	
 	@Override
@@ -36,6 +35,7 @@ public class Segregation extends Simulation {
 		super.init();
 		myCells = super.getCells();
 		randomInit(myPopulation, percentGroup1, GROUP1, GROUP2, EMPTY, GROUP1COLOR, GROUP2COLOR, BACKGROUND); 
+		emptyCells = getEmptyCells();
 		initGridCells();
 		
 		for(int x=0; x<gridSize; x++){
