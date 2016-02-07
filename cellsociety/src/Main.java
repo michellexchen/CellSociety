@@ -172,8 +172,8 @@ public class Main extends Application {
 		Button start = new Button("Start");
 		start.setMinWidth(115);
 		start.setOnMouseClicked(e -> {
-			if(address1 != null && address2 != null){
-				simOption = new XMLReader("./src/XML/" + address1+address2+ "XML.txt").getSimulation();
+			if(address1 != null){
+				simOption = new XMLReader("./src/XML/" + address1+ "XML.txt").getSimulation();
 				if(!simOption.hasException()){
 					currentSim = simOption.getSimulation();
 					myStage.setTitle(currentSim.getTitle());
