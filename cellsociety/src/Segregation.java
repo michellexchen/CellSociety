@@ -1,9 +1,13 @@
 
-
 import java.util.*;
 
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
+/**
+ * 
+ * @author Saumya
+ *
+ */
 
 public class Segregation extends Simulation {
 	private static final String TITLE = "Segregation";
@@ -22,6 +26,14 @@ public class Segregation extends Simulation {
 	private ArrayList<GridCell> nextEmpty = new ArrayList<GridCell>();
 	private ArrayList<GridCell> allCells = new ArrayList<GridCell>();
 	
+	/**
+	 * 
+	 * @param size
+	 * @param numCells
+	 * @param population
+	 * @param group1population
+	 * @param threshold
+	 */
 	public Segregation(int size, int numCells, int population, double group1population, double threshold) {
 		super(TITLE,size,numCells);
 		myPopulation = population;

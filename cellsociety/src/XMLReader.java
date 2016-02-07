@@ -35,11 +35,12 @@ public class XMLReader {
 	        	simulation = getLife(doc);
 	        	break;
 	        default:
-	        	return null; // throw exception?
+	        	return null;
 	        }
 	        return new SimulationOptional(simulation, null);
         }
 		catch(Exception e){
+
 			return new SimulationOptional(null, e);
 		}
 	}
