@@ -40,7 +40,7 @@ public class Main extends Application {
 
 	@Override
 	public void start(Stage gameStage) {
-		labels = ResourceBundle.getBundle("English", Locale.getDefault());
+		labels = ResourceBundle.getBundle("./resources/English.properties");
 		
 		myStage = gameStage;
 		splashScene = splashScene();
