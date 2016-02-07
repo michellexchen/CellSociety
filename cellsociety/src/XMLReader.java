@@ -4,6 +4,20 @@ import javax.xml.parsers.DocumentBuilder;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+/**
+ * 
+ * @author Michelle
+ *
+ * This class reads in XML files and passes the user input to the simulations.
+ * In the case of faulty user input, XMLReader utilizes the SimulationOptional class to throw an error message on the scene in the main class.
+ * 
+ * XML files contain the following info:
+ * --name of the simulation it represents, as well as a title for the simulation and the simulation's "author"
+ * --settings for global configuration parameters specific to the simulation
+ * --dimensions of the grid and the initial configuration of the states for the cells in the grid
+ * 
+ */
+
 public class XMLReader {
 	
 	private String file;
@@ -11,6 +25,12 @@ public class XMLReader {
 	public XMLReader(String filename) {
 		file = filename;
 	}
+	
+	/**
+	 * @return
+	 * This method reads the XML file and calls a simulation specific method to return a simulation based on the information contained within the file.
+	 * If the XML file contains faulty user input, the method will instead return an error message to be displayed on the Stage in the main method.
+	 */
 	
 	public SimulationOptional getSimulation(){
 		try{
@@ -44,7 +64,16 @@ public class XMLReader {
 			return new SimulationOptional(null, e);
 		}
 	}
-	
+
+	/**
+	 * 
+	 * @param doc
+	 * @return
+	 * 
+	 * This method is called in getSimulation() when the predator attribute is read and returns the predator simulation based on user inputed attributes from the XML file
+	 * Attributes included in the XML file include fishBreed, sharkBreed, sharkDie, population, percentFish, size, and numCells
+	 * 
+	 */
 	private Simulation getPredator(Document doc){
 		Element root = doc.getDocumentElement();
         int fishBreed = Integer.parseInt(root.getAttribute("fishbreed"));
@@ -58,6 +87,15 @@ public class XMLReader {
         return new Predator(size,numCells,fishBreed,sharkBreed,sharkDie,population,percentFish);
 	}
 	
+	/**
+	 * 
+	 * @param doc
+	 * @return
+	 * 
+	 * This method is called in getSimulation() when the fire attribute is read and returns the fire simulation based on user inputed attributes from the XML file
+	 * Attributes included in the XML file include probCatch, size, and numCells
+	 * 
+	 */
 	private Simulation getFire(Document doc){
 		 Element root = doc.getDocumentElement();
 		 Double probCatch = Double.parseDouble(root.getAttribute("probcatch"));
@@ -66,6 +104,16 @@ public class XMLReader {
 		 
 		 return new Fire(size,numCells,probCatch);
 	}
+	
+	/**
+	 * 
+	 * @param doc
+	 * @return
+	 * 
+	 * This method is called in getSimulation() when the segregation attribute is read and returns the segregation simulation based on user inputed attributes from the XML file
+	 * Attributes included in the XML file include population, percent1, satisfaction, size, and numCells
+	 * 
+	 */
 	private Simulation getSegregation(Document doc){
 		Element root = doc.getDocumentElement();
         int population = Integer.parseInt(root.getAttribute("popsize"));
@@ -77,6 +125,15 @@ public class XMLReader {
 		return new Segregation(size,numCells,population,percent1,satisfaction);
 	}
 	
+	/**
+	 * 
+	 * @param doc
+	 * @return
+	 * 
+	 * This method is called in getSimulation() when the life attribute is read and returns the life simulation based on user inputed attributes from the XML file
+	 * Attributes included in the XML file include numAlive, size, and numCells
+	 * 
+	 */
 	private Simulation getLife(Document doc){
 		Element root = doc.getDocumentElement();
 		int numAlive = Integer.parseInt(root.getAttribute("numalive"));

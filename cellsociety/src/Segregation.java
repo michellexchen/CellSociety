@@ -1,9 +1,17 @@
 
-
 import java.util.*;
 
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
+/**
+ * 
+ * @author Saumya Jain, Collette Torres, Michelle Chen
+ * This class reresents the Segregation model simulation
+ * The class populates a grid with members of two groups
+ * Members of the groups move if they are dissatisfied, as per the rules in Schelling's model of segregation
+ * The class passes the states of cells to the Simulation superclass that outputs the results visually
+ *
+ */
 
 public class Segregation extends Simulation {
 	private static final String TITLE = "Segregation";
@@ -22,6 +30,14 @@ public class Segregation extends Simulation {
 	private ArrayList<GridCell> nextEmpty = new ArrayList<GridCell>();
 	private ArrayList<GridCell> cellList = new ArrayList<GridCell>();
 	
+	/**
+	 * 
+	 * @param size Size of Scene
+	 * @param numCells Number of cells per row/col
+	 * @param population Total number of nonempty cells
+	 * @param group1population Proportion of population belonging to group one
+	 * @param threshold Threshold for satisfaction
+	 */
 	public Segregation(int size, int numCells, int population, double group1population, double threshold) {
 		super(TITLE,size,numCells);
 		myPopulation = population;
@@ -29,7 +45,9 @@ public class Segregation extends Simulation {
 		myThreshold = threshold;
 		gridSize = super.getGridSize();
 	}
-	
+	/**
+	 * Initializes a Scene with randomly distributed members of group1 and group 2
+	 */
 	@Override
 	public Scene init(){
 		super.init();
@@ -41,7 +59,13 @@ public class Segregation extends Simulation {
 		
 		return super.getMyScene();
 	}
-	
+	/**
+	 * Updates state of cellls
+	 * Checks if populated cells are satisfied
+	 * Moves dissatisfied cells
+	 * Updates list of empty cells
+	 * Randomizes order of checking so that one area of the grid doesn't consistently move before another
+	 */
 	@Override
 	public void update(){
 		for(GridCell e: emptyCells){
@@ -72,7 +96,11 @@ public class Segregation extends Simulation {
 		//setting current state to next state and clearing next state
 		updateStates();
 	}
-	
+	/**
+	 * Checks if cell is satisfied based on threshold 
+	 * @param cell A cell to be checked for satisfaction
+	 * @return
+	 */
 	private boolean isDissatisfied(GridCell cell){
 		ArrayList<GridCell> neighbors = getAllNeighbors(cell.getX(),cell.getY());
 		double numSame = 0;
@@ -88,7 +116,10 @@ public class Segregation extends Simulation {
 		
 		return (numSame/(numSame+numDiff)<myThreshold);
 	}
-	
+	/**
+	 * 
+	 * @return A random cell from a list of empty cells
+	 */
 	private GridCell getRandEmpty(){
 		Random rnd = new Random();
 		if(emptyCells.size() == 0){
@@ -98,7 +129,9 @@ public class Segregation extends Simulation {
 		emptyCells.remove(empty);
 		return empty;
 	}
-
+	/**
+	 * Changes colors of cells based on state of cells
+	 */
 	@Override
 	public void updateColors() {
 		for(int x=0; x<super.getGridSize(); x++){
