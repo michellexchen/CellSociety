@@ -26,7 +26,7 @@ public abstract class Simulation {
 	private String myTitle;
 
 	private int sceneSize;
-	private int gridCellSize;
+	private double gridCellSize;
 	private int gridSize;
 	
 	private ArrayList<GridCell> emptyCells = new ArrayList<GridCell>();
@@ -48,9 +48,10 @@ public abstract class Simulation {
 	 * @param numGridCells the cell dimension of the grid (assuming a square grid)
 	 */
 	public Simulation(String title, int size, int numGridCells){
-		sceneSize = size;
 		gridSize = numGridCells;
-		gridCellSize = (int)((double)(size)/(double)(numGridCells));
+		gridCellSize = Math.ceil(((double)(size)/(double)(numGridCells)));
+		sceneSize = (int) (gridSize * gridCellSize);
+
 		myTitle = title;
 	}
 	
