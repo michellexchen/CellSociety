@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry excluding="resources/" kind="src" path="cellsociety/src"/>
-<<<<<<< HEAD
-=======
-	<classpathentry excluding="src/|src/resources/" kind="src" path="cellsociety"/>
->>>>>>> d99a5dc73a4396bfd2601626622ce20f0de6cf07
+	<classpathentry kind="src" path="cellsociety/src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
