@@ -18,16 +18,9 @@ public class Life extends Simulation {
 	}
 	
 	@Override
-	public Scene init(){
+	public Scene init(){ //Initializes grid and scene. Currently assigns live cells to random locations. 
 		
 		super.init();
-		/*for(int[] c: liveCells){
-			int x = c[0];
-			int y = c[1];
-			GridCell temp = new GridCell(ALIVE, ALIVECOLOR, x, y);
-			getCells()[x][y] = temp;
-		}*/
-		
 		super.randomInit(cellsAlive, 1, ALIVE, DEAD, DEAD, ALIVECOLOR, DEADCOLOR, DEADCOLOR); 
 		super.initEmpty(DEAD, DEADCOLOR);
 		super.initGridCells();
@@ -35,7 +28,7 @@ public class Life extends Simulation {
 	}
 	
 	@Override
-	public void update() {
+	public void update() { //Updates state of grid cells
 		for(GridCell[] c: getCells()){
 			for(GridCell d: c){
 				
@@ -69,7 +62,7 @@ public class Life extends Simulation {
 	}
 
 	@Override
-	public void updateColors() {
+	public void updateColors() { //updates colors in grid to reflect changes in state
 		for(GridCell[] c: getCells()){
 			for(GridCell d: c){
 				if(d.getState() == ALIVE){
