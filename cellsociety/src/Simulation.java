@@ -7,9 +7,20 @@ import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+/**
+ * This class is responsible for all of the functionality and properties of a simulation.
+ * It houses the 2-D array containing all of the cells that are displayed for the simulation
+ * and is this responsible for big-picture handling of simulations as manifested through this matrix, 
+ * such as getting them to display on a screen. 
+ * The class contains methods useful to simulations of varying types, such as getting the neighbors
+ * of a particular cell in the simulation grid, updating the states of all cells on the grid, etc.  
+ * @author colettetorres
+ * @author saumyajain
+ * @author michellechen
+ *
+ */
 public abstract class Simulation {
-	//made gridcell public
-	private GridCell[][] myCells;  //Every array in myCells is one COLUMN of cells
+	private GridCell[][] myCells;  
 	private Group root = new Group();
 	private Scene myScene;
 	private String myTitle;
@@ -20,9 +31,22 @@ public abstract class Simulation {
 	
 	private ArrayList<GridCell> emptyCells = new ArrayList<GridCell>();
 	
+	/**
+	 * This method is generally responsible for determining the next state for each cell based on certain parameters, as defined by each type of simulation 
+	 */
 	public abstract void update(); //Calculates the NEW state for every cell, then sets current state to new state and new state to null, 
+	
+	/** 
+	 * This method is generally responsible for setting the color that is to be displayed to reflect the current state of a cell
+	 */
 	public abstract void updateColors(); //Changes the colors of cells based on their new state
 	
+	/**
+	 * This method is responsible for creating a simulation with a title, specific grid and cell dimension
+	 * @param title the title of the simulation
+	 * @param size the size of the grid
+	 * @param numGridCells the cell dimension of the grid (assuming a square grid)
+	 */
 	public Simulation(String title, int size, int numGridCells){
 		sceneSize = size;
 		gridSize = numGridCells;
@@ -30,10 +54,18 @@ public abstract class Simulation {
 		myTitle = title;
 	}
 	
+	/**
+	 * This method is responsible for retrieving the title of the simulation
+	 * @return the title of the simulation
+	 */
 	public String getTitle(){
 		return myTitle;
 	}
 	
+	/**
+	 * This method is responsible for retrieving the dimension of the simulation scene (assuming a square scene)
+	 * @return the dimension of the simulation scene (in pixels)
+	 */
 	public int getSceneSize(){
 		return sceneSize;
 	}
@@ -97,6 +129,11 @@ public abstract class Simulation {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param defaultState
+	 * @param defaultColor
+	 */
 	public void initEmpty(String defaultState, Color defaultColor){		//Any cells that haven't been initialized are set to some default state and color eg. empty/gray
 		for(int x=0; x<gridSize; x++){
 			for(int y=0; y<gridSize; y++){
