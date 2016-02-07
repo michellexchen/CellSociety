@@ -3,18 +3,32 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class GridCell {
-	
+	/*
+	 * This class is the basic building block of a cellular automata
+	 * Every cell has a state, a location, and a color
+	 * The Simulation class and its subclasses manage the state and color of the cells according to specific rules
+	 * The Simulation class visually represents the information stored in this class
+	 */
 	private Color myColor = Color.BLACK;
 	private Rectangle mySquare;
 	private String currState;
 	private String nextState;
 	private int[] myCoordinates = new int[2];
-	
+	/**
+	 * 
+	 * @param state The initial state of the gridcell
+	 * @param color The initial color of the gridcell
+	 * @param x The x-location of that cell
+	 * @param y The y-location of that cell
+	 */
 	public GridCell(String state, Color color, int x, int y) {
 		currState = state;
 		myColor = color;
 		myCoordinates = new int[]{x,y};
 	}
+	/*
+	 * Getters and setters below
+	 */
 	
 	public String getState(){
 		return currState;
