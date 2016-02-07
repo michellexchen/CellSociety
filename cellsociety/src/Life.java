@@ -3,7 +3,14 @@ import java.util.ArrayList;
 
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
-
+/**
+ * This class represents the Game of Life simulation
+ * The class populates a grid with Live cells by randomly allocating a user-determined number of live cells
+ * It updates the state of cells based on the rules of the simulation
+ * Passes the states of cells to the Simulation superclass, which displays the states visually
+ * @author Saumya Jain, Collette Torres, Michelle Chen
+ *
+ */
 public class Life extends Simulation {
 	private static final String TITLE = "Game of Life";
 	private final String DEAD = "DEAD";
@@ -12,13 +19,22 @@ public class Life extends Simulation {
 	private final Color ALIVECOLOR = Color.BLUE;
 	private int cellsAlive;
 	
+	/**
+	 * Randomly allocates alive cells through the grid
+	 * Initializes non-alive cells to dead
+	 * @param Size of Scene
+	 * @param Number of cells
+	 * @param Number of cells with state alive at beginning
+	 */
 	public Life(int size, int numCells, int numAlive) {
 		super(TITLE, size, numCells);
 		cellsAlive = numAlive;
 	}
-	
+	/**
+	 * Initializes grid and scene. Currently assigns live cells to random locations.
+	 */
 	@Override
-	public Scene init(){ //Initializes grid and scene. Currently assigns live cells to random locations. 
+	public Scene init(){  
 		
 		super.init();
 		super.randomInit(cellsAlive, 1, ALIVE, DEAD, DEAD, ALIVECOLOR, DEADCOLOR, DEADCOLOR); 
@@ -26,9 +42,12 @@ public class Life extends Simulation {
 		super.initGridCells();
 		return super.getMyScene();
 	}
-	
+	/**
+	 * Updates state of grid cells
+	 * Sets live cells to dead and dead cells to alive based on states of their neighbors
+	 */
 	@Override
-	public void update() { //Updates state of grid cells
+	public void update() { 
 		for(GridCell[] c: getCells()){
 			for(GridCell d: c){
 				
@@ -60,9 +79,11 @@ public class Life extends Simulation {
 		}
 		updateStates();
 	}
-
+	/**
+	 * updates colors in grid to reflect changes in state
+	 */
 	@Override
-	public void updateColors() { //updates colors in grid to reflect changes in state
+	public void updateColors() { 
 		for(GridCell[] c: getCells()){
 			for(GridCell d: c){
 				if(d.getState() == ALIVE){
