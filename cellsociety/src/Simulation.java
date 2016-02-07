@@ -44,13 +44,13 @@ public abstract class Simulation {
 	/**
 	 * This method is responsible for creating a simulation with a title, specific grid and cell dimension
 	 * @param title the title of the simulation
-	 * @param size the size of the grid
+	 * @param size the dimension for the size of the grid
 	 * @param numGridCells the cell dimension of the grid (assuming a square grid)
 	 */
 	public Simulation(String title, int size, int numGridCells){
 		sceneSize = size;
 		gridSize = numGridCells;
-		gridCellSize = size/numGridCells;
+		gridCellSize = (int)((double)(size)/(double)(numGridCells));
 		myTitle = title;
 	}
 	
@@ -70,12 +70,21 @@ public abstract class Simulation {
 		return sceneSize;
 	}
 	
+	/**
+	 * This method is responsible for initializing the 2-D grid of cells and creating the scene for this grid
+	 * @return the scene on which the simulation grid is displayed 
+	 */
 	public Scene init(){
 		myCells = new GridCell[gridSize][gridSize];
 		myScene = new Scene(root,sceneSize,sceneSize);
 		return myScene; 
 	}
 	
+	/**
+	 * This method creates a list of random coordinates based on a user-determined amount
+	 * @param population the amount of random coordinates needed
+	 * @return a list of a specified amount of random coordinates 
+	 */
 	private ArrayList<int[]> getRandomCoordinates(int population){
 		HashMap<Integer,ArrayList<Integer>> randCoords = new HashMap<Integer,ArrayList<Integer>>();  //Maps a column integer (x) to a list of rows (y)
 		Random rnd = new Random();
@@ -96,8 +105,7 @@ public abstract class Simulation {
 				population--;
 			}	
 		}
-		
-		//creating list of coordinate pairs to select from below (because too complicated to just get pair when the y coordinates are in a list)
+
 		ArrayList<int[]> coordList = new ArrayList<int[]>();
 		for(int x: randCoords.keySet()){
 			for(int y: randCoords.get(x)){
@@ -110,6 +118,15 @@ public abstract class Simulation {
 		return coordList;
 	}
 	
+	/**
+	 * This method populates the 2-D array representing the simulation grid at certain coordinates
+	 * @param coordinates the list of coordinates to be populated
+	 * @param populationType1 the population for the first type of cell to be populated (implies population of second because the second's population is equal to the amount of remaining coordinates after the first type has been populated)
+	 * @param type1 the label for the first type of cell to be populated 
+	 * @param type2 the label for the second type of cell to be populated
+	 * @param color1 the color for the first type of cell to be populated
+	 * @param color2 the color for the second type of cell to be populated
+	 */
 	private void populateGrid(ArrayList<int[]> coordinates, int populationType1, String type1, String type2, Color color1, Color color2){
 		for(int i=0; i<coordinates.size(); i++){ 
 			int[] coord = coordinates.get(i);
@@ -130,9 +147,9 @@ public abstract class Simulation {
 	}
 	
 	/**
-	 * 
-	 * @param defaultState
-	 * @param defaultColor
+	 * This method initializes the appearance and state of all of the empty cells in the grid
+	 * @param defaultState the default state of cells in the grid not populated
+	 * @param defaultColor the default color of cells in the grid not populated 
 	 */
 	public void initEmpty(String defaultState, Color defaultColor){		//Any cells that haven't been initialized are set to some default state and color eg. empty/gray
 		for(int x=0; x<gridSize; x++){
@@ -146,6 +163,17 @@ public abstract class Simulation {
 		}
 	}
 	
+	/**
+	 * This method randomly populates a grid with cells of two types as well as empty cells based on the given parameters
+	 * @param population the total population of non-empty cells to be populated
+	 * @param percent1
+	 * @param type1
+	 * @param type2
+	 * @param defaultType
+	 * @param color1
+	 * @param color2
+	 * @param defaultColor
+	 */
 	public void randomInit(int population, double percent1, String type1, String type2, String defaultType, Color color1, Color color2, Color defaultColor){
 		ArrayList<int[]> coordinates = getRandomCoordinates(population);
 		populateGrid(coordinates,(int)(population*percent1),type1,type2,color1,color2);
