@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<simulation>
+	<info>
+		<name>Fire</name>
+		<title>Fire Simulation </title>
+		<author>Group 12 </author>
+	</info> 
+
+	<parameters>
+		<probcatch> .65 </probcatch>
+		<size> 500 </size>
+		<numcells> 100 </numcells>
+	</parameters>
+
+</simulation>

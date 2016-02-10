@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding = "UTF-8"?>
+
+<simulation>
+	<info>
+		<name>Predator</name>
+		<title>Predator Simulation </title>
+		<author>Group 12 </author>
+	</info> 
+
+	<parameters>
+		<fishbreed> 15 </fishbreed>
+		<sharkbreed> 5 </sharkbreed>
+		<sharkdie> 10 </sharkdie>
+		<population> 20 </population>
+		<fishpercent> .8 </fishpercent>
+		<size> 500 </size>
+		<numcells> 5 </numcells>
+	</parameters>
+
+</simulation>

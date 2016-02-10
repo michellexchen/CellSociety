@@ -1,5 +1,6 @@
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javafx.animation.KeyFrame;
@@ -15,6 +16,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -78,8 +81,12 @@ public class Main extends Application {
 		animation = new Timeline();
 		animation.setCycleCount(Timeline.INDEFINITE);
 		animation.getKeyFrames().add(frame);
+		
+		
+		
 	}
 
+	
 	/**
 	 * This method is responsible for adding a GUI to the simulation scene once
 	 * a simulation has been chosen. It handles user input to control the
@@ -154,27 +161,11 @@ public class Main extends Application {
 		menu.setLayoutY((SIZE - SPLASHSIZE) / 2);
 		Text welcome = new Text(myResources.getString("Select"));
 		menu.getChildren().add(welcome);
-
-		ComboBox sims = new ComboBox();
-		sims.setPromptText("Simulation");
-		sims.getItems().addAll(options);
-		sims.setOnAction(e -> {
-			 address1 = sims.getSelectionModel().getSelectedItem().toString();
-		});
 		
-		ComboBox number = new ComboBox();
-		number.setPromptText("Configuration");
-		number.getItems().addAll(configs);
-		number.setOnAction(e -> {
-			address2 = number.getSelectionModel().getSelectedItem().toString();
-		});
-		
-		
-		Button start = new Button("Start");
+		Button start = new Button(myResources.getString("Upload"));
 		start.setMinWidth(115);
 		start.setOnMouseClicked(e -> {
-			if(address1 != null && address2 != null){
-				simOption = new XMLReader("./cellsociety/src/XML/" + address1+ "XML"+address2+".txt").getSimulation();
+				simOption = new XMLReader().getSimulation();
 				if(!simOption.hasException()){
 					currentSim = simOption.getSimulation();
 					myStage.setTitle(currentSim.getTitle());
@@ -183,16 +174,13 @@ public class Main extends Application {
 					addButtons();
 					myStage.setScene(myScene);
 				}
-				else {
-					String errorMessage = simOption.getExceptionMessage();
-					handleError(errorMessage);
-
-				} 	
-			}
+//				else {
+//					String errorMessage = simOption.getExceptionMessage();
+//					handleError(errorMessage);
+//				} 	
+			
 		});
 
-		menu.getChildren().add(sims);
-		menu.getChildren().add(number);
 		menu.getChildren().add(start);
 		menu.getStyleClass().add("hbox");
 		splash.getStylesheets().add("Resources/style.css");

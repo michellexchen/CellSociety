@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding = "UTF-8"?>
+
+<simulation>
+	<info>
+		<name>Life</name>
+		<title>Life Simulation </title>
+		<author>Group 12 </author>
+	</info> 
+
+	<parameters>
+		<numalive> 2400 </numalive>
+		<size> 700 </size>
+		<numcells> 70 </numcells>
+	</parameters>
+
+</simulation>

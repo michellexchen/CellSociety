@@ -1,8 +1,16 @@
 import java.io.File;
+
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+//import org.w3c.dom.Node;
+
+import javafx.scene.Node;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
+import javafx.stage.Stage;
 
 /**
  * 
@@ -19,13 +27,31 @@ import org.w3c.dom.Element;
  */
 
 public class XMLReader {
-	
+	private Stage myStage;
 	private String file;
+	private Element root;
 
-	public XMLReader(String filename) {
-		file = filename;
+	public XMLReader() {
+		file = chooseFile();
+	}
+
+	public String chooseFile(){
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Open XML File");		
+		fileChooser.getExtensionFilters().addAll( //xml file check
+		        new ExtensionFilter("XML Files", "*.xml"));
+		
+		File file = fileChooser.showOpenDialog(null);
+
+		String fileName = "";
+		if (file != null) {
+			fileName = file.getPath();
+		}
+		return fileName;
 	}
 	
+	
+
 	/**
 	 * @return
 	 * This method reads the XML file and calls a simulation specific method to return a simulation based on the information contained within the file.
@@ -38,20 +64,32 @@ public class XMLReader {
 	        DocumentBuilderFactory dbFactory 
 	            = DocumentBuilderFactory.newInstance();
 	        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+	        
 	        Document doc = dBuilder.parse(inputFile);
-	        String simulationType = doc.getDocumentElement().getNodeName();
+	        root = doc.getDocumentElement();	        
+	        //refactor.. gets simulation name
+	        Element simulation2 = (Element) doc.getElementsByTagName("simulation").item(0) ; 
+	        String blah = simulation2.getElementsByTagName("name").item(0).getTextContent();
+	        //System.out.println(blah);	 
+	        
+	        Element blah2 = (Element) doc.getElementsByTagName("simulation").item(1);
+	        String b3 = blah2.getElementsByTagName("probcatch").item(0).getTextContent();
+	        System.out.println("rly");
+	        System.out.println(b3);
+	        
 	        Simulation simulation;
-	        switch(simulationType){
-	        case "predator":
-	        	simulation = getPredator(doc);
+	        
+	        switch(blah){
+	        case "Predator":
+	        	simulation = getPredator(root, doc);
 	        	break;
-	        case "fire":
+	        case "Fire":
 	        	simulation = getFire(doc);
 	        	break;
-	        case "segregation":
+	        case "Segregation":
 	        	simulation = getSegregation(doc);
 	        	break;
-	        case "life":
+	        case "Life":
 	        	simulation = getLife(doc);
 	        	break;
 	        default:
@@ -64,7 +102,7 @@ public class XMLReader {
 			return new SimulationOptional(null, e);
 		}
 	}
-
+	
 	/**
 	 * 
 	 * @param doc
@@ -74,8 +112,7 @@ public class XMLReader {
 	 * Attributes included in the XML file include fishBreed, sharkBreed, sharkDie, population, percentFish, size, and numCells
 	 * 
 	 */
-	private Simulation getPredator(Document doc){
-		Element root = doc.getDocumentElement();
+	private Simulation getPredator(Element root, Document doc){
         int fishBreed = Integer.parseInt(root.getAttribute("fishbreed"));
         int sharkBreed = Integer.parseInt(root.getAttribute("sharkbreed"));
         int sharkDie = Integer.parseInt(root.getAttribute("sharkdie"));
