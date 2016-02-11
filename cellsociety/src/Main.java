@@ -3,6 +3,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.SAXException;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -51,11 +55,13 @@ public class Main extends Application {
 	private String address1;
 	private String address2;
 	private ResourceBundle myResources;
-
+	private Button start;
+	private Text welcome;
 	private Stage myStage;
 	private Scene myScene;
 	private Simulation currentSim;
 	private SimulationOptional simOption;
+	private boolean gotSim;
 	private Timeline animation;
 	private Group splashGroup = new Group();
 	private Scene splashScene;
@@ -159,26 +165,36 @@ public class Main extends Application {
 		menu.setPrefSize(SPLASHSIZE, SPLASHSIZE);
 		menu.setLayoutX((SIZE - SPLASHSIZE) / 2);
 		menu.setLayoutY((SIZE - SPLASHSIZE) / 2);
-		Text welcome = new Text(myResources.getString("Select"));
+		welcome = new Text(myResources.getString("Select"));
 		menu.getChildren().add(welcome);
 		
-		Button start = new Button(myResources.getString("Upload"));
+		start = new Button(myResources.getString("Upload"));
 		start.setMinWidth(115);
 		start.setOnMouseClicked(e -> {
 				simOption = new XMLReader().getSimulation();
-				try{
-						currentSim = simOption.getSimulation();
-						myStage.setTitle(currentSim.getTitle());
-						myScene = currentSim.init();
-						myStage.setHeight(currentSim.getSceneSize() + BUTTONHEIGHT + BUTTONPADDING);
-						addButtons();
-						myStage.setScene(myScene);
-
-					} catch (Exception e2) {
-						System.out.println("is it this");						
-						String errorMessage = simOption.getExceptionMessage();
-						handleError(errorMessage);
+				System.out.println(simOption);
+				gotSim = true;
+				if (simOption == null) { //if cant read simuation type
+					System.out.println("WERAWEF");
+					noSimulation();
+					return;
 				}
+				//CAN WE GET ERRORS TO PRINT???
+				try{
+					currentSim = simOption.getSimulation();
+					myStage.setTitle(currentSim.getTitle());
+					myScene = currentSim.init();
+					myStage.setHeight(currentSim.getSceneSize() + BUTTONHEIGHT + BUTTONPADDING);
+					addButtons();
+					//gotSim = false;
+					myStage.setScene(myScene);
+					} catch (Exception e2) { //if xml file contents are bad
+						//gotSim = false;
+						String errorMessage = simOption.getExceptionMessage();
+						handleError(errorMessage); //method below							
+				}
+			//}
+				
 					
 			
 		});
@@ -199,20 +215,39 @@ public class Main extends Application {
 	 */
 	public void handleError(String errorMessage) {
 		Text msg = new Text(myResources.getString("Error"));
+		Text msg2 = new Text(myResources.getString("Error2"));
 		Button ok = new Button(myResources.getString("OK"));
-		menu.getChildren().addAll(msg, ok);
+		
+		menu.getChildren().addAll(msg, msg2, ok);
+		menu.getChildren().removeAll(welcome, start);
+		
+		ok.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent t) {
+				menu.getChildren().removeAll(msg, msg2, ok);
+				menu.getChildren().addAll(welcome, start);
+			}
+		});
+	}
 
+	public void noSimulation() {
+		Text msg = new Text(myResources.getString("SimError"));
+		Text msg2 = new Text(myResources.getString("SimError2"));
+		Button ok = new Button(myResources.getString("OK"));
+		
+		menu.getChildren().addAll(msg, msg2, ok);
+		menu.getChildren().removeAll(welcome, start);
+		
 		ok.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent t) {
-				menu.getChildren().removeAll(msg, ok);
+				menu.getChildren().removeAll(msg, msg2, ok);
+				menu.getChildren().addAll(welcome, start);
 			}
 		});
-
-
 	}
-
+	
 	public static void main(String[] args) throws MalformedURLException {
 
 		launch(args);

@@ -36,10 +36,10 @@ public abstract class Simulation {
 	 */
 	public abstract void update(); 
 	
-	/** 
-	 * This method is generally responsible for setting the color that is to be displayed to reflect the current state of a cell
-	 */
-	public abstract void updateColors(); 
+//	/** 
+//	 * This method is generally responsible for setting the color that is to be displayed to reflect the current state of a cell
+//	 */
+//	public abstract void updateColors(); 
 	
 	/**
 	 * This method is responsible for creating a simulation with a title, specific grid and cell dimension
@@ -259,6 +259,16 @@ public abstract class Simulation {
 		}	
 	}
 	
+	public void updateColors() {
+		for(int x=0; x<getGridSize(); x++){
+			for(int y=0; y<getGridSize(); y++){
+				GridCell cell = getCells()[x][y];
+				cell.updateColor();
+				}
+			}
+		}
+	
+
 	/**
 	 * This method returns the neighbors to the North, South, East, and West of the cell at the specified coordinates 
 	 * @param x the x-coordinate of the cell

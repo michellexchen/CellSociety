@@ -66,6 +66,7 @@ public class XMLReader {
 			File inputFile = new File(file);
 	        DocumentBuilderFactory dbFactory 
 	            = DocumentBuilderFactory.newInstance();
+	        dbFactory.setIgnoringElementContentWhitespace(true);
 	        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();	        
 	        doc = dBuilder.parse(inputFile);
 	        
@@ -92,13 +93,13 @@ public class XMLReader {
 	        case "Life":
 	        	simulation = getLife(listParam, attributes);
 	        	break;
-	        default:
+	        default: //IT'S HERE.. add return button OR create from here?
 	        	return null;
 	        }
 	        return new SimulationOptional(simulation, null);
         }
 		catch(Exception e){
-			System.out.println("wtffff WHY");
+			System.out.println(e.getMessage());
 			return new SimulationOptional(null, e);
 		}
 	}
