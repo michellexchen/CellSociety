@@ -32,7 +32,7 @@ public abstract class Simulation {
 	private double gridCellSize;
 	private int gridSize;
 	private boolean isToroidal = true; //This is default - in final implementation this should be handled in constructor
-	private ArrayList<GridCell> emptyCells = new ArrayList<GridCell>();
+	private List<GridCell> emptyCells = new ArrayList<GridCell>();
 	private Map<String, Color> stateMap;
 	
 	/**
@@ -96,8 +96,8 @@ public abstract class Simulation {
 	 * @param population the amount of random coordinates needed
 	 * @return a list of a specified amount of random coordinates 
 	 */
-	private ArrayList<int[]> getRandomCoordinates(int population){
-		HashMap<Integer,ArrayList<Integer>> randCoords = new HashMap<Integer,ArrayList<Integer>>();  
+	private List<int[]> getRandomCoordinates(int population){
+		HashMap<Integer,List<Integer>> randCoords = new HashMap<Integer,List<Integer>>();  
 		Random rnd = new Random();
 		while(population>0){
 			int x = rnd.nextInt(gridSize);
@@ -110,14 +110,14 @@ public abstract class Simulation {
 				}
 			}
 			else{			
-				ArrayList<Integer> ycoords = new ArrayList<Integer>();
+				List<Integer> ycoords = new ArrayList<Integer>();
 				ycoords.add(y);
 				randCoords.put(x, ycoords);
 				population--;
 			}	
 		}
 
-		ArrayList<int[]> coordList = new ArrayList<int[]>();
+		List<int[]> coordList = new ArrayList<int[]>();
 		for(int x: randCoords.keySet()){
 			for(int y: randCoords.get(x)){
 				int[] coord = {x,y};
@@ -138,7 +138,7 @@ public abstract class Simulation {
 	 * @param color1 the color for the first type of cell to be populated
 	 * @param color2 the color for the second type of cell to be populated
 	 */
-	private void populateGrid(ArrayList<int[]> coordinates, int populationType1, String type1, String type2, Color color1, Color color2){
+	private void populateGrid(List<int[]> coordinates, int populationType1, String type1, String type2, Color color1, Color color2){
 		for(int i=0; i<coordinates.size(); i++){ 
 			int[] coord = coordinates.get(i);
 			int x = coord[0];
@@ -186,7 +186,7 @@ public abstract class Simulation {
 	 * @param defaultColor the color of the second type of cell to be populated 
 	 */
 	public void randomInit(int population, double percent1, String type1, String type2, String defaultType, Color color1, Color color2, Color defaultColor){
-		ArrayList<int[]> coordinates = getRandomCoordinates(population);
+		List<int[]> coordinates = getRandomCoordinates(population);
 		populateGrid(coordinates,(int)(population*percent1),type1,type2,color1,color2);
 		initEmpty(defaultType, defaultColor);
 	}
@@ -211,7 +211,7 @@ public abstract class Simulation {
 	 * This method returns the unpopulated cells in the grid
 	 * @return a list of unpopulated cells in the grid 
 	 */
-	public ArrayList<GridCell> getEmptyCells(){
+	public List<GridCell> getEmptyCells(){
 		return emptyCells;
 	}
 	
@@ -297,8 +297,8 @@ public abstract class Simulation {
 	 * @param y the y-coordinate of the cell
 	 * @return a list of cells neighboring a specified cell in the cardinal directions
 	 */
-	public ArrayList<GridCell> getCardinalNeighbors(int x, int y){
-		ArrayList<GridCell> result = new ArrayList<GridCell>();
+	public List<GridCell> getCardinalNeighbors(int x, int y){
+		List<GridCell> result = new ArrayList<GridCell>();
 		if(x > 0){
 			result.add(myCells[x-1][y]); 
 		}else if(isToroidal){
@@ -328,8 +328,8 @@ public abstract class Simulation {
 	 * @param y the y-coordinate of the cell
 	 * @return a list of all the cells surrounding a specified cell 
 	 */
-	public ArrayList<GridCell> getAllNeighbors(int x, int y){
-		ArrayList<GridCell> result = getCardinalNeighbors(x,y);
+	public List<GridCell> getAllNeighbors(int x, int y){
+		List<GridCell> result = getCardinalNeighbors(x,y);
 
 		if(x > 0 && y > 0){ //top left
 			result.add(myCells[x-1][y-1]); 
@@ -363,8 +363,8 @@ public abstract class Simulation {
 		return myScene;
 	}
 	
-	public ArrayList<GridCell> getCloneList(){
-		ArrayList<GridCell> cellList = new ArrayList<GridCell>();
+	public List<GridCell> getCloneList(){
+		List<GridCell> cellList = new ArrayList<GridCell>();
 		for(int x=0; x<gridSize; x++){
 			for(int y=0; y<gridSize; y++){
 				GridCell cell = myCells[x][y];
