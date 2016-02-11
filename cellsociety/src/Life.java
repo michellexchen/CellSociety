@@ -39,7 +39,7 @@ public class Life extends Simulation {
 		super.init();
 		super.randomInit(cellsAlive, 1, ALIVE, DEAD, DEAD, ALIVECOLOR, DEADCOLOR, DEADCOLOR); 
 		super.initEmpty(DEAD, DEADCOLOR);
-		super.initGridCells();
+		super.displayGrid();
 		return super.getMyScene();
 	}
 	/**

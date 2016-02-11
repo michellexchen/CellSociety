@@ -53,7 +53,7 @@ public class Fire extends Simulation {
 			}
 		}
 		
-		initGridCells();		
+		displayGrid();		
 		return super.getMyScene();
 	}
 	

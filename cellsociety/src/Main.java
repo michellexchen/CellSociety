@@ -133,6 +133,8 @@ public class Main extends Application {
 	 * @return the Scene containing the menu screen
 	 */
 	private Scene splashScene() {
+		System.setProperty("glass.accessible.force", "false"); //Added this line to resolve combobox error with windows
+
 		Scene splash = new Scene(splashGroup, SIZE, SIZE);
 
 		splash.setFill(Color.GRAY);
@@ -155,14 +157,14 @@ public class Main extends Application {
 		Text welcome = new Text(myResources.getString("Select"));
 		menu.getChildren().add(welcome);
 
-		ComboBox sims = new ComboBox();
+		ComboBox<String> sims = new ComboBox<String>();
 		sims.setPromptText("Simulation");
 		sims.getItems().addAll(options);
 		sims.setOnAction(e -> {
 			 address1 = sims.getSelectionModel().getSelectedItem().toString();
 		});
 		
-		ComboBox number = new ComboBox();
+		ComboBox<String> number = new ComboBox<String>();
 		number.setPromptText("Configuration");
 		number.getItems().addAll(configs);
 		number.setOnAction(e -> {
@@ -173,7 +175,7 @@ public class Main extends Application {
 		Button start = new Button("Start");
 		start.setMinWidth(115);
 		start.setOnMouseClicked(e -> {
-			if(address1 != null && address2 != null){
+			/*if(address1 != null && address2 != null){
 				simOption = new XMLReader("./cellsociety/src/XML/" + address1+ "XML"+address2+".txt").getSimulation();
 				if(!simOption.hasException()){
 					currentSim = simOption.getSimulation();
@@ -188,7 +190,15 @@ public class Main extends Application {
 					handleError(errorMessage);
 
 				} 	
-			}
+			}*/
+			
+			//currentSim = new Predator(500, 10, 15, 5, 10, 50, .5);  //Initializes simulation constants
+			currentSim = new Fire(700, 100, .6);
+			myStage.setTitle(currentSim.getTitle());
+			myScene = currentSim.init();
+			myStage.setHeight(currentSim.getSceneSize() + BUTTONHEIGHT + BUTTONPADDING);
+			addButtons();
+			myStage.setScene(myScene);
 		});
 
 		menu.getChildren().add(sims);

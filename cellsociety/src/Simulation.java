@@ -3,9 +3,12 @@ import java.util.*;
 import java.util.Random;
 
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 
 /**
  * This class is responsible for all of the functionality and properties of a simulation.
@@ -28,8 +31,9 @@ public abstract class Simulation {
 	private int sceneSize;
 	private double gridCellSize;
 	private int gridSize;
-	
+	private boolean isToroidal = true; //This is default - in final implementation this should be handled in constructor
 	private ArrayList<GridCell> emptyCells = new ArrayList<GridCell>();
+	private Map<String, Color> stateMap;
 	
 	/**
 	 * This method is generally responsible for determining the next state for each cell based on certain parameters, as defined by each type of simulation 
@@ -39,7 +43,13 @@ public abstract class Simulation {
 	/** 
 	 * This method is generally responsible for setting the color that is to be displayed to reflect the current state of a cell
 	 */
-	public abstract void updateColors(); 
+	public void updateColors(){
+		for(GridCell[] a: myCells){
+			for(GridCell b: a){
+				b.setMyColor(stateMap.get(b.getState()));
+			}
+		}
+	}
 	
 	/**
 	 * This method is responsible for creating a simulation with a title, specific grid and cell dimension
@@ -208,11 +218,10 @@ public abstract class Simulation {
 	/**
 	 * This method initializes the cells to be displayed such that they appear on the grid as colored squares 
 	 */
-	public void initGridCells(){
-		int top = 0;
-		int left = 0;
+	public void displayGrid(){
+
 		
-		for(int i = 0; i < this.gridSize; i++){
+		/*for(int i = 0; i < this.gridSize; i++){
 			for(int j = 0; j < this.gridSize; j++){
 				GridCell d = myCells[i][j];
 				Rectangle temp = new Rectangle(left, top, gridCellSize, gridCellSize);
@@ -223,7 +232,29 @@ public abstract class Simulation {
 			}
 			top = 0;
 			left += gridCellSize;
-		}	
+		}	*/
+		double dx = gridCellSize;
+		double dy = dx*Math.sqrt(3)/2;
+		double y1 = 0;
+		double y2 = dy;
+		double left = 0;
+		double right = dx;
+		
+		for(int i = 0; i < gridSize; i ++){
+			for(int j = 0; j < gridSize; j++){
+				double[] temp = {left, y1, right, y1, (left+right)/2, y2};
+				Polygon next = new Polygon(temp);
+				next.setFill(myCells[i][j].getMyColor());
+				myCells[i][j].setMyShape(next);
+				root.getChildren().add(next);
+				y1 += dy*2*((j+1+i)%2);
+				y2 +=  dy*2*((j+i)%2);
+			}
+			y1 = dy * ((i+1)%2);
+			y2 = dy * (i%2);
+			left += dx/2;
+			right += dx/2;
+		}
 	}
 
 	/**
@@ -253,9 +284,10 @@ public abstract class Simulation {
 
 		for(GridCell[] c: myCells){
 			for(GridCell d: c){
-				Rectangle temp = d.getMySquare();
+				Shape temp = d.getMySquare();
 				temp.setFill(d.getMyColor());	
 			}			
+			
 		}	
 	}
 	
@@ -269,15 +301,23 @@ public abstract class Simulation {
 		ArrayList<GridCell> result = new ArrayList<GridCell>();
 		if(x > 0){
 			result.add(myCells[x-1][y]); 
+		}else if(isToroidal){
+			result.add(myCells[gridSize-1][y]);
 		}
 		if(x < gridSize -1){
 			result.add(myCells[x+1][y]);
+		}else if(isToroidal){
+			result.add(myCells[0][y]);
 		}
 		if(y > 0){
 			result.add(myCells[x][y-1]);
+		}else if(isToroidal){
+			result.add(myCells[x][gridSize-1]);
 		}
 		if(y < gridSize -1){
 			result.add(myCells[x][y+1]);
+		}else if(isToroidal){
+			result.add(myCells[x][0]);
 		}
 		return result;
 	}
@@ -291,17 +331,25 @@ public abstract class Simulation {
 	public ArrayList<GridCell> getAllNeighbors(int x, int y){
 		ArrayList<GridCell> result = getCardinalNeighbors(x,y);
 
-		if(x > 0 && y > 0){
+		if(x > 0 && y > 0){ //top left
 			result.add(myCells[x-1][y-1]); 
+		}else if(isToroidal){
+			result.add(myCells[gridSize-1][gridSize-1]);
 		}
-		if(x < gridSize-1 && y > 0){
+		if(x < gridSize-1 && y > 0){ //top right
 			result.add(myCells[x+1][y-1]); 
+		}else if(isToroidal){
+			result.add(myCells[0][gridSize-1]);
 		}
-		if(x < gridSize-1 && y < gridSize-1){
+		if(x < gridSize-1 && y < gridSize-1){ //bottom right
 			result.add(myCells[x+1][y+1]); 
+		}else if(isToroidal){
+			result.add(myCells[0][0]);
 		}
-		if(x>0 && y < gridSize-1){
+		if(x>0 && y < gridSize-1){//bottom left
 			result.add(myCells[x-1][y+1]); 
+		}else if(isToroidal){
+			result.add(myCells[gridSize-1][0]);
 		}
 		
 		return result;

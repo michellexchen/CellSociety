@@ -48,6 +48,9 @@ public class Predator extends Simulation {
 		sharkBreedTime = sharkBreed;
 		sharkDieTime = sharkDie;
 		fishBreedTime = fishBreed;
+		
+		super.stateMap.put(SHARK, SHARKCOLOR);
+		super.stateMap.put(FISH, FISHCOLOR);
 	}
 	/**
 	 * Assigns fish, sharks, and empty cells - returns a Scene with these attributes
@@ -58,7 +61,7 @@ public class Predator extends Simulation {
 		breedGrid = new int[gridSize][gridSize];
 		dieGrid = new int[gridSize][gridSize];
 		randomInit(myPopulation, percentFish, FISH, SHARK, EMPTY, FISHCOLOR, SHARKCOLOR, BACKGROUND);
-		initGridCells();
+		displayGrid();
 		myCells = super.getCells();
 		cellList = getCloneList();
 		
@@ -100,6 +103,7 @@ public class Predator extends Simulation {
 		for(GridCell cell: cellList){
 			int x = cell.getX();
 			int y = cell.getY();
+
 			if(cell.getState()==SHARK){
 				ArrayList<GridCell> neighbors = getCardinalNeighbors(x,y);
 				ArrayList<GridCell> emptyNeighbors = getSpecialNeighbors(neighbors,EMPTY);
@@ -149,6 +153,54 @@ public class Predator extends Simulation {
 				}
 			}
 		}
+	}
+	
+	public void updateState(){
+		for(GridCell cell: cellList){
+			int x = cell.getX();
+			int y = cell.getY();
+			ArrayList<GridCell> neighbors = getCardinalNeighbors(x,y);
+			ArrayList<GridCell> emptyNeighbors = getSpecialNeighbors(neighbors,EMPTY);
+			
+			if(cell.getState()==FISH){
+
+				GridCell empty = getRandomCell(emptyNeighbors);
+				if(breedGrid[x][y]+1>=fishBreedTime){ 
+					breedAnimal(cell,emptyNeighbors);
+				}
+				if(empty!=null){ 
+					moveFish(cell,empty);
+				}
+				else{ 
+					cell.setNextState(FISH);
+					breedGrid[x][y]++;
+				}
+			}
+			
+			if(cell.getState()==SHARK){
+
+				ArrayList<GridCell> fishNeighbors = getSpecialNeighbors(neighbors,FISH);
+				GridCell fish = getRandomCell(fishNeighbors);
+				GridCell empty = getRandomCell(emptyNeighbors);
+				if(fish!=null){
+					eatFish(cell,fish,emptyNeighbors);
+				}
+				else if(dieGrid[x][y]+1==sharkDieTime){ 
+					cell.setNextState(EMPTY);
+					breedGrid[x][y]=0;
+					dieGrid[x][y]=0;
+				}
+				else if(empty!=null){ 
+					moveShark(cell,empty);
+				}
+				else{ 
+					cell.setNextState(SHARK);
+					breedGrid[x][y]=0;
+					dieGrid[x][y]++;
+				}
+			}
+		}	
+		
 	}
 	
 	
@@ -245,24 +297,6 @@ public class Predator extends Simulation {
 	/**
 	 * Updates grid colors to reflect changes in state
 	 */
-	@Override
-	public void updateColors() { 
-		for(int x=0; x<gridSize; x++){
-			for(int y=0; y<gridSize; y++){
-				GridCell cell = myCells[x][y];
-				if(cell.getState()==SHARK){
-					cell.setMyColor(SHARKCOLOR);
-				}
-				else if(cell.getState()==FISH){
-					cell.setMyColor(FISHCOLOR);
-				}
-				else{
-					cell.setMyColor(BACKGROUND);
-				}
-			}
-		}
 
-	}
 
 }
-

@@ -41,6 +41,9 @@ public class Segregation extends Simulation {
 		myPopulation = population;
 		percentGroup1 = group1population;
 		myThreshold = threshold;
+		
+		super.stateMap.put(GROUP1, GROUP1COLOR);
+		super.stateMap.put(GROUP2, GROUP2COLOR);
 	}
 	/**
 	 * Initializes a Scene with randomly distributed members of group1 and group 2
@@ -50,7 +53,7 @@ public class Segregation extends Simulation {
 		super.init();
 		randomInit(myPopulation, percentGroup1, GROUP1, GROUP2, EMPTY, GROUP1COLOR, GROUP2COLOR, BACKGROUND); 
 		emptyCells = getEmptyCells();
-		initGridCells();
+		displayGrid();
 		cellList = getCloneList();
 		
 		return super.getMyScene();
@@ -128,22 +131,6 @@ public class Segregation extends Simulation {
 	/**
 	 * Changes colors of cells based on state of cells
 	 */
-	@Override
-	public void updateColors() {
-		for(int x=0; x<super.getGridSize(); x++){
-			for(int y=0; y<super.getGridSize(); y++){
-				GridCell cell = getCells()[x][y];
-				if(cell.getState()==GROUP1){
-					cell.setMyColor(GROUP2COLOR);
-				}
-				else if(cell.getState()==GROUP2){
-					cell.setMyColor(GROUP1COLOR);
-				}
-				else if(cell.getState() == EMPTY){
-					cell.setMyColor(BACKGROUND);
-				}
-			}
-		}
-	}	
+	
 }		
 	

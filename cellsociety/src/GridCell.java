@@ -1,6 +1,9 @@
 
+import java.util.ArrayList;
+
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 
 public class GridCell {
 	/*
@@ -10,7 +13,7 @@ public class GridCell {
 	 * The Simulation class visually represents the information stored in this class
 	 */
 	private Color myColor = Color.BLACK;
-	private Rectangle mySquare;
+	private Shape mySquare;
 	private String currState;
 	private String nextState;
 	private int[] myCoordinates = new int[2];
@@ -38,7 +41,7 @@ public class GridCell {
 		return nextState;
 	}
 	
-	public Rectangle getMySquare() {
+	public Shape getMySquare() {
 		return mySquare;
 	}
 
@@ -66,7 +69,7 @@ public class GridCell {
 		this.myColor = myColor;
 	}
 	
-	public void setMySquare(Rectangle mySquare) {
+	public void setMyShape(Shape mySquare) {
 		this.mySquare = mySquare;
 	}
 
