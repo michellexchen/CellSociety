@@ -60,7 +60,7 @@ public class Predator extends Simulation {
 		randomInit(myPopulation, percentFish, FISH, SHARK, EMPTY, FISHCOLOR, SHARKCOLOR, BACKGROUND);
 		initGridCells();
 		myCells = super.getCells();
-		cellList = getCloneList();
+		cellList = getCellList();
 		
 		return super.getMyScene();
 	}
@@ -71,8 +71,8 @@ public class Predator extends Simulation {
 	public void update() {
 		Collections.shuffle(cellList);
 		updateEmpty();
-		updateSharks();
-		updateFish();
+		updateAnimal(SHARK);
+		updateAnimal(FISH);
 		updateStates();
 		taken.clear();
 	}
@@ -89,32 +89,17 @@ public class Predator extends Simulation {
 		}
 
 	}
-
-	/**
-	 * Applies rules for shark death/breeding/eating
-	 * Sharks eat available fish
-	 * Checks if fish and sharks have reached end of lifespan
-	 * Checks if fish and sharks have reached breeding time
-	 */
-	private void updateSharks(){ 
+	
+	private void updateAnimal(String animal){
 		for(GridCell cell: cellList){
 			int x = cell.getX();
 			int y = cell.getY();
+			ArrayList<GridCell> neighbors = getCardinalNeighbors(x,y);
+			ArrayList<GridCell> emptyNeighbors = getSpecialNeighbors(neighbors,EMPTY);
+			GridCell empty = getRandomCell(emptyNeighbors);
 			if(cell.getState()==SHARK){
-				ArrayList<GridCell> neighbors = getCardinalNeighbors(x,y);
-				ArrayList<GridCell> emptyNeighbors = getSpecialNeighbors(neighbors,EMPTY);
-				ArrayList<GridCell> fishNeighbors = getSpecialNeighbors(neighbors,FISH);
-				GridCell fish = getRandomCell(fishNeighbors);
-				GridCell empty = getRandomCell(emptyNeighbors);
-				if(fish!=null){
-					eatFish(cell,fish,emptyNeighbors);
-				}
-				else if(dieGrid[x][y]+1==sharkDieTime){ 
-					cell.setNextState(EMPTY);
-					breedGrid[x][y]=0;
-					dieGrid[x][y]=0;
-				}
-				else if(empty!=null){ 
+				updateSharkEat(cell,neighbors);
+				if(empty!=null){ 
 					moveShark(cell,empty);
 				}
 				else{ 
@@ -123,20 +108,7 @@ public class Predator extends Simulation {
 					dieGrid[x][y]++;
 				}
 			}
-		}
-	}
-
-	/**
-	 * applies rules for fish movement and breeding
-	 */
-	private void updateFish(){ 
-		for(GridCell cell: cellList){
-			int x = cell.getX();
-			int y = cell.getY();
-			if(cell.getState()==FISH){
-				ArrayList<GridCell> neighbors = getCardinalNeighbors(x,y);
-				ArrayList<GridCell> emptyNeighbors = getSpecialNeighbors(neighbors,EMPTY);
-				GridCell empty = getRandomCell(emptyNeighbors);
+			else if(cell.getState()==FISH){
 				if(breedGrid[x][y]+1>=fishBreedTime){ 
 					breedAnimal(cell,emptyNeighbors);
 				}
@@ -148,6 +120,22 @@ public class Predator extends Simulation {
 					breedGrid[x][y]++;
 				}
 			}
+		}
+	}
+		
+	private void updateSharkEat(GridCell cell,ArrayList<GridCell> neighbors){
+		ArrayList<GridCell> fishNeighbors = getSpecialNeighbors(neighbors,FISH);
+		ArrayList<GridCell> emptyNeighbors = getSpecialNeighbors(neighbors,EMPTY);
+		GridCell fish = getRandomCell(fishNeighbors);
+		int x = cell.getX();
+		int y = cell.getY();
+		if(fish!=null){
+			eatFish(cell,fish,emptyNeighbors);
+		}
+		else if(dieGrid[x][y]+1==sharkDieTime){ 
+			cell.setNextState(EMPTY);
+			breedGrid[x][y]=0;
+			dieGrid[x][y]=0;
 		}
 	}
 	

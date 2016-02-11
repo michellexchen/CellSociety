@@ -127,15 +127,8 @@ public class Main extends Application {
 		currentSim.getRoot().getChildren().add(buttons);
 
 	}
-
-	/**
-	 * This method is responsible for creating the scene for the menu screen that allows the user to select a simulation.
-	 * @return the Scene containing the menu screen
-	 */
-	private Scene splashScene() {
-		Scene splash = new Scene(splashGroup, SIZE, SIZE);
-
-		splash.setFill(Color.GRAY);
+	
+	private void addDropDowns(VBox vbox){
 		ArrayList<String> options = new ArrayList<String>();
 		options.add("Fire");
 		options.add("Segregation");
@@ -146,15 +139,7 @@ public class Main extends Application {
 		configs.add("1");
 		configs.add("2");
 		configs.add("3");
-		splash.setFill(Color.SLATEBLUE);
-
-		menu = new VBox();
-		menu.setPrefSize(SPLASHSIZE, SPLASHSIZE);
-		menu.setLayoutX((SIZE - SPLASHSIZE) / 2);
-		menu.setLayoutY((SIZE - SPLASHSIZE) / 2);
-		Text welcome = new Text(myResources.getString("Select"));
-		menu.getChildren().add(welcome);
-
+	
 		ComboBox sims = new ComboBox();
 		sims.setPromptText("Simulation");
 		sims.getItems().addAll(options);
@@ -169,35 +154,59 @@ public class Main extends Application {
 			address2 = number.getSelectionModel().getSelectedItem().toString();
 		});
 		
+		vbox.getChildren().add(sims);
+		vbox.getChildren().add(number);
+		
+	}
+
+	/**
+	 * This method is responsible for creating the scene for the menu screen that allows the user to select a simulation.
+	 * @return the Scene containing the menu screen
+	 */
+	private Scene splashScene() {
+		Scene splash = new Scene(splashGroup, SIZE, SIZE);
+
+		splash.setFill(Color.SLATEBLUE);
+
+		menu = new VBox();
+		menu.setPrefSize(SPLASHSIZE, SPLASHSIZE);
+		menu.setLayoutX((SIZE - SPLASHSIZE) / 2);
+		menu.setLayoutY((SIZE - SPLASHSIZE) / 2);
+		Text welcome = new Text(myResources.getString("Select"));
+		menu.getChildren().add(welcome);
+		
 		
 		Button start = new Button("Start");
 		start.setMinWidth(115);
 		start.setOnMouseClicked(e -> {
-			if(address1 != null && address2 != null){
-				simOption = new XMLReader("./cellsociety/src/XML/" + address1+ "XML"+address2+".txt").getSimulation();
-				if(!simOption.hasException()){
-					currentSim = simOption.getSimulation();
-					myStage.setTitle(currentSim.getTitle());
-					myScene = currentSim.init();
-					myStage.setHeight(currentSim.getSceneSize() + BUTTONHEIGHT + BUTTONPADDING);
-					addButtons();
-					myStage.setScene(myScene);
-				}
-				else {
-					String errorMessage = simOption.getExceptionMessage();
-					handleError(errorMessage);
-
-				} 	
-			}
+			startSim();
 		});
-
-		menu.getChildren().add(sims);
-		menu.getChildren().add(number);
+		
+		addDropDowns(menu);
 		menu.getChildren().add(start);
 		menu.getStyleClass().add("hbox");
 		splash.getStylesheets().add("Resources/style.css");
 		splashGroup.getChildren().add(menu);
 		return splash;
+	}
+
+	private void startSim() {
+		if(address1 != null && address2 != null){
+			simOption = new XMLReader("./cellsociety/src/XML/" + address1+ "XML"+address2+".txt").getSimulation();
+			if(!simOption.hasException()){
+				currentSim = simOption.getSimulation();
+				myStage.setTitle(currentSim.getTitle());
+				myScene = currentSim.init();
+				myStage.setHeight(currentSim.getSceneSize() + BUTTONHEIGHT + BUTTONPADDING);
+				addButtons();
+				myStage.setScene(myScene);
+			}
+			else {
+				String errorMessage = simOption.getExceptionMessage();
+				handleError(errorMessage);
+
+			} 	
+		}
 	}
 
 	/**
