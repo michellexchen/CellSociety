@@ -15,4 +15,16 @@
 * I chose this option because the color modification behavior is common to every simulation. Therefore it made sense to to handle this behavior in the 
   abstract class. The construction of a Map allows each class to use its own specific values for states and colors. 
   
+  
+####Use of ArrayList
+* In all of the spots where we used ArrayList, it was unnecessary, so all uses of ArrayList have been relaced with List
+
+####Long functions
+
+Main.splashScene: 
+  * This function turned out to be performing multiple purposes. It added comboboxes to the splash screen, and it added a start button 
+    that would initialize the Simulation
+  * To shorten the function I created several helper methods, each of which had one distinct purpose
+  * In the future this redesign will make it easier to add new menus to the splash screen or to change the content of a given menu
+
 
