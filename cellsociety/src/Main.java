@@ -166,21 +166,22 @@ public class Main extends Application {
 		start.setMinWidth(115);
 		start.setOnMouseClicked(e -> {
 				simOption = new XMLReader().getSimulation();
-				if(!simOption.hasException()){
-					currentSim = simOption.getSimulation();
-					myStage.setTitle(currentSim.getTitle());
-					myScene = currentSim.init();
-					myStage.setHeight(currentSim.getSceneSize() + BUTTONHEIGHT + BUTTONPADDING);
-					addButtons();
-					myStage.setScene(myScene);
+				try{
+						currentSim = simOption.getSimulation();
+						myStage.setTitle(currentSim.getTitle());
+						myScene = currentSim.init();
+						myStage.setHeight(currentSim.getSceneSize() + BUTTONHEIGHT + BUTTONPADDING);
+						addButtons();
+						myStage.setScene(myScene);
+
+					} catch (Exception e2) {
+						System.out.println("is it this");						
+						String errorMessage = simOption.getExceptionMessage();
+						handleError(errorMessage);
 				}
-//				else {
-//					String errorMessage = simOption.getExceptionMessage();
-//					handleError(errorMessage);
-//				} 	
+					
 			
 		});
-
 		menu.getChildren().add(start);
 		menu.getStyleClass().add("hbox");
 		splash.getStylesheets().add("Resources/style.css");

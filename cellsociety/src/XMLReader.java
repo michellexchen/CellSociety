@@ -1,13 +1,15 @@
 import java.io.File;
 
+
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.validation.Validator;
 import javax.xml.parsers.DocumentBuilder;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-//import org.w3c.dom.Node;
+import org.w3c.dom.Node;
 
-import javafx.scene.Node;
+//import javafx.scene.Node;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
@@ -27,9 +29,10 @@ import javafx.stage.Stage;
  */
 
 public class XMLReader {
-	private Stage myStage;
 	private String file;
-	private Element root;
+	private Document doc;
+	
+	private Validator validator;
 
 	public XMLReader() {
 		file = chooseFile();
@@ -50,7 +53,6 @@ public class XMLReader {
 		return fileName;
 	}
 	
-	
 
 	/**
 	 * @return
@@ -60,37 +62,35 @@ public class XMLReader {
 	
 	public SimulationOptional getSimulation(){
 		try{
+			//reading file
 			File inputFile = new File(file);
 	        DocumentBuilderFactory dbFactory 
 	            = DocumentBuilderFactory.newInstance();
-	        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+	        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();	        
+	        doc = dBuilder.parse(inputFile);
 	        
-	        Document doc = dBuilder.parse(inputFile);
-	        root = doc.getDocumentElement();	        
-	        //refactor.. gets simulation name
-	        Element simulation2 = (Element) doc.getElementsByTagName("simulation").item(0) ; 
-	        String blah = simulation2.getElementsByTagName("name").item(0).getTextContent();
-	        //System.out.println(blah);	 
+	        //simulation type
+	        Element simulation2 = (Element) doc.getElementsByTagName("info").item(0) ;
+	        String simType = simulation2.getElementsByTagName("name").item(0).getTextContent();	        
 	        
-	        Element blah2 = (Element) doc.getElementsByTagName("simulation").item(1);
-	        String b3 = blah2.getElementsByTagName("probcatch").item(0).getTextContent();
-	        System.out.println("rly");
-	        System.out.println(b3);
+	        //getting nodes
+			NodeList listParam = doc.getElementsByTagName("parameters");
+	        Element attributes = (Element) listParam.item(0);
 	        
 	        Simulation simulation;
 	        
-	        switch(blah){
+	        switch(simType){
 	        case "Predator":
-	        	simulation = getPredator(root, doc);
+	        	simulation = getPredator(listParam, attributes);
 	        	break;
 	        case "Fire":
-	        	simulation = getFire(doc);
+	        	simulation = getFire(listParam, attributes);
 	        	break;
 	        case "Segregation":
-	        	simulation = getSegregation(doc);
+	        	simulation = getSegregation(listParam, attributes);
 	        	break;
 	        case "Life":
-	        	simulation = getLife(doc);
+	        	simulation = getLife(listParam, attributes);
 	        	break;
 	        default:
 	        	return null;
@@ -98,13 +98,14 @@ public class XMLReader {
 	        return new SimulationOptional(simulation, null);
         }
 		catch(Exception e){
-
+			System.out.println("wtffff WHY");
 			return new SimulationOptional(null, e);
 		}
 	}
 	
 	/**
 	 * 
+	 * @param attributes 
 	 * @param doc
 	 * @return
 	 * 
@@ -112,14 +113,15 @@ public class XMLReader {
 	 * Attributes included in the XML file include fishBreed, sharkBreed, sharkDie, population, percentFish, size, and numCells
 	 * 
 	 */
-	private Simulation getPredator(Element root, Document doc){
-        int fishBreed = Integer.parseInt(root.getAttribute("fishbreed"));
-        int sharkBreed = Integer.parseInt(root.getAttribute("sharkbreed"));
-        int sharkDie = Integer.parseInt(root.getAttribute("sharkdie"));
-        int population = Integer.parseInt(root.getAttribute("population"));
-        double percentFish = Double.parseDouble(root.getAttribute("fishpercent"));
-		int size = Integer.parseInt(root.getAttribute("size"));
-		int numCells = Integer.parseInt(root.getAttribute("numcells"));
+	private Simulation getPredator(NodeList listParam, Element attributes){
+	     
+        Integer fishBreed = Integer.parseInt(attributes.getElementsByTagName("fishbreed").item(0).getChildNodes().item(0).getNodeValue().trim());
+        Integer sharkBreed = Integer.parseInt(attributes.getElementsByTagName("sharkbreed").item(0).getChildNodes().item(0).getNodeValue().trim());
+        Integer sharkDie = Integer.parseInt(attributes.getElementsByTagName("sharkdie").item(0).getChildNodes().item(0).getNodeValue().trim());
+        Integer population = Integer.parseInt(attributes.getElementsByTagName("population").item(0).getChildNodes().item(0).getNodeValue().trim());
+        Double percentFish = Double.parseDouble(attributes.getElementsByTagName("fishpercent").item(0).getChildNodes().item(0).getNodeValue().trim());
+        Integer size = Integer.parseInt(attributes.getElementsByTagName("size").item(0).getChildNodes().item(0).getNodeValue().trim());
+        Integer numCells = Integer.parseInt(attributes.getElementsByTagName("numcells").item(0).getChildNodes().item(0).getNodeValue().trim());
         
         return new Predator(size,numCells,fishBreed,sharkBreed,sharkDie,population,percentFish);
 	}
@@ -133,13 +135,13 @@ public class XMLReader {
 	 * Attributes included in the XML file include probCatch, size, and numCells
 	 * 
 	 */
-	private Simulation getFire(Document doc){
-		 Element root = doc.getDocumentElement();
-		 Double probCatch = Double.parseDouble(root.getAttribute("probcatch"));
-		 Integer size = Integer.parseInt(root.getAttribute("size"));
-		 Integer numCells = Integer.parseInt(root.getAttribute("numcells"));
+	private Simulation getFire(NodeList listParam, Element attributes){
+        
+        Double probCatch = Double.parseDouble(attributes.getElementsByTagName("probcatch").item(0).getChildNodes().item(0).getNodeValue().trim());
+        Integer size = Integer.parseInt(attributes.getElementsByTagName("size").item(0).getChildNodes().item(0).getNodeValue().trim());
+        Integer numCells = Integer.parseInt(attributes.getElementsByTagName("numcells").item(0).getChildNodes().item(0).getNodeValue().trim());
 		 
-		 return new Fire(size,numCells,probCatch);
+		return new Fire(size, numCells, probCatch);
 	}
 	
 	/**
@@ -151,13 +153,12 @@ public class XMLReader {
 	 * Attributes included in the XML file include population, percent1, satisfaction, size, and numCells
 	 * 
 	 */
-	private Simulation getSegregation(Document doc){
-		Element root = doc.getDocumentElement();
-        int population = Integer.parseInt(root.getAttribute("popsize"));
-        double percent1 = Double.parseDouble(root.getAttribute("percentone"));
-        double satisfaction = Double.parseDouble(root.getAttribute("satisfaction"));
-		int size = Integer.parseInt(root.getAttribute("size"));
-		int numCells = Integer.parseInt(root.getAttribute("numcells"));
+	private Simulation getSegregation(NodeList listParam, Element attributes){
+        Integer population = Integer.parseInt(attributes.getElementsByTagName("popsize").item(0).getChildNodes().item(0).getNodeValue().trim());
+        Double percent1 = Double.parseDouble(attributes.getElementsByTagName("percentone").item(0).getChildNodes().item(0).getNodeValue().trim());
+        Double satisfaction = Double.parseDouble(attributes.getElementsByTagName("satisfaction").item(0).getChildNodes().item(0).getNodeValue().trim());
+        Integer size = Integer.parseInt(attributes.getElementsByTagName("size").item(0).getChildNodes().item(0).getNodeValue().trim());
+        Integer numCells = Integer.parseInt(attributes.getElementsByTagName("numcells").item(0).getChildNodes().item(0).getNodeValue().trim());
 		
 		return new Segregation(size,numCells,population,percent1,satisfaction);
 	}
@@ -171,11 +172,10 @@ public class XMLReader {
 	 * Attributes included in the XML file include numAlive, size, and numCells
 	 * 
 	 */
-	private Simulation getLife(Document doc){
-		Element root = doc.getDocumentElement();
-		int numAlive = Integer.parseInt(root.getAttribute("numalive"));
-		int size = Integer.parseInt(root.getAttribute("size"));
-		int numCells = Integer.parseInt(root.getAttribute("numcells"));
+	private Simulation getLife(NodeList listParam, Element attributes){
+		Integer numAlive = Integer.parseInt(attributes.getElementsByTagName("numalive").item(0).getChildNodes().item(0).getNodeValue().trim());		
+		Integer size = Integer.parseInt(attributes.getElementsByTagName("size").item(0).getChildNodes().item(0).getNodeValue().trim());
+	    Integer numCells = Integer.parseInt(attributes.getElementsByTagName("numcells").item(0).getChildNodes().item(0).getNodeValue().trim());
 		
 		return new Life(size,numCells,numAlive);
 	}
