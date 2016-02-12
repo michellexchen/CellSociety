@@ -51,7 +51,7 @@ public class Segregation extends Simulation {
 		randomInit(myPopulation, percentGroup1, GROUP1, GROUP2, EMPTY, GROUP1COLOR, GROUP2COLOR, BACKGROUND); 
 		emptyCells = getEmptyCells();
 		initGridCells();
-		cellList = getCloneList();
+		cellList = getCellList();
 		
 		return super.getMyScene();
 	}
