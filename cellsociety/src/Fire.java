@@ -72,9 +72,11 @@ public class Fire extends Simulation {
 				String currState = curr.getState();
 				if (currState == EMPTY){
 					curr.setNextState(currState);
+					curr.setNextColor(BACKGROUND);
 				}
 				if (currState == BURNING) {
 					curr.setNextState(EMPTY);
+					curr.setNextColor(BURNINGCOLOR);
 				}
 				if (currState == TREE) {
 					ArrayList<GridCell> neighbors = getCardinalNeighbors(x,y);
@@ -85,9 +87,11 @@ public class Fire extends Simulation {
 					if (blah.contains(BURNING)) {
 						if (Math.random()<myProbCatch) {
 							curr.setNextState(BURNING);
+							curr.setNextColor(BURNINGCOLOR);
 						}
 						else {
 							curr.setNextState(currState);
+							curr.setNextColor(TREECOLOR);
 						}
 					}
 					else {
@@ -100,26 +104,17 @@ public class Fire extends Simulation {
 		updateStates();		
 	}
 
-	/**
-	 * Updates cell color based on previously updated state. 
-	 */
-	
-	@Override
-	public void updateColors() {
-		for(int c = 0; c<super.getGridSize(); c++) {
-			for(int d = 0; d<super.getGridSize(); d++) {
-				GridCell current = myCells[c][d]; 
-				if (current.getState().equals(EMPTY)) {
-					current.setMyColor(BACKGROUND);
+
+	public void updateColor(String current) {
+				if (current.equals(EMPTY)) {
+					
 				}
-				else if (current.getState().equals(TREE)){
+				else if (current.equals(TREE)){
 					current.setMyColor(TREECOLOR);
 				}
-				else if (current.getState().equals(BURNING)){
+				else if (current.equals(BURNING)){
 					current.setMyColor(BURNINGCOLOR);
 				}
-			}
-		}
 		
 	}
 
