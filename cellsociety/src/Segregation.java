@@ -24,9 +24,9 @@ public class Segregation extends Simulation {
 	private int myPopulation;
 	private double percentGroup1;
 	private double myThreshold;
-	private ArrayList<GridCell> emptyCells;
-	private ArrayList<GridCell> nextEmpty = new ArrayList<GridCell>();
-	private ArrayList<GridCell> cellList = new ArrayList<GridCell>();
+	private List<GridCell> emptyCells;
+	private List<GridCell> nextEmpty = new ArrayList<GridCell>();
+	private List<GridCell> cellList = new ArrayList<GridCell>();
 	
 	/**
 	 * 
@@ -37,10 +37,13 @@ public class Segregation extends Simulation {
 	 * @param threshold Threshold for satisfaction
 	 */
 	public Segregation(int size, int numCells, int population, double group1population, double threshold) {
-		super(TITLE,size,numCells);
+		super(TITLE,size,numCells, true);
 		myPopulation = population;
 		percentGroup1 = group1population;
 		myThreshold = threshold;
+		
+		super.getStateMap().put(GROUP1, GROUP1COLOR);
+		super.getStateMap().put(GROUP2, GROUP2COLOR);
 	}
 	/**
 	 * Initializes a Scene with randomly distributed members of group1 and group 2
@@ -50,7 +53,7 @@ public class Segregation extends Simulation {
 		super.init();
 		randomInit(myPopulation, percentGroup1, GROUP1, GROUP2, EMPTY, GROUP1COLOR, GROUP2COLOR, BACKGROUND); 
 		emptyCells = getEmptyCells();
-		initGridCells();
+		displayGrid();
 		cellList = getCloneList();
 		
 		return super.getMyScene();
@@ -102,7 +105,7 @@ public class Segregation extends Simulation {
 	 * @return
 	 */
 	private boolean isDissatisfied(GridCell cell){
-		ArrayList<GridCell> neighbors = getAllNeighbors(cell.getX(),cell.getY());
+		List<GridCell> neighbors = cell.getAllNeighbors();
 		double numSame = 0;
 		double numDiff = 0;
 		for(GridCell n: neighbors){
@@ -129,6 +132,6 @@ public class Segregation extends Simulation {
 		emptyCells.remove(empty);
 		return empty;
 	}
-	
+
 }		
 	

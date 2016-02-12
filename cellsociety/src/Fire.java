@@ -1,5 +1,6 @@
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
@@ -27,7 +28,7 @@ public class Fire extends Simulation {
 
 	
 	public Fire(int size, int numCells, double probCatch) {
-		super(TITLE,size,numCells);
+		super(TITLE,size,numCells, true);
 		myProbCatch = probCatch;
 	}
 
@@ -53,7 +54,7 @@ public class Fire extends Simulation {
 			}
 		}
 		
-		initGridCells();		
+		displayGrid();		
 		return super.getMyScene();
 	}
 	
@@ -79,8 +80,8 @@ public class Fire extends Simulation {
 					curr.setNextColor(BURNINGCOLOR);
 				}
 				if (currState == TREE) {
-					ArrayList<GridCell> neighbors = getCardinalNeighbors(x,y);
-					ArrayList<String> blah = new ArrayList<String>();
+					List<GridCell> neighbors = curr.getCardinalNeighbors();
+					List<String> blah = new ArrayList<String>();
 					for (GridCell cell: neighbors){
 						blah.add(cell.getState());
 					}
@@ -98,7 +99,6 @@ public class Fire extends Simulation {
 						curr.setNextState(currState);
 						curr.setNextColor(TREECOLOR);
 					}						
-					
 				}
 			}
 		}		
