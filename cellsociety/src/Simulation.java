@@ -342,8 +342,8 @@ public abstract class Simulation {
 		return myScene;
 	}
 	
-	public List<GridCell> getCloneList(){
-		List<GridCell> cellList = new ArrayList<GridCell>();
+	public ArrayList<GridCell> getCellList(){
+		ArrayList<GridCell> cellList = new ArrayList<GridCell>();
 		for(int x=0; x<gridSize; x++){
 			for(int y=0; y<gridSize; y++){
 				GridCell cell = myCells[x][y];

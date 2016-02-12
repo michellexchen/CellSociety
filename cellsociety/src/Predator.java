@@ -59,7 +59,7 @@ public class Predator extends Simulation {
 		randomInit(myPopulation, percentFish, FISH, SHARK, EMPTY, FISHCOLOR, SHARKCOLOR, BACKGROUND);
 		super.displayGrid();
 		myCells = super.getCells();
-		cellList = getCloneList();
+		cellList = getCellList();
 		
 		return super.getMyScene();
 	}
