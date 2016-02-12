@@ -171,7 +171,7 @@ public class Main extends Application {
 		Button start = new Button("Start");
 		start.setMinWidth(115);
 		start.setOnMouseClicked(e -> {
-			if(address1 != null && address2 != null){
+			/*if(address1 != null && address2 != null){
 				simOption = new XMLReader("./cellsociety/src/XML/" + address1+ "XML"+address2+".txt").getSimulation();
 				if(!simOption.hasException()){
 					currentSim = simOption.getSimulation();
@@ -185,14 +185,15 @@ public class Main extends Application {
 					String errorMessage = simOption.getExceptionMessage();
 					handleError(errorMessage);
 				} 	
-			}
+			}*/
 			//currentSim = new Life(500, 20, 200);
-			/*currentSim = new Segregation( 500,  100,  7500,  .7,  .5);
+			//currentSim = new Segregation( 500,  100,  7500,  .7,  .5);
+			currentSim = new Fire(500, 100, .7);
 			myStage.setTitle(currentSim.getTitle());
 			myScene = currentSim.init();
 			myStage.setHeight(currentSim.getSceneSize() + BUTTONHEIGHT + BUTTONPADDING);
 			addButtons();
-			myStage.setScene(myScene);*/
+			myStage.setScene(myScene);
 		});	
 		menu.getChildren().add(start);
 	}

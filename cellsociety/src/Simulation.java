@@ -246,8 +246,8 @@ public abstract class Simulation {
 			top = 0;
 			left += gridCellSize;
 		}	*/
-		double dx = gridCellSize;
-		double dy = dx*Math.sqrt(3)/2;
+		double dx = gridCellSize*2;
+		double dy = dx*Math.sqrt(3)/4;
 		double y1 = 0;
 		double y2 = dy;
 		double left = 0;
