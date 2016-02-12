@@ -31,9 +31,11 @@ public abstract class Simulation {
 	private int sceneSize;
 	private double gridCellSize;
 	private int gridSize;
-	private boolean isToroidal = true; //This is default - in final implementation this should be handled in constructor
+	private boolean isToroidal; 
 	private List<GridCell> emptyCells = new ArrayList<GridCell>();
-	private Map<String, Color> stateMap;
+	private Map<String, Color> stateMap = new HashMap<String, Color>();
+	private Map<Integer, Integer> adjacentMap;
+	private int[] dirCodes = {6, 7, 8, 5, 1, 4, 3, 2};
 	
 	/**
 	 * This method is generally responsible for determining the next state for each cell based on certain parameters, as defined by each type of simulation 
@@ -46,7 +48,7 @@ public abstract class Simulation {
 	public void updateColors(){
 		for(GridCell[] a: myCells){
 			for(GridCell b: a){
-				b.setMyColor(stateMap.get(b.getState()));
+				b.setMyColor(getStateMap().get(b.getState()));
 			}
 		}
 	}
@@ -57,14 +59,26 @@ public abstract class Simulation {
 	 * @param size the dimension for the size of the grid
 	 * @param numGridCells the cell dimension of the grid (assuming a square grid)
 	 */
-	public Simulation(String title, int size, int numGridCells){
+	public Simulation(String title, int size, int numGridCells, boolean tor){
 		gridSize = numGridCells;
 		gridCellSize = Math.ceil(((double)(size)/(double)(numGridCells)));
 		sceneSize = (int) (gridSize * gridCellSize);
-
+		isToroidal = tor;
 		myTitle = title;
+		initAdj();
 	}
 	
+	private void initAdj(){
+		this.adjacentMap = new HashMap<Integer, Integer>();
+		for(int i = 0; i < gridSize; i++){
+			this.adjacentMap.put(i, i);
+		}
+		
+		if(isToroidal){
+			adjacentMap.put(gridSize, 0);
+			adjacentMap.put(-1, gridSize-1);
+		}
+	}
 	/**
 	 * This method is responsible for retrieving the title of the simulation
 	 * @return the title of the simulation
@@ -220,7 +234,6 @@ public abstract class Simulation {
 	 */
 	public void displayGrid(){
 
-		
 		/*for(int i = 0; i < this.gridSize; i++){
 			for(int j = 0; j < this.gridSize; j++){
 				GridCell d = myCells[i][j];
@@ -242,10 +255,12 @@ public abstract class Simulation {
 		
 		for(int i = 0; i < gridSize; i ++){
 			for(int j = 0; j < gridSize; j++){
+				GridCell current = myCells[i][j];
+				setAllNeighbors(i,j);
 				double[] temp = {left, y1, right, y1, (left+right)/2, y2};
 				Polygon next = new Polygon(temp);
-				next.setFill(myCells[i][j].getMyColor());
-				myCells[i][j].setMyShape(next);
+				next.setFill(current.getMyColor());
+				current.setMyShape(next);
 				root.getChildren().add(next);
 				y1 += dy*2*((j+1+i)%2);
 				y2 +=  dy*2*((j+i)%2);
@@ -292,67 +307,27 @@ public abstract class Simulation {
 	}
 	
 	/**
-	 * This method returns the neighbors to the North, South, East, and West of the cell at the specified coordinates 
-	 * @param x the x-coordinate of the cell
-	 * @param y the y-coordinate of the cell
-	 * @return a list of cells neighboring a specified cell in the cardinal directions
-	 */
-	public List<GridCell> getCardinalNeighbors(int x, int y){
-		List<GridCell> result = new ArrayList<GridCell>();
-		if(x > 0){
-			result.add(myCells[x-1][y]); 
-		}else if(isToroidal){
-			result.add(myCells[gridSize-1][y]);
-		}
-		if(x < gridSize -1){
-			result.add(myCells[x+1][y]);
-		}else if(isToroidal){
-			result.add(myCells[0][y]);
-		}
-		if(y > 0){
-			result.add(myCells[x][y-1]);
-		}else if(isToroidal){
-			result.add(myCells[x][gridSize-1]);
-		}
-		if(y < gridSize -1){
-			result.add(myCells[x][y+1]);
-		}else if(isToroidal){
-			result.add(myCells[x][0]);
-		}
-		return result;
-	}
-	
-	/**
 	 * This method returns all the neighbors surrounding a specified cell 
 	 * @param x the x-coordinate of the cell
 	 * @param y the y-coordinate of the cell
 	 * @return a list of all the cells surrounding a specified cell 
 	 */
-	public List<GridCell> getAllNeighbors(int x, int y){
-		List<GridCell> result = getCardinalNeighbors(x,y);
-
-		if(x > 0 && y > 0){ //top left
-			result.add(myCells[x-1][y-1]); 
-		}else if(isToroidal){
-			result.add(myCells[gridSize-1][gridSize-1]);
+	public void setAllNeighbors(int x, int y){
+		GridCell cell = myCells[x][y];
+		int count = 1;
+		for(int i = -1; i < 2; i++){
+			for(int j = -1; j < 2; j++){
+				if(i == 0 && j == 0){
+					continue;
+				}
+				if(this.adjacentMap.containsKey(x+i) && this.adjacentMap.containsKey(y+j)){
+					GridCell neighbor = myCells[adjacentMap.get(x+i)][adjacentMap.get(y+j)];
+					int[] dir = {i,j};
+					cell.addNeighbor(dirCodes[count-1], neighbor);
+					count++;
+				}
+			}	
 		}
-		if(x < gridSize-1 && y > 0){ //top right
-			result.add(myCells[x+1][y-1]); 
-		}else if(isToroidal){
-			result.add(myCells[0][gridSize-1]);
-		}
-		if(x < gridSize-1 && y < gridSize-1){ //bottom right
-			result.add(myCells[x+1][y+1]); 
-		}else if(isToroidal){
-			result.add(myCells[0][0]);
-		}
-		if(x>0 && y < gridSize-1){//bottom left
-			result.add(myCells[x-1][y+1]); 
-		}else if(isToroidal){
-			result.add(myCells[gridSize-1][0]);
-		}
-		
-		return result;
 	}
 	
 	/**
@@ -372,5 +347,13 @@ public abstract class Simulation {
 			}
 		}
 		return cellList;
+	}
+
+	public Map<String, Color> getStateMap() {
+		return stateMap;
+	}
+
+	public void setStateMap(Map<String, Color> stateMap) {
+		this.stateMap = stateMap;
 	}
 }

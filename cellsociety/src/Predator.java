@@ -28,8 +28,8 @@ public class Predator extends Simulation {
 	private int sharkBreedTime;
 	private int sharkDieTime;
 	private int fishBreedTime;
-	private ArrayList<GridCell> taken = new ArrayList<GridCell>();
-	private ArrayList<GridCell> cellList = new ArrayList<GridCell>();
+	private List<GridCell> taken = new ArrayList<GridCell>();
+	private List<GridCell> cellList = new ArrayList<GridCell>();
 	
 	/**
 	 * Initializes fields
@@ -42,15 +42,15 @@ public class Predator extends Simulation {
 	 * @param fish Percentage of population that is fish
 	 */
 	public Predator(int size, int numCells, int fishBreed, int sharkBreed, int sharkDie, int population, double fish) { //Initializes simulation constants
-		super(TITLE, size, numCells);
+		super(TITLE, size, numCells, true);
 		myPopulation = population;
 		percentFish = fish;
 		sharkBreedTime = sharkBreed;
 		sharkDieTime = sharkDie;
 		fishBreedTime = fishBreed;
 		
-		super.stateMap.put(SHARK, SHARKCOLOR);
-		super.stateMap.put(FISH, FISHCOLOR);
+		super.getStateMap().put(SHARK, SHARKCOLOR);
+		super.getStateMap().put(FISH, FISHCOLOR);
 	}
 	/**
 	 * Assigns fish, sharks, and empty cells - returns a Scene with these attributes
@@ -74,8 +74,6 @@ public class Predator extends Simulation {
 	public void update() {
 		Collections.shuffle(cellList);
 		updateEmpty();
-		updateSharks();
-		updateFish();
 		updateStates();
 		taken.clear();
 	}
@@ -92,75 +90,13 @@ public class Predator extends Simulation {
 		}
 
 	}
-
-	/**
-	 * Applies rules for shark death/breeding/eating
-	 * Sharks eat available fish
-	 * Checks if fish and sharks have reached end of lifespan
-	 * Checks if fish and sharks have reached breeding time
-	 */
-	private void updateSharks(){ 
-		for(GridCell cell: cellList){
-			int x = cell.getX();
-			int y = cell.getY();
-
-			if(cell.getState()==SHARK){
-				ArrayList<GridCell> neighbors = getCardinalNeighbors(x,y);
-				ArrayList<GridCell> emptyNeighbors = getSpecialNeighbors(neighbors,EMPTY);
-				ArrayList<GridCell> fishNeighbors = getSpecialNeighbors(neighbors,FISH);
-				GridCell fish = getRandomCell(fishNeighbors);
-				GridCell empty = getRandomCell(emptyNeighbors);
-				if(fish!=null){
-					eatFish(cell,fish,emptyNeighbors);
-				}
-				else if(dieGrid[x][y]+1==sharkDieTime){ 
-					cell.setNextState(EMPTY);
-					breedGrid[x][y]=0;
-					dieGrid[x][y]=0;
-				}
-				else if(empty!=null){ 
-					moveShark(cell,empty);
-				}
-				else{ 
-					cell.setNextState(SHARK);
-					breedGrid[x][y]=0;
-					dieGrid[x][y]++;
-				}
-			}
-		}
-	}
-
-	/**
-	 * applies rules for fish movement and breeding
-	 */
-	private void updateFish(){ 
-		for(GridCell cell: cellList){
-			int x = cell.getX();
-			int y = cell.getY();
-			if(cell.getState()==FISH){
-				ArrayList<GridCell> neighbors = getCardinalNeighbors(x,y);
-				ArrayList<GridCell> emptyNeighbors = getSpecialNeighbors(neighbors,EMPTY);
-				GridCell empty = getRandomCell(emptyNeighbors);
-				if(breedGrid[x][y]+1>=fishBreedTime){ 
-					breedAnimal(cell,emptyNeighbors);
-				}
-				if(empty!=null){ 
-					moveFish(cell,empty);
-				}
-				else{ 
-					cell.setNextState(FISH);
-					breedGrid[x][y]++;
-				}
-			}
-		}
-	}
 	
 	public void updateState(){
 		for(GridCell cell: cellList){
 			int x = cell.getX();
 			int y = cell.getY();
-			ArrayList<GridCell> neighbors = getCardinalNeighbors(x,y);
-			ArrayList<GridCell> emptyNeighbors = getSpecialNeighbors(neighbors,EMPTY);
+			List<GridCell> neighbors = cell.getCardinalNeighbors();
+			List<GridCell> emptyNeighbors = getSpecialNeighbors(neighbors,EMPTY);
 			
 			if(cell.getState()==FISH){
 
@@ -177,9 +113,9 @@ public class Predator extends Simulation {
 				}
 			}
 			
-			if(cell.getState()==SHARK){
+			else if(cell.getState()==SHARK){
 
-				ArrayList<GridCell> fishNeighbors = getSpecialNeighbors(neighbors,FISH);
+				List<GridCell> fishNeighbors = getSpecialNeighbors(neighbors,FISH);
 				GridCell fish = getRandomCell(fishNeighbors);
 				GridCell empty = getRandomCell(emptyNeighbors);
 				if(fish!=null){
@@ -223,7 +159,7 @@ public class Predator extends Simulation {
 	 * @param fish A gridcell with a fish
 	 * @param emptyNeighbors A list of empty cells neighboring the shark
 	 */
-	private void eatFish(GridCell shark, GridCell fish, ArrayList<GridCell> emptyNeighbors) {
+	private void eatFish(GridCell shark, GridCell fish, List<GridCell> emptyNeighbors) {
 		fish.setState(EMPTY); //so you don't look at it when iterating through fish
 		fish.setNextState(SHARK);
 		shark.setNextState(EMPTY);
@@ -253,7 +189,7 @@ public class Predator extends Simulation {
 	 * @param animal A gridcell containing a shark or fish
 	 * @param emptyNeighbors A list of empty cells neighboring the animal cell
 	 */
-	private void breedAnimal(GridCell animal, ArrayList<GridCell> emptyNeighbors) { 
+	private void breedAnimal(GridCell animal, List<GridCell> emptyNeighbors) { 
 		GridCell newAnimal = getRandomCell(emptyNeighbors);
 		if(newAnimal!=null){ 
 			newAnimal.setNextState(animal.getState());
@@ -265,7 +201,7 @@ public class Predator extends Simulation {
 	 * @param selections A list of cells
 	 * @return A random grid cell
 	 */
-	private GridCell getRandomCell(ArrayList<GridCell> selections){ 
+	private GridCell getRandomCell(List<GridCell> selections){ 
 		Random rnd = new Random();
 		while(selections.size()>0){
 			GridCell chosen = selections.get(rnd.nextInt(selections.size()));
@@ -285,7 +221,7 @@ public class Predator extends Simulation {
 	 * @param type A type of cell - fish or shark
 	 * @return All neighbors of the type specified
 	 */
-	private ArrayList<GridCell> getSpecialNeighbors(ArrayList<GridCell> neighbors, String type){ //Returns all neighbors of a specific type
+	private List<GridCell> getSpecialNeighbors(List<GridCell> neighbors, String type){ //Returns all neighbors of a specific type
 		ArrayList<GridCell> special = new ArrayList<GridCell>();
 		for(GridCell n: neighbors){
 			if(n.getState()==type){
@@ -294,9 +230,4 @@ public class Predator extends Simulation {
 		}
 		return special;
 	}
-	/**
-	 * Updates grid colors to reflect changes in state
-	 */
-
-
 }

@@ -28,7 +28,7 @@ public class Fire extends Simulation {
 
 	
 	public Fire(int size, int numCells, double probCatch) {
-		super(TITLE,size,numCells);
+		super(TITLE,size,numCells, true);
 		myProbCatch = probCatch;
 	}
 
@@ -78,7 +78,7 @@ public class Fire extends Simulation {
 					curr.setNextState(EMPTY);
 				}
 				if (currState == TREE) {
-					List<GridCell> neighbors = getCardinalNeighbors(x,y);
+					List<GridCell> neighbors = curr.getCardinalNeighbors();
 					List<String> blah = new ArrayList<String>();
 					for (GridCell cell: neighbors){
 						blah.add(cell.getState());

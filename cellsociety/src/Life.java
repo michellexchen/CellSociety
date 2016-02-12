@@ -1,5 +1,6 @@
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
@@ -27,7 +28,7 @@ public class Life extends Simulation {
 	 * @param Number of cells with state alive at beginning
 	 */
 	public Life(int size, int numCells, int numAlive) {
-		super(TITLE, size, numCells);
+		super(TITLE, size, numCells, true);
 		cellsAlive = numAlive;
 	}
 	/**
@@ -51,7 +52,7 @@ public class Life extends Simulation {
 		for(GridCell[] c: getCells()){
 			for(GridCell d: c){
 				
-				ArrayList<GridCell> neighbors = this.getAllNeighbors(d.getX(), d.getY());
+				List<GridCell> neighbors = d.getAllNeighbors();
 				int liveNeighbors = 0;
 				for(GridCell temp: neighbors){
 					if(temp.getState() == ALIVE){

@@ -186,6 +186,13 @@ public class Main extends Application {
 					handleError(errorMessage);
 				} 	
 			}
+			//currentSim = new Life(500, 20, 200);
+			/*currentSim = new Segregation( 500,  100,  7500,  .7,  .5);
+			myStage.setTitle(currentSim.getTitle());
+			myScene = currentSim.init();
+			myStage.setHeight(currentSim.getSceneSize() + BUTTONHEIGHT + BUTTONPADDING);
+			addButtons();
+			myStage.setScene(myScene);*/
 		});	
 		menu.getChildren().add(start);
 	}

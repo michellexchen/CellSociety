@@ -1,5 +1,6 @@
 
 import java.util.ArrayList;
+import java.util.*;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -17,6 +18,10 @@ public class GridCell {
 	private String currState;
 	private String nextState;
 	private int[] myCoordinates = new int[2];
+	private Map<Integer, GridCell> myNeighbors = new HashMap<Integer, GridCell>();
+	private List<GridCell> cardNeighbors = new ArrayList<GridCell>();
+	private List<GridCell> allNeighbors = new ArrayList<GridCell>();
+
 	/**
 	 * 
 	 * @param state The initial state of the gridcell
@@ -71,6 +76,24 @@ public class GridCell {
 	
 	public void setMyShape(Shape mySquare) {
 		this.mySquare = mySquare;
+	}
+	
+	public void addNeighbor(int direction, GridCell neighbor){
+		if(!myNeighbors.containsKey(direction)){
+			myNeighbors.put(direction, neighbor);
+		}
+		allNeighbors.add(neighbor);
+		if(direction%2 == 1){
+			cardNeighbors.add(neighbor);
+		}
+	}
+	
+	public List<GridCell> getCardinalNeighbors(){
+		return cardNeighbors;
+	}
+	
+	public List<GridCell> getAllNeighbors(){
+		return allNeighbors;
 	}
 
 }
