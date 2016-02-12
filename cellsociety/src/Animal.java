@@ -5,7 +5,7 @@ public class Animal {
 	private int breedThresh;
 	private int dieThresh;
 	private int[] location;
-	private Direction orientation;
+	private int orientation;
 
 	public Animal(String name, int animalBreed, int animalLife, int x, int y) {
 		animal = name;
@@ -29,11 +29,11 @@ public class Animal {
 		return location[1];
 	}
 	
-	public void setOrientation(Direction direction){
+	public void setOrientation(int direction){
 		orientation = direction;
 	}
 	
-	public Direction getOrientation(){
+	public int getOrientation(){
 		return orientation;
 	}
 	

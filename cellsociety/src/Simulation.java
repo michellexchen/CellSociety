@@ -35,7 +35,7 @@ public abstract class Simulation {
 	private List<GridCell> emptyCells = new ArrayList<GridCell>();
 	private Map<String, Color> stateMap = new HashMap<String, Color>();
 	private Map<Integer, Integer> adjacentMap;
-	private int[] dirCodes = {6, 7, 8, 5, 1, 4, 3, 2};
+	private int[] dirCodes = {5, 6, 7, 4, 0, 3, 2, 1};
 	
 	/**
 	 * This method is generally responsible for determining the next state for each cell based on certain parameters, as defined by each type of simulation 

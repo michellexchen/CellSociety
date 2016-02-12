@@ -104,8 +104,9 @@ public class Ants extends Simulation {
 	}
 	
 	private void returnToNest(Ant ant){
-		ArrayList<GridCell> forwardNeighbors = getForwardNeighbors(ant.getX(),ant.getY());
-		ArrayList<GridCell> backwardNeighbors = getBackwardNeighbors(ant.getX(),ant.getY());
+		GridCell cell = myCells[ant.getX()][ant.getY()];
+		ArrayList<GridCell> forwardNeighbors = (ArrayList<GridCell>) cell.getForwardNeighbors(ant.getOrientation());
+		ArrayList<GridCell> backwardNeighbors = (ArrayList<GridCell>) cell.getBackwardNeighbors(ant.getOrientation());
 		if(myCells[ant.getX()][ant.getY()].getState()=="FOOD"){
 			//ant.setOrientation(NEWORIENTATION);
 		}
@@ -126,8 +127,9 @@ public class Ants extends Simulation {
 	}
 	
 	private void findFoodSource(Ant ant){
-		ArrayList<GridCell> forwardNeighbors = getForwardNeighbors(ant.getX(),ant.getY());
-		ArrayList<GridCell> backwardNeighbors = getBackwardNeighbors(ant.getX(),ant.getY());
+		GridCell cell = myCells[ant.getX()][ant.getY()];
+		ArrayList<GridCell> forwardNeighbors = (ArrayList<GridCell>) cell.getForwardNeighbors(ant.getOrientation());
+		ArrayList<GridCell> backwardNeighbors = (ArrayList<GridCell>) cell.getBackwardNeighbors(ant.getOrientation());
 		if(myCells[ant.getX()][ant.getY()].getState()=="NEST"){
 			//ant.setOrientation(NEWORIENTATION);
 		}
