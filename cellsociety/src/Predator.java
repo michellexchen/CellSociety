@@ -1,4 +1,3 @@
-
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import java.util.*;
@@ -28,8 +27,8 @@ public class Predator extends Simulation {
 	private int sharkBreedTime;
 	private int sharkDieTime;
 	private int fishBreedTime;
-	private ArrayList<GridCell> taken = new ArrayList<GridCell>();
-	private ArrayList<GridCell> cellList = new ArrayList<GridCell>();
+	private List<GridCell> taken = new ArrayList<GridCell>();
+	private List<GridCell> cellList = new ArrayList<GridCell>();
 	
 	/**
 	 * Initializes fields
@@ -42,7 +41,7 @@ public class Predator extends Simulation {
 	 * @param fish Percentage of population that is fish
 	 */
 	public Predator(int size, int numCells, int fishBreed, int sharkBreed, int sharkDie, int population, double fish) { //Initializes simulation constants
-		super(TITLE, size, numCells);
+		super(TITLE, size, numCells, true);
 		myPopulation = population;
 		percentFish = fish;
 		sharkBreedTime = sharkBreed;
@@ -58,7 +57,7 @@ public class Predator extends Simulation {
 		breedGrid = new int[gridSize][gridSize];
 		dieGrid = new int[gridSize][gridSize];
 		randomInit(myPopulation, percentFish, FISH, SHARK, EMPTY, FISHCOLOR, SHARKCOLOR, BACKGROUND);
-		initGridCells();
+		super.displayGrid();
 		myCells = super.getCells();
 		cellList = getCellList();
 		
@@ -102,9 +101,9 @@ public class Predator extends Simulation {
 			int x = cell.getX();
 			int y = cell.getY();
 			if(cell.getState()==SHARK){
-				ArrayList<GridCell> neighbors = getCardinalNeighbors(x,y);
-				ArrayList<GridCell> emptyNeighbors = getSpecialNeighbors(neighbors,EMPTY);
-				ArrayList<GridCell> fishNeighbors = getSpecialNeighbors(neighbors,FISH);
+				List<GridCell> neighbors = cell.getCardinalNeighbors();
+				List<GridCell> emptyNeighbors = getSpecialNeighbors(neighbors,EMPTY);
+				List<GridCell> fishNeighbors = getSpecialNeighbors(neighbors,FISH);
 				GridCell fish = getRandomCell(fishNeighbors);
 				GridCell empty = getRandomCell(emptyNeighbors);
 				if(fish!=null){
@@ -137,8 +136,8 @@ public class Predator extends Simulation {
 			int x = cell.getX();
 			int y = cell.getY();
 			if(cell.getState()==FISH){
-				ArrayList<GridCell> neighbors = getCardinalNeighbors(x,y);
-				ArrayList<GridCell> emptyNeighbors = getSpecialNeighbors(neighbors,EMPTY);
+				List<GridCell> neighbors = cell.getCardinalNeighbors();
+				List<GridCell> emptyNeighbors = getSpecialNeighbors(neighbors,EMPTY);
 				GridCell empty = getRandomCell(emptyNeighbors);
 				if(breedGrid[x][y]+1>=fishBreedTime){ 
 					breedAnimal(cell,emptyNeighbors);
@@ -177,7 +176,7 @@ public class Predator extends Simulation {
 	 * @param fish A gridcell with a fish
 	 * @param emptyNeighbors A list of empty cells neighboring the shark
 	 */
-	private void eatFish(GridCell shark, GridCell fish, ArrayList<GridCell> emptyNeighbors) {
+	private void eatFish(GridCell shark, GridCell fish, List<GridCell> emptyNeighbors) {
 		fish.setState(EMPTY); //so you don't look at it when iterating through fish
 		fish.setNextState(SHARK);
 		fish.setNextColor(SHARKCOLOR);
@@ -211,7 +210,7 @@ public class Predator extends Simulation {
 	 * @param animal A gridcell containing a shark or fish
 	 * @param emptyNeighbors A list of empty cells neighboring the animal cell
 	 */
-	private void breedAnimal(GridCell animal, ArrayList<GridCell> emptyNeighbors) { 
+	private void breedAnimal(GridCell animal, List<GridCell> emptyNeighbors) { 
 		GridCell newAnimal = getRandomCell(emptyNeighbors);
 		if(newAnimal!=null){ 
 			newAnimal.setNextState(animal.getState());
@@ -224,7 +223,7 @@ public class Predator extends Simulation {
 	 * @param selections A list of cells
 	 * @return A random grid cell
 	 */
-	private GridCell getRandomCell(ArrayList<GridCell> selections){ 
+	private GridCell getRandomCell(List<GridCell> selections){ 
 		Random rnd = new Random();
 		while(selections.size()>0){
 			GridCell chosen = selections.get(rnd.nextInt(selections.size()));
@@ -244,8 +243,8 @@ public class Predator extends Simulation {
 	 * @param type A type of cell - fish or shark
 	 * @return All neighbors of the type specified
 	 */
-	private ArrayList<GridCell> getSpecialNeighbors(ArrayList<GridCell> neighbors, String type){ //Returns all neighbors of a specific type
-		ArrayList<GridCell> special = new ArrayList<GridCell>();
+	private List<GridCell> getSpecialNeighbors(List<GridCell> neighbors, String type){ //Returns all neighbors of a specific type
+		List<GridCell> special = new ArrayList<GridCell>();
 		for(GridCell n: neighbors){
 			if(n.getState()==type){
 				special.add(n);
@@ -255,4 +254,3 @@ public class Predator extends Simulation {
 	}
 
 }
-
