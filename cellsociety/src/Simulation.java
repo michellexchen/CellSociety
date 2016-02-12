@@ -260,15 +260,6 @@ public abstract class Simulation {
 		}	
 	}
 	
-//	public void updateColors() {
-//		for(int x=0; x<getGridSize(); x++){
-//			for(int y=0; y<getGridSize(); y++){
-//				GridCell cell = getCells()[x][y];
-//				cell.updateColor();
-//				}
-//			}
-//		}
-	
 
 	/**
 	 * This method returns the neighbors to the North, South, East, and West of the cell at the specified coordinates 

@@ -96,6 +96,7 @@ public class Fire extends Simulation {
 					}
 					else {
 						curr.setNextState(currState);
+						curr.setNextColor(TREECOLOR);
 					}						
 					
 				}
@@ -104,19 +105,6 @@ public class Fire extends Simulation {
 		updateStates();		
 	}
 
-
-	public void updateColor(String current) {
-				if (current.equals(EMPTY)) {
-					
-				}
-				else if (current.equals(TREE)){
-					current.setMyColor(TREECOLOR);
-				}
-				else if (current.equals(BURNING)){
-					current.setMyColor(BURNINGCOLOR);
-				}
-		
-	}
 
 
 }

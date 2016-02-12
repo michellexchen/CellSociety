@@ -70,6 +70,11 @@ public class GridCell {
 	public void setNextColor(Color myColor) {
 		this.nextColor = myColor;
 	}
+	
+	public void updateColor() {
+		this.myColor = this.nextColor;
+	}
+	
 	public void setMySquare(Rectangle mySquare) {
 		this.mySquare = mySquare;
 	}
