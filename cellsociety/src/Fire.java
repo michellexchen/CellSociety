@@ -27,8 +27,8 @@ public class Fire extends Simulation {
 	private GridCell[][] myCells;
 
 	
-	public Fire(int size, int numCells, double probCatch) {
-		super(TITLE,size,numCells, true);
+	public Fire(int size, int numCells, double probCatch, boolean toroidal, boolean triangular) {
+		super(TITLE,size,numCells, toroidal, triangular);
 		myProbCatch = probCatch;
 	}
 

@@ -36,8 +36,8 @@ public class Segregation extends Simulation {
 	 * @param group1population Proportion of population belonging to group one
 	 * @param threshold Threshold for satisfaction
 	 */
-	public Segregation(int size, int numCells, int population, double group1population, double threshold) {
-		super(TITLE,size,numCells, true);
+	public Segregation(int size, int numCells, int population, double group1population, double threshold, boolean toroidal, boolean triangular) {
+		super(TITLE,size,numCells, toroidal, triangular);
 		myPopulation = population;
 		percentGroup1 = group1population;
 		myThreshold = threshold;
@@ -53,7 +53,7 @@ public class Segregation extends Simulation {
 		super.init();
 		randomInit(myPopulation, percentGroup1, GROUP1, GROUP2, EMPTY, GROUP1COLOR, GROUP2COLOR, BACKGROUND); 
 		emptyCells = getEmptyCells();
-		initGridCells();
+		super.displayGrid();
 		cellList = getCellList();
 		displayGrid();
 		

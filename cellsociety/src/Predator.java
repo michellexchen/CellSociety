@@ -40,8 +40,8 @@ public class Predator extends Simulation {
 	 * @param population Total number of sharks+fish
 	 * @param fish Percentage of population that is fish
 	 */
-	public Predator(int size, int numCells, int fishBreed, int sharkBreed, int sharkDie, int population, double fish) { //Initializes simulation constants
-		super(TITLE, size, numCells, true);
+	public Predator(int size, int numCells, int fishBreed, int sharkBreed, int sharkDie, int population, double fish, boolean toroidal, boolean triangular) { //Initializes simulation constants
+		super(TITLE, size, numCells, toroidal, triangular);
 		myPopulation = population;
 		percentFish = fish;
 		sharkBreedTime = sharkBreed;
