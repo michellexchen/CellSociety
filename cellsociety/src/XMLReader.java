@@ -104,6 +104,11 @@ public class XMLReader {
 		}
 	}
 	
+	
+	private String getNodeValue(Element attributes, String tagName){
+		return attributes.getElementsByTagName(tagName).item(0).getChildNodes().item(0).getNodeValue().trim();
+	}
+	
 	/**
 	 * 
 	 * @param attributes 
@@ -116,13 +121,13 @@ public class XMLReader {
 	 */
 	private Simulation getPredator(NodeList listParam, Element attributes){
 	     
-        Integer fishBreed = Integer.parseInt(attributes.getElementsByTagName("fishbreed").item(0).getChildNodes().item(0).getNodeValue().trim());
-        Integer sharkBreed = Integer.parseInt(attributes.getElementsByTagName("sharkbreed").item(0).getChildNodes().item(0).getNodeValue().trim());
-        Integer sharkDie = Integer.parseInt(attributes.getElementsByTagName("sharkdie").item(0).getChildNodes().item(0).getNodeValue().trim());
-        Integer population = Integer.parseInt(attributes.getElementsByTagName("population").item(0).getChildNodes().item(0).getNodeValue().trim());
-        Double percentFish = Double.parseDouble(attributes.getElementsByTagName("fishpercent").item(0).getChildNodes().item(0).getNodeValue().trim());
-        Integer size = Integer.parseInt(attributes.getElementsByTagName("size").item(0).getChildNodes().item(0).getNodeValue().trim());
-        Integer numCells = Integer.parseInt(attributes.getElementsByTagName("numcells").item(0).getChildNodes().item(0).getNodeValue().trim());
+        Integer fishBreed = Integer.parseInt(getNodeValue(attributes, "fishbreed"));
+        Integer sharkBreed = Integer.parseInt(getNodeValue(attributes, "sharkbreed"));
+        Integer sharkDie = Integer.parseInt(getNodeValue(attributes, "sharkdie"));
+        Integer population = Integer.parseInt(getNodeValue(attributes, "population"));
+        Double percentFish = Double.parseDouble(getNodeValue(attributes, "fishpercent"));
+        Integer size = Integer.parseInt(getNodeValue(attributes, "size"));
+        Integer numCells = Integer.parseInt(getNodeValue(attributes, "numcells"));
         
         return new Predator(size,numCells,fishBreed,sharkBreed,sharkDie,population,percentFish);
 	}
@@ -138,9 +143,9 @@ public class XMLReader {
 	 */
 	private Simulation getFire(NodeList listParam, Element attributes){
         
-        Double probCatch = Double.parseDouble(attributes.getElementsByTagName("probcatch").item(0).getChildNodes().item(0).getNodeValue().trim());
-        Integer size = Integer.parseInt(attributes.getElementsByTagName("size").item(0).getChildNodes().item(0).getNodeValue().trim());
-        Integer numCells = Integer.parseInt(attributes.getElementsByTagName("numcells").item(0).getChildNodes().item(0).getNodeValue().trim());
+        Double probCatch = Double.parseDouble(getNodeValue(attributes, "probcatch"));
+        Integer size = Integer.parseInt(getNodeValue(attributes, "size"));
+        Integer numCells = Integer.parseInt(getNodeValue(attributes, "numcells"));
 		 
 		return new Fire(size, numCells, probCatch);
 	}
@@ -155,11 +160,11 @@ public class XMLReader {
 	 * 
 	 */
 	private Simulation getSegregation(NodeList listParam, Element attributes){
-        Integer population = Integer.parseInt(attributes.getElementsByTagName("popsize").item(0).getChildNodes().item(0).getNodeValue().trim());
-        Double percent1 = Double.parseDouble(attributes.getElementsByTagName("percentone").item(0).getChildNodes().item(0).getNodeValue().trim());
-        Double satisfaction = Double.parseDouble(attributes.getElementsByTagName("satisfaction").item(0).getChildNodes().item(0).getNodeValue().trim());
-        Integer size = Integer.parseInt(attributes.getElementsByTagName("size").item(0).getChildNodes().item(0).getNodeValue().trim());
-        Integer numCells = Integer.parseInt(attributes.getElementsByTagName("numcells").item(0).getChildNodes().item(0).getNodeValue().trim());
+        Integer population = Integer.parseInt(getNodeValue(attributes, "popsize"));
+        Double percent1 = Double.parseDouble(getNodeValue(attributes, "percentone"));
+        Double satisfaction = Double.parseDouble(getNodeValue(attributes, "satisfaction"));
+        Integer size = Integer.parseInt(getNodeValue(attributes, "size"));
+        Integer numCells = Integer.parseInt(getNodeValue(attributes, "numcells"));
 		
 		return new Segregation(size,numCells,population,percent1,satisfaction);
 	}
@@ -174,9 +179,9 @@ public class XMLReader {
 	 * 
 	 */
 	private Simulation getLife(NodeList listParam, Element attributes){
-		Integer numAlive = Integer.parseInt(attributes.getElementsByTagName("numalive").item(0).getChildNodes().item(0).getNodeValue().trim());		
-		Integer size = Integer.parseInt(attributes.getElementsByTagName("size").item(0).getChildNodes().item(0).getNodeValue().trim());
-	    Integer numCells = Integer.parseInt(attributes.getElementsByTagName("numcells").item(0).getChildNodes().item(0).getNodeValue().trim());
+		Integer numAlive = Integer.parseInt(getNodeValue(attributes, "numalive"));		
+		Integer size = Integer.parseInt(getNodeValue(attributes, "size"));
+	    Integer numCells = Integer.parseInt(getNodeValue(attributes, "numcells"));
 		
 		return new Life(size,numCells,numAlive);
 	}
