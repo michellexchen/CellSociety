@@ -1,2 +1,0 @@
-<?xml version="1.0" encoding = "UTF-8"?>
-<segregation popsize = "500" satisfaction = "0.9" percentone = "0.5" size = "500" numcells = "100"  title = "Segregation" author = "Group 12"></segregation>

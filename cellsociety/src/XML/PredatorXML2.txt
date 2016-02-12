@@ -1,2 +1,0 @@
-<?xml version="1.0" encoding = "UTF-8"?>
-<predator fishbreed = "2" sharkbreed = "2" sharkdie = "3" population = "200" fishpercent = ".5" size = "500" numcells = "100" title = "Predator" author = "Group 12"></predator>

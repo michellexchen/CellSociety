@@ -66,6 +66,7 @@ public class Segregation extends Simulation {
 	public void update(){
 		for(GridCell e: emptyCells){
 			e.setNextState(EMPTY);
+			e.setNextColor(BACKGROUND);
 		}
 			Collections.shuffle(cellList);
 			for(GridCell cell: cellList){
@@ -76,13 +77,16 @@ public class Segregation extends Simulation {
 						GridCell empty = getRandEmpty();
 						if(empty != null){
 							empty.setNextState(currState);
+							empty.setNextColor(cell.getMyColor());
 							cell.setNextState(EMPTY);
+							cell.setNextColor(BACKGROUND);
 							nextEmpty.add(cell);
 						}	
 					}
 					
 					if(cell.getNextState()==null){ //if satisfied or can't move, do nothing
 						cell.setNextState(currState);
+						cell.setNextColor(cell.getMyColor());
 					}
 				}
 			}
@@ -125,25 +129,6 @@ public class Segregation extends Simulation {
 		emptyCells.remove(empty);
 		return empty;
 	}
-	/**
-	 * Changes colors of cells based on state of cells
-	 */
-	@Override
-	public void updateColors() {
-		for(int x=0; x<super.getGridSize(); x++){
-			for(int y=0; y<super.getGridSize(); y++){
-				GridCell cell = getCells()[x][y];
-				if(cell.getState()==GROUP1){
-					cell.setMyColor(GROUP2COLOR);
-				}
-				else if(cell.getState()==GROUP2){
-					cell.setMyColor(GROUP1COLOR);
-				}
-				else if(cell.getState() == EMPTY){
-					cell.setMyColor(BACKGROUND);
-				}
-			}
-		}
-	}	
+	
 }		
 	

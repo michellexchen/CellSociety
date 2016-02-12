@@ -61,17 +61,21 @@ public class Life extends Simulation {
 				if(d.getState() == ALIVE){
 					if(liveNeighbors == 2 || liveNeighbors == 3){
 						d.setNextState(ALIVE);
+						d.setNextColor(ALIVECOLOR);
 					}
 					else{
 						d.setNextState(DEAD);
+						d.setNextColor(DEADCOLOR);
 					}
 				}
 				else{
 					if(liveNeighbors == 3){
 						d.setNextState(ALIVE);
+						d.setNextColor(ALIVECOLOR);
 					}
 					else{
 						d.setNextState(DEAD);
+						d.setNextColor(DEADCOLOR);
 					}
 				}
 								
@@ -79,20 +83,5 @@ public class Life extends Simulation {
 		}
 		updateStates();
 	}
-	/**
-	 * updates colors in grid to reflect changes in state
-	 */
-	@Override
-	public void updateColors() { 
-		for(GridCell[] c: getCells()){
-			for(GridCell d: c){
-				if(d.getState() == ALIVE){
-					d.setMyColor(ALIVECOLOR);
-				}
-				else{
-					d.setMyColor(DEADCOLOR);
-				}
-			}
-		}
-	}
+	
 }

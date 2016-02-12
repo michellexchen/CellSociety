@@ -10,6 +10,7 @@ public class GridCell {
 	 * The Simulation class visually represents the information stored in this class
 	 */
 	private Color myColor = Color.BLACK;
+	private Color nextColor;
 	private Rectangle mySquare;
 	private String currState;
 	private String nextState;
@@ -64,6 +65,14 @@ public class GridCell {
 	
 	public void setMyColor(Color myColor) {
 		this.myColor = myColor;
+	}
+	
+	public void setNextColor(Color myColor) {
+		this.nextColor = myColor;
+	}
+	
+	public void updateColor() {
+		this.myColor = this.nextColor;
 	}
 	
 	public void setMySquare(Rectangle mySquare) {

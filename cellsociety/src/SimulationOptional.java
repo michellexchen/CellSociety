@@ -11,6 +11,13 @@ public class SimulationOptional {
 	private Simulation simulation;
 	private Exception exception;
 	
+	
+//	•	no simulation type given
+//	•	default values when parameter values are not given
+//	•	invalid cell state values given
+//	•	cell locations given that are outside the bounds of the grid's size
+// • incorrect information
+	
 	public SimulationOptional(Simulation sim, Exception except) {
 		simulation = sim;
 		exception = except;
