@@ -48,10 +48,8 @@ public class Main extends Application {
 	private final double SPEED = .5;
 	private final int BUTTONHEIGHT = 50;
 	private final int BUTTONPADDING = 40;
-	private final int SPLASHSIZE = 400;
 	private final int SIZE = 500;
 	
-	private VBox menu;
 	private String address1;
 	private String address2;
 	private ResourceBundle myResources;
@@ -59,11 +57,13 @@ public class Main extends Application {
 	private Text welcome;
 	private Stage myStage;
 	private Scene myScene;
-	private Simulation currentSim;
+	private SplashScreen myScreen;
+	
 	private SimulationOptional simOption;
 	private boolean gotSim;
+	private Simulation currentSim;
+
 	private Timeline animation;
-	private Group splashGroup = new Group();
 	private Scene splashScene;
 
 	/**
@@ -78,7 +78,8 @@ public class Main extends Application {
 		myResources = ResourceBundle.getBundle("Resources/English");
 
 		myStage = gameStage;
-		splashScene = splashScene();
+		myScreen = new SplashScreen();
+		splashScene = myScreen.SplashScreen(this, SIZE);
 		myStage.setScene(splashScene);
 		myStage.setTitle("Simulations Home Screen");
 		myStage.show();
@@ -87,11 +88,8 @@ public class Main extends Application {
 		animation = new Timeline();
 		animation.setCycleCount(Timeline.INDEFINITE);
 		animation.getKeyFrames().add(frame);
-		
-		
-		
+	
 	}
-
 	
 	/**
 	 * This method is responsible for adding a GUI to the simulation scene once
@@ -99,7 +97,7 @@ public class Main extends Application {
 	 * simulation timeline (whether it's playing, stopped, or its speed is
 	 * changed)
 	 */
-	private void addButtons() {
+	private void addButtons(ResourceBundle myResources, Timeline animation) {
 		Button start = new Button(myResources.getString("Start"));
 		start.setOnMouseClicked(e -> animation.play());
 
@@ -140,110 +138,18 @@ public class Main extends Application {
 		currentSim.getRoot().getChildren().add(buttons);
 
 	}
-
-	/**
-	 * This method is responsible for creating the scene for the menu screen that allows the user to select a simulation.
-	 * @return the Scene containing the menu screen
-	 */
-	private Scene splashScene() {
-		Scene splash = new Scene(splashGroup, SIZE, SIZE);
-
-		splash.setFill(Color.GRAY);
-		ArrayList<String> options = new ArrayList<String>();
-		options.add("Fire");
-		options.add("Segregation");
-		options.add("Predator");
-		options.add("Life");
-		
-		ArrayList<String> configs = new ArrayList<String>();
-		configs.add("1");
-		configs.add("2");
-		configs.add("3");
-		splash.setFill(Color.SLATEBLUE);
-
-		menu = new VBox();
-		menu.setPrefSize(SPLASHSIZE, SPLASHSIZE);
-		menu.setLayoutX((SIZE - SPLASHSIZE) / 2);
-		menu.setLayoutY((SIZE - SPLASHSIZE) / 2);
-		welcome = new Text(myResources.getString("Select"));
-		menu.getChildren().add(welcome);
-		
-		start = new Button(myResources.getString("Upload"));
-		start.setMinWidth(115);
-		start.setOnMouseClicked(e -> {
-				simOption = new XMLReader().getSimulation();
-				gotSim = true;
-				if (simOption == null) { //if cant read simuation type
-					noSimulation();
-					return;
-				}
-				//CAN WE GET ERRORS TO PRINT???
-				try{
-					currentSim = simOption.getSimulation();
-					myStage.setTitle(currentSim.getTitle());
-					myScene = currentSim.init();
-					myStage.setHeight(currentSim.getSceneSize() + BUTTONHEIGHT + BUTTONPADDING);
-					addButtons();
-					//gotSim = false;
-					myStage.setScene(myScene);
-					} catch (Exception e2) { //if xml file contents are bad
-						//gotSim = false;
-						String errorMessage = simOption.getExceptionMessage();
-						handleError(errorMessage); //method below							
-				}
-			//}
-				
-					
-			
-		});
-		menu.getChildren().add(start);
-		menu.getStyleClass().add("hbox");
-		splash.getStylesheets().add("Resources/style.css");
-		splashGroup.getChildren().add(menu);
-		return splash;
+	
+	public void setSimOption(SimulationOptional sim){
+		 simOption = sim;
 	}
-
-	/**
-	 * This method is responsible for displaying a pop-up error message when
-	 * there is faulty user input such that an XML file can't be read to
-	 * initialize a simulation
-	 * 
-	 * @param errorMessage
-	 *            the error message to be displayed to the user
-	 */
-	public void handleError(String errorMessage) {
-		Text msg = new Text(myResources.getString("Error"));
-		Text msg2 = new Text(myResources.getString("Error2"));
-		Button ok = new Button(myResources.getString("OK"));
-		
-		menu.getChildren().addAll(msg, msg2, ok);
-		menu.getChildren().removeAll(welcome, start);
-		
-		ok.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent t) {
-				menu.getChildren().removeAll(msg, msg2, ok);
-				menu.getChildren().addAll(welcome, start);
-			}
-		});
-	}
-
-	public void noSimulation() {
-		Text msg = new Text(myResources.getString("SimError"));
-		Text msg2 = new Text(myResources.getString("SimError2"));
-		Button ok = new Button(myResources.getString("OK"));
-		
-		menu.getChildren().addAll(msg, msg2, ok);
-		menu.getChildren().removeAll(welcome, start);
-		
-		ok.setOnAction(new EventHandler<ActionEvent>() {
-
-			@Override
-			public void handle(ActionEvent t) {
-				menu.getChildren().removeAll(msg, msg2, ok);
-				menu.getChildren().addAll(welcome, start);
-			}
-		});
+	
+	public void startystart(){ //starts simulation
+		currentSim = simOption.getSimulation();
+		myStage.setTitle(currentSim.getTitle());
+		myScene = currentSim.init();
+		myStage.setHeight(currentSim.getSceneSize() + BUTTONHEIGHT + BUTTONPADDING);
+		addButtons(myResources, animation);
+		myStage.setScene(myScene);
 	}
 	
 	public static void main(String[] args) throws MalformedURLException {
