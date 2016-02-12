@@ -22,6 +22,8 @@ public class GridCell {
 	private Map<Integer, GridCell> myNeighbors = new HashMap<Integer, GridCell>();
 	private List<GridCell> cardNeighbors = new ArrayList<GridCell>();
 	private List<GridCell> allNeighbors = new ArrayList<GridCell>();
+	private Map<Integer,ArrayList<GridCell>> forwardNeighbors;
+	private Map<Integer,ArrayList<GridCell>> backwardNeighbors;
 
 	/**
 	 * 
@@ -34,7 +36,37 @@ public class GridCell {
 		currState = state;
 		myColor = color;
 		myCoordinates = new int[]{x,y};
+		
+		forwardNeighbors = initForwardNeighbors();
+		backwardNeighbors = initBackwardNeighbors();
+		
 	}
+	
+	private Map<Integer,ArrayList<GridCell>> initForwardNeighbors(){
+		Map<Integer,ArrayList<GridCell>> neighborMap = new HashMap<Integer,ArrayList<GridCell>>();
+		for(int i=0; i<8; i++){
+			ArrayList<GridCell> neighbors = new ArrayList<GridCell>();
+			neighbors.add(myNeighbors.get((i-1)%8));
+			neighbors.add(myNeighbors.get(i));
+			neighbors.add(myNeighbors.get((i+1)%8));
+			neighborMap.put(i, neighbors);
+		}
+		return forwardNeighbors;
+	}
+	
+	private Map<Integer,ArrayList<GridCell>> initBackwardNeighbors(){
+		Map<Integer,ArrayList<GridCell>> neighborMap = new HashMap<Integer,ArrayList<GridCell>>();
+		for(int i=0; i<8; i++){
+			ArrayList<GridCell> neighbors = new ArrayList<GridCell>();
+			Collections.copy(neighbors, allNeighbors);
+			ArrayList<GridCell> forward = forwardNeighbors.get(i);
+			neighbors.removeAll(forward);
+			neighborMap.put(i,neighbors);
+		}	
+		return neighborMap;
+	}
+	
+	
 	/*
 	 * Getters and setters below
 	 */
@@ -105,6 +137,14 @@ public class GridCell {
 	
 	public List<GridCell> getAllNeighbors(){
 		return allNeighbors;
+	}
+	
+	public List<GridCell> getForwardNeighbors(int direction){
+		return forwardNeighbors.get(direction);
+	}
+	
+	public List<GridCell> getBackwardNeighbors(int direction){
+		return backwardNeighbors.get(direction);
 	}
 
 }
