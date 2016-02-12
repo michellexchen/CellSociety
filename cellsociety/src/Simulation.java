@@ -249,24 +249,16 @@ public abstract class Simulation {
 	
 	public void step(){
 		update();
-		updateColors();
+		//updateColors();
 
 		for(GridCell[] c: myCells){
 			for(GridCell d: c){
+				d.updateColor();
 				Rectangle temp = d.getMySquare();
-				temp.setFill(d.getMyColor());	
+				temp.setFill(d.getMyColor());
 			}			
 		}	
 	}
-	
-	public void updateColors() {
-		for(int x=0; x<getGridSize(); x++){
-			for(int y=0; y<getGridSize(); y++){
-				GridCell cell = getCells()[x][y];
-				cell.updateColor();
-				}
-			}
-		}
 	
 
 	/**

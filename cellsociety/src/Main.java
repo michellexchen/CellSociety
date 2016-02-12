@@ -172,10 +172,8 @@ public class Main extends Application {
 		start.setMinWidth(115);
 		start.setOnMouseClicked(e -> {
 				simOption = new XMLReader().getSimulation();
-				System.out.println(simOption);
 				gotSim = true;
 				if (simOption == null) { //if cant read simuation type
-					System.out.println("WERAWEF");
 					noSimulation();
 					return;
 				}
