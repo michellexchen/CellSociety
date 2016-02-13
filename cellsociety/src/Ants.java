@@ -1,6 +1,10 @@
 import java.util.*;
 
+import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.chart.Chart;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.paint.Color;
 
 public class Ants extends Simulation {
@@ -21,6 +25,9 @@ public class Ants extends Simulation {
 	private double pherMin;
 	private double evapRate;
 	private double diffRate;
+	private DataChart dataChart;
+	private Chart myChart;
+	private static final int MAX_X_POINTS = 20;
 	
 
 	public Ants(String title, int size, int numCells, boolean tor) { //ArrayList<int[]> nest, ArrayList<int[]> food, int maxAnts, int antLife, int antBreed, int numNest, double minPher, double maxPher, double evaporation, double diffusion, ArrayList<int[]> obstacles, int k, int n
@@ -59,8 +66,8 @@ public class Ants extends Simulation {
 		gridSize = super.getGridSize();
 		populateCells("OBSTACLE",Color.YELLOW ,obstacleCoords, obstacleCells);
 		populateCells("NEST",Color.BEIGE,nestCoords,nestCells);
-		//populateAnts(nestCells,startAnts);
 		populateCells("FOOD",Color.BLUE,foodCoords,foodCells);
+		populateAnts(nestCells,startAnts);
 		populateEmpty();
 		displayGrid();
 		cellList = super.getCellList();
@@ -68,7 +75,26 @@ public class Ants extends Simulation {
 			cell.initForwardNeighbors();
 			cell.initBackwardNeighbors();
 		}
+		
+		ArrayList<Integer> dataVals = new ArrayList<Integer>();
+		dataVals.add(ants.size());
+		
+		ArrayList<String> dataNames = new ArrayList<String>();
+		dataNames.add("Ants");
+		
+		dataChart = new DataChart(dataVals,dataNames,this);
+		myChart = dataChart.init();
+		
+		Group root = getRoot();
+		root.getChildren().add(myChart);
+		
 		return super.getMyScene();
+	}
+	
+	private void updateChart(){
+		ArrayList<Integer> newData = new ArrayList<Integer>();
+		newData.add(ants.size());
+		dataChart.update(newData);
 	}
 	
 	private void populateCells(String state, Color color, ArrayList<int[]> coordinates, ArrayList<GridCell> cellDest){
@@ -108,6 +134,7 @@ public class Ants extends Simulation {
 	
 	@Override
 	public void update() {
+		updateChart();
 		for(Ant ant: ants){
 			if(ant.hasFoodItem()){
 				returnToNest(ant);
@@ -121,13 +148,6 @@ public class Ants extends Simulation {
 			antCell.diffuse();
 			antCell.evaporate();
 		}
-		for(int x=0; x<gridSize; x++){
-			for(int y=0; y<gridSize; y++){
-				System.out.print(((AntCell)myCells[x][y]).getPher("NEST")+" ");
-			}
-			System.out.println();
-		}
-		System.out.println();
 		populateAnts(nestCells,2);
 	}
 	
@@ -174,8 +194,8 @@ public class Ants extends Simulation {
 			ant.setOrientation(cell.getOrientationTo(nextLoc));
 			((AntCell)myCells[ant.getX()][ant.getY()]).removeAnimal(ant);
 			nextLoc.addAnimal(ant);
-			if(nextLoc.getState()=="NEST"){
-				ant.dropFood();
+			if(nextLoc.getState()=="FOOD"){
+				ant.pickUpFood();
 			}
 		}
 		
@@ -228,12 +248,15 @@ public class Ants extends Simulation {
 			double maxPher = maxCell.getPher(pherKind);
 			double result = maxPher - 2 - antCell.getPher(pherKind); //constant
 			if(result>0){
-				antCell.setPher(antCell.getPher(pherKind)+result, pherKind);
+				antCell.addPher(result, pherKind);
 			}
 		}
 	}
 	
 	private AntCell getMaxNeighbor(List<GridCell> list,String pherKind){
+		if(list==null){
+			return null;
+		}
 		double maxNum=0;
 		AntCell maxCell = null;
 		for(GridCell cell: list){

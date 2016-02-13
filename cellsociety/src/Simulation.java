@@ -1,10 +1,10 @@
 
 import java.util.*;
-import java.util.Random;
 
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.chart.Chart;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
@@ -36,6 +36,8 @@ public abstract class Simulation {
 	private Map<String, Color> stateMap = new HashMap<String, Color>();
 	private Map<Integer, Integer> adjacentMap;
 	private int[] dirCodes = {5, 6, 7, 4, 0, 3, 2, 1};
+	private int stepCount;
+	DataChart dataChart;
 	
 	/**
 	 * This method is generally responsible for determining the next state for each cell based on certain parameters, as defined by each type of simulation 
@@ -105,6 +107,22 @@ public abstract class Simulation {
 		myScene = new Scene(root,sceneSize,sceneSize);
 		return myScene; 
 	}
+	
+	private void initChart(){
+		ArrayList<Integer> dataVals = (ArrayList<Integer>) getDataVals();
+		ArrayList<String> dataNames = (ArrayList<String>) getDataLabels();
+		
+		dataChart = new DataChart(dataVals,dataNames,this);
+		Chart myChart = dataChart.init();
+		root.getChildren().add(myChart);
+	}
+	
+	private void updateChart(){
+		dataChart.update(getDataVals());
+	}
+	
+	public abstract List<Integer> getDataVals();
+	public abstract List<String> getDataLabels();
 	
 	/**
 	 * This method creates a list of random coordinates based on a user-determined amount
@@ -297,6 +315,7 @@ public abstract class Simulation {
 	}
 	
 	public void step(){
+		stepCount++;
 		update();
 		//updateColors();
 
@@ -311,6 +330,9 @@ public abstract class Simulation {
 		}	
 	}
 	
+	public int getStepCount(){
+		return stepCount;
+	}
 
 	/**
 	 * This method returns all the neighbors surrounding a specified cell 

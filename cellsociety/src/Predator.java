@@ -1,4 +1,5 @@
 import javafx.scene.Scene;
+import javafx.scene.chart.LineChart;
 import javafx.scene.paint.Color;
 import java.util.*;
 /**
@@ -29,6 +30,8 @@ public class Predator extends Simulation {
 	private int fishBreedTime;
 	private List<GridCell> taken = new ArrayList<GridCell>();
 	private List<GridCell> cellList = new ArrayList<GridCell>();
+	private int numSharks;
+	private int numFish;
 	
 	/**
 	 * Initializes fields
@@ -47,6 +50,8 @@ public class Predator extends Simulation {
 		sharkBreedTime = sharkBreed;
 		sharkDieTime = sharkDie;
 		fishBreedTime = fishBreed;
+		numSharks = (int)(population*(1-percentFish));
+		numFish = (int)(population*(percentFish));
 	}
 	/**
 	 * Assigns fish, sharks, and empty cells - returns a Scene with these attributes
@@ -60,6 +65,17 @@ public class Predator extends Simulation {
 		super.displayGrid();
 		myCells = super.getCells();
 		cellList = getCellList();
+		
+//		ArrayList<Integer> dataVals = new ArrayList<Integer>();
+//		dataVals.add(numSharks);
+//		dataVals.add(numFish);
+//		
+//		ArrayList<String> dataNames = new ArrayList<String>();
+//		dataNames.add("Shark");
+//		dataNames.add("Fish");
+//		
+//		//DataChart chart = new DataChart(dataVals,dataNames);
+//		chart.init();
 		
 		return super.getMyScene();
 	}
@@ -251,6 +267,10 @@ public class Predator extends Simulation {
 			}
 		}
 		return special;
+	}
+	
+	public void updateChart(){
+		
 	}
 
 }

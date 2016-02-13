@@ -103,6 +103,9 @@ public class AntCell extends AnimalCell {
 	public void diffuse(){
 		List<GridCell> neighbors = getAllNeighbors();//get neighbors
 		for(GridCell neighbor: neighbors){
+			if(neighbor.getState()=="FOOD" || neighbor.getState()=="OBSTACLE"){
+				continue;
+			}
 			((AntCell)neighbor).addPher(homePher*diffRate,"NEST");
 			((AntCell)neighbor).addPher(foodPher*diffRate,"FOOD");
 		}

@@ -42,7 +42,7 @@ public class Ant extends Animal {
 	}
 	
 	public void pickUpFood(){
-		hasFood = false;
+		hasFood = true;
 	}
 
 }
