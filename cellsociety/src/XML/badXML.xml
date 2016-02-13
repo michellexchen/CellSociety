@@ -8,9 +8,7 @@
 	</info> 
 
 	<parameters>
-		<probcatch> a </probcatch>
-		<size> 500 </size>
-		<numcells> 100 </numcells>
+		<probcatch> dsf</probcatch>
 	</parameters>
 
 </simulation>

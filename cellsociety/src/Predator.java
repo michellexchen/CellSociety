@@ -1,4 +1,5 @@
 import javafx.scene.Scene;
+import javafx.scene.chart.LineChart;
 import javafx.scene.paint.Color;
 import java.util.*;
 /**
@@ -29,6 +30,8 @@ public class Predator extends Simulation {
 	private int fishBreedTime;
 	private List<GridCell> taken = new ArrayList<GridCell>();
 	private List<GridCell> cellList = new ArrayList<GridCell>();
+	private int numSharks;
+	private int numFish;
 	
 	/**
 	 * Initializes fields
@@ -40,13 +43,16 @@ public class Predator extends Simulation {
 	 * @param population Total number of sharks+fish
 	 * @param fish Percentage of population that is fish
 	 */
-	public Predator(int size, int numCells, int fishBreed, int sharkBreed, int sharkDie, int population, double fish, boolean toroidal, boolean triangular) { //Initializes simulation constants
-		super(TITLE, size, numCells, toroidal, triangular);
+
+	public Predator(int size, int numCells, int fishBreed, int sharkBreed, int sharkDie, int population, double fish, boolean tor, boolean tri) { //Initializes simulation constants
+		super(TITLE, size, numCells, tor, tri);
 		myPopulation = population;
 		percentFish = fish;
 		sharkBreedTime = sharkBreed;
 		sharkDieTime = sharkDie;
 		fishBreedTime = fishBreed;
+		numSharks = (int)(population*(1-percentFish));
+		numFish = (int)(population*(percentFish));
 	}
 	/**
 	 * Assigns fish, sharks, and empty cells - returns a Scene with these attributes
@@ -60,6 +66,8 @@ public class Predator extends Simulation {
 		super.displayGrid();
 		myCells = super.getCells();
 		cellList = getCellList();
+		
+		initChart();
 		
 		return super.getMyScene();
 	}
@@ -112,6 +120,7 @@ public class Predator extends Simulation {
 				else if(dieGrid[x][y]+1==sharkDieTime){ 
 					cell.setNextState(EMPTY);
 					cell.setNextColor(BACKGROUND);
+					numSharks--;
 					breedGrid[x][y]=0;
 					dieGrid[x][y]=0;
 				}
@@ -177,6 +186,7 @@ public class Predator extends Simulation {
 	 * @param emptyNeighbors A list of empty cells neighboring the shark
 	 */
 	private void eatFish(GridCell shark, GridCell fish, List<GridCell> emptyNeighbors) {
+		numFish--;
 		fish.setState(EMPTY); //so you don't look at it when iterating through fish
 		fish.setNextState(SHARK);
 		fish.setNextColor(SHARKCOLOR);
@@ -212,7 +222,13 @@ public class Predator extends Simulation {
 	 */
 	private void breedAnimal(GridCell animal, List<GridCell> emptyNeighbors) { 
 		GridCell newAnimal = getRandomCell(emptyNeighbors);
-		if(newAnimal!=null){ 
+		if(newAnimal!=null){
+			if(animal.getState()==SHARK){
+				numSharks++;
+			}
+			else if(animal.getState()==FISH){
+				numFish++;
+			}
 			newAnimal.setNextState(animal.getState());
 			newAnimal.setNextColor(animal.getMyColor());
 			breedGrid[animal.getX()][animal.getY()]=0;
@@ -251,6 +267,22 @@ public class Predator extends Simulation {
 			}
 		}
 		return special;
+	}
+	
+	@Override
+	public List<Integer> getDataVals() {
+		ArrayList<Integer> dataVals = new ArrayList<Integer>();
+		dataVals.add(numSharks);
+		dataVals.add(numFish);
+		return dataVals;
+	}
+	
+	@Override
+	public List<String> getDataLabels() {
+		ArrayList<String> dataLabels = new ArrayList<String>();
+		dataLabels.add("Sharks");
+		dataLabels.add("Fish");
+		return dataLabels;
 	}
 
 }

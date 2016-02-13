@@ -1,24 +1,11 @@
 import java.net.MalformedURLException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
-import javax.xml.parsers.ParserConfigurationException;
-import org.xml.sax.SAXException;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
-import javafx.stage.FileChooser;
-import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -41,23 +28,18 @@ import javafx.util.Duration;
  */
 public class Main extends Application {
 
-	private final int MILLISECOND_DELAY = 1000 / 2;
+	private final int MILLISECOND_DELAY = 1000 / 5;
 	private final double SPEED = .5;
 	private final int BUTTONHEIGHT = 50;
 	private final int BUTTONPADDING = 40;
 	private final int SIZE = 500;
-	
-	private String address1;
-	private String address2;
+
 	private ResourceBundle myResources;
-	private Button start;
-	private Text welcome;
 	private Stage myStage;
 	private Scene myScene;
 	private SplashScreen myScreen;
 	
 	private SimulationOptional simOption;
-	private boolean gotSim;
 	private Simulation currentSim;
 
 	private Timeline animation;
@@ -69,6 +51,8 @@ public class Main extends Application {
 	 * responsible for setting up the simulation timeline
 	 * 
 	 */
+	
+
 	@Override
 
 	public void start(Stage gameStage) {
@@ -78,6 +62,7 @@ public class Main extends Application {
 		myScreen = new SplashScreen();
 		splashScene = myScreen.SplashScreen(this, SIZE);
 		myStage.setScene(splashScene);
+		
 		myStage.setTitle("Simulations Home Screen");
 		myStage.show();
 
@@ -119,10 +104,7 @@ public class Main extends Application {
 
 		Button switchSim = new Button(myResources.getString("Switch"));
 		switchSim.setOnMouseClicked(e -> {
-			myStage.setScene(splashScene);
-			animation.stop();
-			animation.setRate(1);
-			myStage.setHeight(SIZE+BUTTONHEIGHT-BUTTONPADDING);
+			myStage.setScene(myScreen.SplashScreen(this, SIZE));
 
 		});
 
@@ -135,6 +117,7 @@ public class Main extends Application {
 		currentSim.getRoot().getChildren().add(buttons);
 
 	}
+
 	
 	public void setSimOption(SimulationOptional sim){
 		 simOption = sim;

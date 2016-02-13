@@ -8,9 +8,10 @@
 	</info> 
 
 	<parameters>
+		<custom> true </custom>
 		<probcatch> .88 </probcatch>
-		<size> 500 </size>
-		<numcells> 255 </numcells>
+		<numcells> 100 </numcells>
+		<gridsize> 600> </gridsize>
 	</parameters>
 
 </simulation>

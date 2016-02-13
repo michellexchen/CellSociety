@@ -17,8 +17,8 @@ public class Ant extends Animal {
 		return super.getY();
 	}
 	
-	public void setOrientation(double reorient){
-		super.setOrientation(reorient);
+	public void setOrientation(int direction){
+		super.setOrientation(direction);
 	}
 	
 	public void updateDieTime(){
@@ -42,7 +42,7 @@ public class Ant extends Animal {
 	}
 	
 	public void pickUpFood(){
-		hasFood = false;
+		hasFood = true;
 	}
 
 }

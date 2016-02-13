@@ -26,9 +26,9 @@ public class Fire extends Simulation {
 	private int gridSize;
 	private GridCell[][] myCells;
 
-	
-	public Fire(int size, int numCells, double probCatch, boolean toroidal, boolean triangular) {
-		super(TITLE,size,numCells, toroidal, triangular);
+
+	public Fire(int size, int numCells, double probCatch, boolean tor, boolean tri) {
+		super(TITLE,size,numCells, tor, tri);
 		myProbCatch = probCatch;
 	}
 
@@ -53,7 +53,6 @@ public class Fire extends Simulation {
 				}
 			}
 		}
-		
 		displayGrid();		
 		return super.getMyScene();
 	}
@@ -103,6 +102,18 @@ public class Fire extends Simulation {
 			}
 		}		
 		updateStates();		
+	}
+
+	@Override
+	public List<Integer> getDataVals() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<String> getDataLabels() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

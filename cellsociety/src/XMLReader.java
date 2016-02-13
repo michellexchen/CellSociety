@@ -1,5 +1,6 @@
 import java.io.File;
-
+import java.util.List;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.validation.Validator;
@@ -9,7 +10,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 
-//import javafx.scene.Node;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
@@ -30,9 +30,13 @@ import javafx.stage.Stage;
 
 public class XMLReader {
 	private String file;
-	private Document doc;
-	
+	private Document doc;	
 	private Validator validator;
+	
+	private Integer gridSize;
+	private Integer numCells;
+	private Boolean gridType;
+	private Boolean cellType;
 
 	public XMLReader() {
 		file = chooseFile();
@@ -60,7 +64,7 @@ public class XMLReader {
 	 * If the XML file contains faulty user input, the method will instead return an error message to be displayed on the Stage in the main method.
 	 */
 	
-	public SimulationOptional getSimulation(){
+	public SimulationOptional getSimulation(Map myParams){
 		try{
 			//reading file
 			File inputFile = new File(file);
@@ -79,6 +83,8 @@ public class XMLReader {
 	        Element attributes = (Element) listParam.item(0);
 	        
 	        Simulation simulation;
+	        
+	        parseMap(myParams);
 	        
 	        switch(simType){
 	        case "Predator":
@@ -99,13 +105,31 @@ public class XMLReader {
 	        return new SimulationOptional(simulation, null);
         }
 		catch(Exception e){
-			//System.out.println(e.getMessage());
 			return new SimulationOptional(null, e);
 		}
 	}
 	
 	
-	private String getNodeValue(Element attributes, String tagName){
+	
+	private void parseMap(Map myParams){
+		 gridSize = Integer.parseInt((String) myParams.get("gridSize"));
+	     numCells = Integer.parseInt((String) myParams.get("numCells"));
+	     if (myParams.get("gridType") == "Finite") {
+	    	 gridType = false;
+	     } else {
+	    	 gridType = true;
+	     }
+	     if (myParams.get("cellType") == "Square") {
+	    	 cellType = false;
+	     } else {
+	    	 cellType = true;
+	     }
+	}
+	
+	private String getNodeValue(Element attributes, String tagName){ // THIS IS A CHECK FOR WHEN IT'S EMPTY. CHECK FOR WHEN DONT INCLUDE FOR WHEN ITS EMPTY
+		if (attributes.getElementsByTagName(tagName).item(0).getChildNodes().getLength() == 0) {
+			return Default.getDefault(tagName);
+		}
 		return attributes.getElementsByTagName(tagName).item(0).getChildNodes().item(0).getNodeValue().trim();
 	}
 	
@@ -116,21 +140,19 @@ public class XMLReader {
 	 * @return
 	 * 
 	 * This method is called in getSimulation() when the predator attribute is read and returns the predator simulation based on user inputed attributes from the XML file
-	 * Attributes included in the XML file include fishBreed, sharkBreed, sharkDie, population, percentFish, size, and numCells
+	 * Attributes included in the XML file include fishBreed, sharkBreed, sharkDie, population, percentFish, gridSize, and numCells
 	 * 
 	 */
 	private Simulation getPredator(NodeList listParam, Element attributes){
-	     
         Integer fishBreed = Integer.parseInt(getNodeValue(attributes, "fishbreed"));
         Integer sharkBreed = Integer.parseInt(getNodeValue(attributes, "sharkbreed"));
         Integer sharkDie = Integer.parseInt(getNodeValue(attributes, "sharkdie"));
         Integer population = Integer.parseInt(getNodeValue(attributes, "population"));
         Double percentFish = Double.parseDouble(getNodeValue(attributes, "fishpercent"));
-        Integer size = Integer.parseInt(getNodeValue(attributes, "size"));
-        Integer numCells = Integer.parseInt(getNodeValue(attributes, "numcells"));
         
-        return new Predator(size,numCells,fishBreed,sharkBreed,sharkDie,population,percentFish);
-	}
+        return new Predator(gridSize,numCells,fishBreed,sharkBreed,sharkDie,population,percentFish, gridType, cellType);
+	}	
+	
 	
 	/**
 	 * 
@@ -138,16 +160,17 @@ public class XMLReader {
 	 * @return
 	 * 
 	 * This method is called in getSimulation() when the fire attribute is read and returns the fire simulation based on user inputed attributes from the XML file
-	 * Attributes included in the XML file include probCatch, size, and numCells
+	 * Attributes included in the XML file include probCatch, gridSize, and numCells
 	 * 
 	 */
 	private Simulation getFire(NodeList listParam, Element attributes){
-        
+		System.out.println("i'm here");
+//	    if (getNodeValue(attributes, "custom").toString() == "true") {
+//	    	System.out.println("hehehahahohoh");
+//	    }
         Double probCatch = Double.parseDouble(getNodeValue(attributes, "probcatch"));
-        Integer size = Integer.parseInt(getNodeValue(attributes, "size"));
-        Integer numCells = Integer.parseInt(getNodeValue(attributes, "numcells"));
 		 
-		return new Fire(size, numCells, probCatch);
+		return new Fire(gridSize, numCells, probCatch, gridType, cellType);
 	}
 	
 	/**
@@ -156,17 +179,15 @@ public class XMLReader {
 	 * @return
 	 * 
 	 * This method is called in getSimulation() when the segregation attribute is read and returns the segregation simulation based on user inputed attributes from the XML file
-	 * Attributes included in the XML file include population, percent1, satisfaction, size, and numCells
+	 * Attributes included in the XML file include population, percent1, satisfaction, gridSize, and numCells
 	 * 
 	 */
 	private Simulation getSegregation(NodeList listParam, Element attributes){
-        Integer population = Integer.parseInt(getNodeValue(attributes, "popsize"));
+        Integer population = Integer.parseInt(getNodeValue(attributes, "popgridSize"));
         Double percent1 = Double.parseDouble(getNodeValue(attributes, "percentone"));
         Double satisfaction = Double.parseDouble(getNodeValue(attributes, "satisfaction"));
-        Integer size = Integer.parseInt(getNodeValue(attributes, "size"));
-        Integer numCells = Integer.parseInt(getNodeValue(attributes, "numcells"));
 		
-		return new Segregation(size,numCells,population,percent1,satisfaction);
+		return new Segregation(gridSize,numCells,population,percent1,satisfaction, gridType, cellType);
 	}
 	
 	/**
@@ -175,14 +196,12 @@ public class XMLReader {
 	 * @return
 	 * 
 	 * This method is called in getSimulation() when the life attribute is read and returns the life simulation based on user inputed attributes from the XML file
-	 * Attributes included in the XML file include numAlive, size, and numCells
+	 * Attributes included in the XML file include numAlive, gridSize, and numCells
 	 * 
 	 */
 	private Simulation getLife(NodeList listParam, Element attributes){
 		Integer numAlive = Integer.parseInt(getNodeValue(attributes, "numalive"));		
-		Integer size = Integer.parseInt(getNodeValue(attributes, "size"));
-	    Integer numCells = Integer.parseInt(getNodeValue(attributes, "numcells"));
 		
-		return new Life(size,numCells,numAlive);
+		return new Life(gridSize,numCells,numAlive, gridType, cellType);
 	}
 }

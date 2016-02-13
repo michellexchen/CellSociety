@@ -1,10 +1,9 @@
-
 import java.util.*;
-import java.util.Random;
 
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.chart.Chart;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
@@ -27,21 +26,25 @@ public abstract class Simulation {
 	private Group root = new Group();
 	private Scene myScene;
 	private String myTitle;
-
 	private int sceneSize;
 	private double gridCellSize;
 	private int gridSize;
 	private boolean isToroidal; 
-	private boolean isTri;
+	private boolean isTriangular;
 	private List<GridCell> emptyCells = new ArrayList<GridCell>();
 	private Map<String, Color> stateMap = new HashMap<String, Color>();
 	private Map<Integer, Integer> adjacentMap;
 	private int[] dirCodes = {5, 6, 7, 4, 0, 3, 2, 1};
+	private int stepCount;
+	DataChart dataChart;
 	
 	/**
 	 * This method is generally responsible for determining the next state for each cell based on certain parameters, as defined by each type of simulation 
 	 */
-	public abstract void update(); 
+	public abstract void update();
+	public Scene init(String[] columns){
+		return myScene;
+	}
 
 	/** 
 	 * This method is generally responsible for setting the color that is to be displayed to reflect the current state of a cell
@@ -53,7 +56,6 @@ public abstract class Simulation {
 			}
 		}
 	}
-
 	
 	/**
 	 * This method is responsible for creating a simulation with a title, specific grid and cell dimension
@@ -66,9 +68,19 @@ public abstract class Simulation {
 		gridCellSize = Math.ceil(((double)(size)/(double)(numGridCells)));
 		sceneSize = (int) (gridSize * gridCellSize);
 		isToroidal = tor;
-		isTri = tri;
+		isTriangular = tri;
 		myTitle = title;
 		initAdj();
+	}
+	
+	/**
+	 * This method is responsible for initializing the 2-D grid of cells and creating the scene for this grid
+	 * @return the scene on which the simulation grid is displayed 
+	 */
+	public Scene init(){
+		myCells = new GridCell[gridSize][gridSize];
+		myScene = new Scene(root,sceneSize,sceneSize);
+		return myScene; 
 	}
 	
 	private void initAdj(){
@@ -82,38 +94,101 @@ public abstract class Simulation {
 			adjacentMap.put(-1, gridSize-1);
 		}
 	}
-	/**
-	 * This method is responsible for retrieving the title of the simulation
-	 * @return the title of the simulation
-	 */
-	public String getTitle(){
-		return myTitle;
+	
+	public void displayGrid(){
+		if(!isTriangular){
+			int top = 0;
+			int left = 0;
+			
+			for(int i = 0; i < this.gridSize; i++){
+				for(int j = 0; j < this.gridSize; j++){
+					GridCell d = myCells[i][j];
+					setAllNeighbors(i,j);
+					Rectangle temp = new Rectangle(left, top, gridCellSize, gridCellSize);
+					temp.setFill(d.getMyColor());
+					d.setMyShape(temp);
+					root.getChildren().add(temp);
+					top += gridCellSize;
+				}
+				top = 0;
+				left += gridCellSize;
+			}	
+		}
+		else{
+			double dx = gridCellSize*2;
+			double dy = dx*Math.sqrt(3)/4;
+			double y1 = 0;
+			double y2 = dy;
+			double left = 0;
+			double right = dx;
+			
+			for(int i = 0; i < gridSize; i ++){
+				for(int j = 0; j < gridSize; j++){
+					GridCell current = myCells[i][j];
+					setAllNeighbors(i,j);
+					double[] temp = {left, y1, right, y1, (left+right)/2, y2};
+					Polygon next = new Polygon(temp);
+					next.setFill(current.getMyColor());
+					current.setMyShape(next);
+					root.getChildren().add(next);
+					y1 += dy*2*((j+1+i)%2);
+					y2 +=  dy*2*((j+i)%2);
+				}
+				y1 = dy * ((i+1)%2);
+				y2 = dy * (i%2);
+				left += dx/2;
+				right += dx/2;
+			}
+		}
 	}
+
 	
 	/**
-	 * This method is responsible for retrieving the dimension of the simulation scene (assuming a square scene)
-	 * @return the dimension of the simulation scene (in pixels)
+	 * This method returns all the neighbors surrounding a specified cell 
+	 * @param x the x-coordinate of the cell
+	 * @param y the y-coordinate of the cell
+	 * @return a list of all the cells surrounding a specified cell 
 	 */
-	public int getSceneSize(){
-		return sceneSize;
+	public void setAllNeighbors(int x, int y){
+		GridCell cell = myCells[x][y];
+		int count = 1;
+		for(int i = -1; i < 2; i++){
+			for(int j = -1; j < 2; j++){
+				if(i == 0 && j == 0){
+					continue;
+				}
+				if(this.adjacentMap.containsKey(x+i) && this.adjacentMap.containsKey(y+j)){
+					GridCell neighbor = myCells[adjacentMap.get(x+i)][adjacentMap.get(y+j)];
+					int[] dir = {i,j};
+					cell.addNeighbor(dirCodes[count-1], neighbor);
+					count++;
+				}
+			}	
+		}
 	}
 	
-	/**
-	 * This method is responsible for initializing the 2-D grid of cells and creating the scene for this grid
-	 * @return the scene on which the simulation grid is displayed 
-	 */
-	public Scene init(){
-		myCells = new GridCell[gridSize][gridSize];
-		myScene = new Scene(root,sceneSize,sceneSize);
-		return myScene; 
+	public void initChart(){
+		ArrayList<Integer> dataVals = (ArrayList<Integer>) getDataVals();
+		ArrayList<String> dataNames = (ArrayList<String>) getDataLabels();
+		
+		dataChart = new DataChart(dataVals,dataNames,this);
+		Chart myChart = dataChart.init();
+		root.getChildren().add(myChart);
 	}
+	
+	private void updateChart(){
+		dataChart.update(getDataVals());
+	}
+	
+	public abstract List<Integer> getDataVals();
+	public abstract List<String> getDataLabels();
 	
 	/**
 	 * This method creates a list of random coordinates based on a user-determined amount
 	 * @param population the amount of random coordinates needed
 	 * @return a list of a specified amount of random coordinates 
 	 */
-	private List<int[]> getRandomCoordinates(int population){
+	public List<int[]> getRandomCoordinates(int population){
 		HashMap<Integer,List<Integer>> randCoords = new HashMap<Integer,List<Integer>>();  
 		Random rnd = new Random();
 		while(population>0){
@@ -231,56 +306,6 @@ public abstract class Simulation {
 	public List<GridCell> getEmptyCells(){
 		return emptyCells;
 	}
-	
-	/**
-	 * This method initializes the cells to be displayed such that they appear on the grid as colored squares 
-	 */
-	public void displayGrid(){
-	
-		if(isTri){
-			double dx = gridCellSize*2;
-			double dy = dx*Math.sqrt(3)/4;
-			double y1 = 0;
-			double y2 = dy;
-			double left = 0;
-			double right = dx;
-			
-			for(int i = 0; i < gridSize; i ++){
-				for(int j = 0; j < gridSize; j++){
-					GridCell current = myCells[i][j];
-					setAllNeighbors(i,j);
-					double[] temp = {left, y1, right, y1, (left+right)/2, y2};
-					Polygon next = new Polygon(temp);
-					next.setFill(current.getMyColor());
-					current.setMyShape(next);
-					root.getChildren().add(next);
-					y1 += dy*2*((j+1+i)%2);
-					y2 +=  dy*2*((j+i)%2);
-				}
-				y1 = dy * ((i+1)%2);
-				y2 = dy * (i%2);
-				left += dx/2;
-				right += dx/2;
-			}
-		}	
-		
-		else{
-			int top = 0;
-			int left = 0;
-			for(int i = 0; i < this.gridSize; i++){
-				for(int j = 0; j < this.gridSize; j++){
-					GridCell d = myCells[i][j];
-					Rectangle temp = new Rectangle(left, top, gridCellSize, gridCellSize);
-					temp.setFill(d.getMyColor());
-					d.setMyShape(temp);
-					root.getChildren().add(temp);
-					top += gridCellSize;
-				}
-				top = 0;
-				left += gridCellSize;
-			}
-		}
-	}
 
 	/**
 	 * This method updates the current states of each cell to the next determined state of each cell
@@ -304,8 +329,9 @@ public abstract class Simulation {
 	}
 	
 	public void step(){
+		stepCount++;
+		updateChart();
 		update();
-		//updateColors();
 
 		for(GridCell[] c: myCells){
 			for(GridCell d: c){
@@ -318,30 +344,10 @@ public abstract class Simulation {
 		}	
 	}
 	
-
-	/**
-	 * This method returns all the neighbors surrounding a specified cell 
-	 * @param x the x-coordinate of the cell
-	 * @param y the y-coordinate of the cell
-	 * @return a list of all the cells surrounding a specified cell 
-	 */
-	public void setAllNeighbors(int x, int y){
-		GridCell cell = myCells[x][y];
-		int count = 1;
-		for(int i = -1; i < 2; i++){
-			for(int j = -1; j < 2; j++){
-				if(i == 0 && j == 0){
-					continue;
-				}
-				if(this.adjacentMap.containsKey(x+i) && this.adjacentMap.containsKey(y+j)){
-					GridCell neighbor = myCells[adjacentMap.get(x+i)][adjacentMap.get(y+j)];
-					cell.addNeighbor(dirCodes[count-1], neighbor);
-					count++;
-				}
-			}	
-		}
+	public int getStepCount(){
+		return stepCount;
 	}
-	
+
 	/**
 	 * This method returns the scene of the simulation
 	 * @return the simulation scene
@@ -368,4 +374,22 @@ public abstract class Simulation {
 	public void setStateMap(Map<String, Color> stateMap) {
 		this.stateMap = stateMap;
 	}
+
+	/**
+	 * This method is responsible for retrieving the title of the simulation
+	 * @return the title of the simulation
+	 */
+	public String getTitle(){
+		return myTitle;
+	}
+	
+	/**
+	 * This method is responsible for retrieving the dimension of the simulation scene (assuming a square scene)
+	 * @return the dimension of the simulation scene (in pixels)
+	 */
+	public int getSceneSize(){
+		return sceneSize;
+	}
+
+	
 }
