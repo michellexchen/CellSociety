@@ -43,8 +43,9 @@ public class Predator extends Simulation {
 	 * @param population Total number of sharks+fish
 	 * @param fish Percentage of population that is fish
 	 */
-	public Predator(int size, int numCells, int fishBreed, int sharkBreed, int sharkDie, int population, double fish) { //Initializes simulation constants
-		super(TITLE, size, numCells, true);
+
+	public Predator(int size, int numCells, int fishBreed, int sharkBreed, int sharkDie, int population, double fish, boolean tor, boolean tri) { //Initializes simulation constants
+		super(TITLE, size, numCells, tor, tri);
 		myPopulation = population;
 		percentFish = fish;
 		sharkBreedTime = sharkBreed;
@@ -268,9 +269,6 @@ public class Predator extends Simulation {
 		return special;
 	}
 	
-	public void updateChart(){
-		
-	}
 	@Override
 	public List<Integer> getDataVals() {
 		ArrayList<Integer> dataVals = new ArrayList<Integer>();

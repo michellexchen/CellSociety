@@ -1,3 +1,4 @@
+
 public class Direction{
 	public static final int N = 1;
 	public static final int NE = 2;

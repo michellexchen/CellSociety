@@ -3,7 +3,6 @@ import java.util.ArrayList;
 import java.util.*;
 
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 
 public class GridCell {
@@ -36,7 +35,6 @@ public class GridCell {
 		currState = state;
 		myColor = color;
 		myCoordinates = new int[]{x,y};
-		
 	}
 	
 	private int mod8(int i){
@@ -76,11 +74,20 @@ public class GridCell {
 		backwardNeighbors = neighborMap;
 	}
 	
+	public List<GridCell> getRangeNeighbors(int direction, int range){ //returns neighbors within a specified range from direcetion. Ex: (5, 2) returns neighbors from 3-7 inclusive
+		List<GridCell> neighbors = new ArrayList<GridCell>();
+		for(int i = direction-range; i <= direction+range; i++){
+			int neighbor = i%8;
+			if(myNeighbors.get(neighbor) != null){
+				neighbors.add(myNeighbors.get(neighbor));
+			}	
+		}
+		return neighbors;
+	}
 	
 	/*
 	 * Getters and setters below
 	 */
-	
 	public String getState(){
 		return currState;
 	}
@@ -136,7 +143,7 @@ public class GridCell {
 			myNeighbors.put(direction, neighbor);
 		}
 		allNeighbors.add(neighbor);
-		if(direction%2 == 1){
+		if(direction%2 == 0){
 			cardNeighbors.add(neighbor);
 		}
 	}

@@ -53,14 +53,18 @@ public class DataChart {
 	}
 	
 	public void update(List<Integer> newVals){
-		if(seriesList.get(0).getData().size()>MAX_X_POINTS){
+		if(mySimulation.getStepCount()>MAX_X_POINTS){
 			for(XYChart.Series<Number,Number> series: seriesList){
 				series.getData().remove(0);
-				xAxis.setLowerBound(xAxis.getLowerBound()+1);
-				xAxis.setUpperBound(xAxis.getUpperBound()+1);
 				
 			}
 		}
+		
+		if(mySimulation.getStepCount() > MAX_X_POINTS-1){
+			xAxis.setLowerBound(xAxis.getLowerBound()+1);
+			xAxis.setUpperBound(xAxis.getUpperBound()+1);
+		}
+		
 		for(int i=0; i<seriesList.size(); i++){
 			XYChart.Series<Number,Number> series = seriesList.get(i);
 			series.getData().add(new LineChart.Data<Number,Number>(mySimulation.getStepCount(),newVals.get(i)));

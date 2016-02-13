@@ -29,8 +29,8 @@ public class Ants extends Simulation {
 	private Chart myChart;
 	
 
-	public Ants(String title, int size, int numCells, boolean tor) { //ArrayList<int[]> nest, ArrayList<int[]> food, int maxAnts, int antLife, int antBreed, int numNest, double minPher, double maxPher, double evaporation, double diffusion, ArrayList<int[]> obstacles, int k, int n
-		super(title,size,numCells,tor);
+	public Ants(String title, int size, int numCells, boolean tor, boolean tri) { //ArrayList<int[]> nest, ArrayList<int[]> food, int maxAnts, int antLife, int antBreed, int numNest, double minPher, double maxPher, double evaporation, double diffusion, ArrayList<int[]> obstacles, int k, int n
+		super(title,size,numCells,tor,tri);
 //		obstacleCoords = obstacles;
 //		nestCoords = nest;
 //		foodCoords = food;

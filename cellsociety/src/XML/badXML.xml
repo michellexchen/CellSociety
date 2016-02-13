@@ -8,13 +8,7 @@
 	</info> 
 
 	<parameters>
-<<<<<<< HEAD
-		<probcatch> a </probcatch>
-=======
-		<probcatch .65 </probcatch>
->>>>>>> duplicated_mmc56_cmt57
-		<size> 500 </size>
-		<numcells> 100 </numcells>
+		<probcatch> dsf</probcatch>
 	</parameters>
 
 </simulation>

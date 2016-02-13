@@ -9,8 +9,6 @@
 
 	<parameters>
 		<numalive> 5000 </numalive>
-		<size> 500 </size>
-		<numcells> 100 </numcells>
 	</parameters>
 
 </simulation>
