@@ -13,8 +13,6 @@
 		<sharkdie> 3 </sharkdie>
 		<population> 200 </population>
 		<fishpercent> .5 </fishpercent>
-		<size> 500 </size>
-		<numcells> 100 </numcells>
 	</parameters>
 
 </simulation>

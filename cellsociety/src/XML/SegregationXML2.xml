@@ -11,8 +11,6 @@
 		<popsize> 7500 </popsize>
 		<satisfaction> .9 </satisfaction>
 		<percentone> .5 </percentone>
-		<size> 500 </size>
-		<numcells> 100 </numcells>
 	</parameters>
 
 </simulation>

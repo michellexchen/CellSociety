@@ -32,6 +32,7 @@ public abstract class Simulation {
 	private double gridCellSize;
 	private int gridSize;
 	private boolean isToroidal; 
+	private boolean isTriangular;
 	private List<GridCell> emptyCells = new ArrayList<GridCell>();
 	private Map<String, Color> stateMap = new HashMap<String, Color>();
 	private Map<Integer, Integer> adjacentMap;
@@ -60,11 +61,12 @@ public abstract class Simulation {
 	 * @param size the dimension for the size of the grid
 	 * @param numGridCells the cell dimension of the grid (assuming a square grid)
 	 */
-	public Simulation(String title, int size, int numGridCells, boolean tor){
+	public Simulation(String title, int size, int numGridCells, boolean tor, boolean tri){
 		gridSize = numGridCells;
 		gridCellSize = Math.ceil(((double)(size)/(double)(numGridCells)));
 		sceneSize = (int) (gridSize * gridCellSize);
 		isToroidal = tor;
+		isTriangular = tri;
 		myTitle = title;
 		initAdj();
 	}
@@ -239,6 +241,7 @@ public abstract class Simulation {
 		for(int i = 0; i < this.gridSize; i++){
 			for(int j = 0; j < this.gridSize; j++){
 				GridCell d = myCells[i][j];
+				setAllNeighbors(i,j);
 				Rectangle temp = new Rectangle(left, top, gridCellSize, gridCellSize);
 				temp.setFill(d.getMyColor());
 				d.setMyShape(temp);
@@ -271,7 +274,7 @@ public abstract class Simulation {
 //			y2 = dy * (i%2);
 //			left += dx/2;
 //			right += dx/2;
-//		}
+		//}
 	}
 
 	/**

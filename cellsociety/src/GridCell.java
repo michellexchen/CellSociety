@@ -126,7 +126,7 @@ public class GridCell {
 			myNeighbors.put(direction, neighbor);
 		}
 		allNeighbors.add(neighbor);
-		if(direction%2 == 1){
+		if(direction%2 == 0){
 			cardNeighbors.add(neighbor);
 		}
 	}

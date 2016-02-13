@@ -36,8 +36,8 @@ public class Segregation extends Simulation {
 	 * @param group1population Proportion of population belonging to group one
 	 * @param threshold Threshold for satisfaction
 	 */
-	public Segregation(int size, int numCells, int population, double group1population, double threshold) {
-		super(TITLE,size,numCells, true);
+	public Segregation(int size, int numCells, int population, double group1population, double threshold, boolean tor, boolean tri) {
+		super(TITLE,size,numCells, tor, tri);
 		myPopulation = population;
 		percentGroup1 = group1population;
 		myThreshold = threshold;
