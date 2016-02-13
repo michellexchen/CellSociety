@@ -37,8 +37,8 @@ public class GridCell {
 		myColor = color;
 		myCoordinates = new int[]{x,y};
 		
-		forwardNeighbors = initForwardNeighbors();
-		backwardNeighbors = initBackwardNeighbors();
+		//forwardNeighbors = initForwardNeighbors();
+		//backwardNeighbors = initBackwardNeighbors();
 		
 	}
 	
@@ -66,6 +66,16 @@ public class GridCell {
 		return neighborMap;
 	}
 	
+	public List<GridCell> getRangeNeighbors(int direction, int range){ //returns neighbors within a specified range from direcetion. Ex: (5, 2) returns neighbors from 3-7 inclusive
+		List<GridCell> neighbors = new ArrayList<GridCell>();
+		for(int i = direction-range; i <= direction+range; i++){
+			int neighbor = i%8;
+			if(myNeighbors.get(neighbor) != null){
+				neighbors.add(myNeighbors.get(neighbor));
+			}	
+		}
+		return neighbors;
+	}
 	
 	/*
 	 * Getters and setters below

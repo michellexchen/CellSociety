@@ -41,7 +41,7 @@ import javafx.util.Duration;
  */
 public class Main extends Application {
 
-	private final int MILLISECOND_DELAY = 1000 / 2;
+	private final int MILLISECOND_DELAY = 1000 / 5;
 	private final double SPEED = .5;
 	private final int BUTTONHEIGHT = 50;
 	private final int BUTTONPADDING = 40;
@@ -77,14 +77,17 @@ public class Main extends Application {
 		myStage = gameStage;
 		myScreen = new SplashScreen();
 		splashScene = myScreen.SplashScreen(this, SIZE);
-		myStage.setScene(splashScene);
+		//myStage.setScene(splashScene);
+		Simulation temp = new Slime(500, 100, false, false, 3000);
+		myStage.setScene(temp.init());
 		myStage.setTitle("Simulations Home Screen");
 		myStage.show();
 
-		KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> currentSim.step());
+		KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> temp.step());
 		animation = new Timeline();
 		animation.setCycleCount(Timeline.INDEFINITE);
 		animation.getKeyFrames().add(frame);
+		animation.play();
 	
 	}
 	

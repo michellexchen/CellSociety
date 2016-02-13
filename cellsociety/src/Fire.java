@@ -40,6 +40,7 @@ public class Fire extends Simulation {
 		super.init();
 		myCells = super.getCells();
 		gridSize = super.getGridSize();
+		System.out.println("before loop"); 
 		for (int a = 0; a<gridSize; a++) { //row
 			for (int b = 0; b<gridSize; b++) {
 				if (a == (gridSize-1)/2&& b == (gridSize-1)/2) {
@@ -51,9 +52,10 @@ public class Fire extends Simulation {
 				else {
 					myCells[a][b] = new GridCell(TREE, TREECOLOR,a,b);
 				}
+				System.out.println(a + ", " + b);
+
 			}
 		}
-		
 		displayGrid();		
 		return super.getMyScene();
 	}
