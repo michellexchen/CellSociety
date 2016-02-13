@@ -76,18 +76,19 @@ public class Main extends Application {
 
 	public void start(Stage gameStage) {
 		myResources = ResourceBundle.getBundle("Resources/English");
+		System.setProperty("glass.accessible.force", "false");
 
 		myStage = gameStage;
 		myScreen = new SplashScreen();
 		splashScene = myScreen.SplashScreen(this, SIZE);
-		//myStage.setScene(splashScene);
-		Simulation temp = new Life(500, 5, -1, false, false);//Slime(500, 100, false, false, 3000);
-		myStage.setScene(temp.init(cols));
+		myStage.setScene(splashScene);
+		//Simulation temp = new Life(500, 5, -1, false, false);//Slime(500, 100, false, false, 3000);
+		//myStage.setScene(temp.init(cols));
 		
 		myStage.setTitle("Simulations Home Screen");
 		myStage.show();
 
-		KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> temp.step());
+		KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> currentSim.step());
 		animation = new Timeline();
 		animation.setCycleCount(Timeline.INDEFINITE);
 		animation.getKeyFrames().add(frame);
