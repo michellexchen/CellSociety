@@ -37,8 +37,8 @@ public class GridCell {
 		myColor = color;
 		myCoordinates = new int[]{x,y};
 		
-		forwardNeighbors = initForwardNeighbors();
-		backwardNeighbors = initBackwardNeighbors();
+		//forwardNeighbors = initForwardNeighbors();
+		//backwardNeighbors = initBackwardNeighbors();
 		
 	}
 	

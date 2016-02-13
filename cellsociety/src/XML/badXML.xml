@@ -2,13 +2,13 @@
 
 <simulation>
 	<info>
-		<name>Fire</name>
+		<name></name>
 		<title>Fire Simulation </title>
 		<author>Group 12 </author>
 	</info> 
 
 	<parameters>
-		<probcatch> a </probcatch>
+		<probcatch> .65 </probcatch>
 		<size> 500 </size>
 		<numcells> 100 </numcells>
 	</parameters>
