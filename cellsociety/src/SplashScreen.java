@@ -53,9 +53,8 @@ public class SplashScreen {
 	 * @return the Scene containing the menu screen
 	 */
 	public Scene SplashScreen(Main myMain, int SIZE) {
-		welcomeMsg(SIZE);
-		enterParams();
-		uploadParams(myMain);
+		setUp(SIZE);
+		randomization(myMain);
 		makeMenu(menu);
 		return formatting(splash, SIZE);
 	}
@@ -71,7 +70,7 @@ public class SplashScreen {
 		menu.getStyleClass().add("hbox");
 	}
 	
-	private void welcomeMsg(int SIZE){
+	private void setUp(int SIZE){
 		menu = new VBox();
 		menu.setPrefSize(SPLASHSIZE, SPLASHSIZE);
 		menu.setLayoutX((SIZE - SPLASHSIZE) / 2);
@@ -82,6 +81,28 @@ public class SplashScreen {
 	private void addMenu(){
 		splashGroup = new Group();
 		splashGroup.getChildren().add(menu);
+	}
+	
+	private Text randomizeorNot;
+	private Button random;
+	private Button custom;
+
+	private void randomization(Main myMain){ //TODO: MAKE SURE IT OVERWRITES GRIDS IF CUSTOM AND GRID INCLUDED.. CHECK FOR THIS IN XMLREADER????
+		randomizeorNot = new Text(myResources.getString("Welcome"));
+		custom = new Button(myResources.getString("Custom"));
+		random = new Button(myResources.getString("Random"));
+		menu.getChildren().addAll(randomizeorNot, custom, random);
+
+		random.setOnMouseClicked(e -> {
+			menu.getChildren().removeAll(randomizeorNot, custom, random);
+			enterParams();
+			uploadParams(myMain);
+		});
+
+		custom.setOnMouseClicked(e->{
+			menu.getChildren().removeAll(randomizeorNot, custom, random);
+			uploadXML(myMain);
+		});
 	}
 	
 	private void uploadXML(Main myMain){
@@ -99,11 +120,12 @@ public class SplashScreen {
 					noSimulation();
 					return;
 				}
+				
 				try{
 					myMain.startystart();
 					} catch (Exception e2) { //if xml file contents are bad
 						String errorMessage = simOption.getExceptionMessage();
-						handleError(errorMessage);						
+						handleError(errorMessage);		
 				}
 							
 		});

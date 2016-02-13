@@ -80,14 +80,14 @@ public class Main extends Application {
 		myStage = gameStage;
 		myScreen = new SplashScreen();
 		splashScene = myScreen.SplashScreen(this, SIZE);
-		//myStage.setScene(splashScene);
-		Simulation temp = new Life(500, 5, -1, false, false);//Slime(500, 100, false, false, 3000);
-		myStage.setScene(temp.init(cols));
+		myStage.setScene(splashScene);
+		//Simulation temp = new Life(500, 5, -1, false, false);//Slime(500, 100, false, false, 3000);
+		//myStage.setScene(temp.init(cols));
 		
 		myStage.setTitle("Simulations Home Screen");
 		myStage.show();
 
-		KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> temp.step());
+		KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> currentSim.step());
 		animation = new Timeline();
 		animation.setCycleCount(Timeline.INDEFINITE);
 		animation.getKeyFrames().add(frame);
@@ -126,10 +126,7 @@ public class Main extends Application {
 
 		Button switchSim = new Button(myResources.getString("Switch"));
 		switchSim.setOnMouseClicked(e -> {
-			myStage.setScene(splashScene);
-			animation.stop();
-			animation.setRate(1);
-			myStage.setHeight(SIZE+BUTTONHEIGHT-BUTTONPADDING);
+			myStage.setScene(myScreen.SplashScreen(this, SIZE));
 
 		});
 

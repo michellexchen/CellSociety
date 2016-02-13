@@ -105,15 +105,10 @@ public class XMLReader {
 	        return new SimulationOptional(simulation, null);
         }
 		catch(Exception e){
-			//System.out.println(e.getMessage());
 			return new SimulationOptional(null, e);
 		}
 	}
 	
-	
-	private String getNodeValue(Element attributes, String tagName){
-		return attributes.getElementsByTagName(tagName).item(0).getChildNodes().item(0).getNodeValue().trim();
-	}
 	
 	
 	private void parseMap(Map myParams){
@@ -131,6 +126,13 @@ public class XMLReader {
 	     }
 	}
 	
+	private String getNodeValue(Element attributes, String tagName){ // THIS IS A CHECK FOR WHEN IT'S EMPTY. CHECK FOR WHEN DONT INCLUDE FOR WHEN ITS EMPTY
+		if (attributes.getElementsByTagName(tagName).item(0).getChildNodes().getLength() == 0) {
+			return Default.getDefault(tagName);
+		}
+		return attributes.getElementsByTagName(tagName).item(0).getChildNodes().item(0).getNodeValue().trim();
+	}
+	
 	/**
 	 * 
 	 * @param attributes 
@@ -142,7 +144,6 @@ public class XMLReader {
 	 * 
 	 */
 	private Simulation getPredator(NodeList listParam, Element attributes){
-	     
         Integer fishBreed = Integer.parseInt(getNodeValue(attributes, "fishbreed"));
         Integer sharkBreed = Integer.parseInt(getNodeValue(attributes, "sharkbreed"));
         Integer sharkDie = Integer.parseInt(getNodeValue(attributes, "sharkdie"));
@@ -150,7 +151,8 @@ public class XMLReader {
         Double percentFish = Double.parseDouble(getNodeValue(attributes, "fishpercent"));
         
         return new Predator(gridSize,numCells,fishBreed,sharkBreed,sharkDie,population,percentFish, gridType, cellType);
-	}
+	}	
+	
 	
 	/**
 	 * 
@@ -162,7 +164,10 @@ public class XMLReader {
 	 * 
 	 */
 	private Simulation getFire(NodeList listParam, Element attributes){
-        
+		System.out.println("i'm here");
+//	    if (getNodeValue(attributes, "custom").toString() == "true") {
+//	    	System.out.println("hehehahahohoh");
+//	    }
         Double probCatch = Double.parseDouble(getNodeValue(attributes, "probcatch"));
 		 
 		return new Fire(gridSize, numCells, probCatch, gridType, cellType);
