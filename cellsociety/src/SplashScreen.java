@@ -53,9 +53,7 @@ public class SplashScreen {
 	 * @return the Scene containing the menu screen
 	 */
 	public Scene SplashScreen(Main myMain, int SIZE) {
-		
 		welcomeMsg(SIZE);
-		//uploadXML(myMain); //comment this out later when you fix your animation
 		enterParams();
 		uploadParams(myMain);
 		makeMenu(menu);
@@ -87,14 +85,15 @@ public class SplashScreen {
 	}
 	
 	private void uploadXML(Main myMain){
-		menu.getChildren().removeAll(vb, welcome, upload, fill); //TODO: u messed up with start button here, get it tg
+		menu.getChildren().removeAll(vb, welcome, upload, fill);
 		welcome = new Text(myResources.getString("Select"));
 		menu.getChildren().add(welcome);
 		start = new Button(myResources.getString("Upload"));
 		start.setMinWidth(115);
 		menu.getChildren().add(start);
+		
 		start.setOnMouseClicked(e -> {
-				simOption = new XMLReader().getSimulation();
+				simOption = new XMLReader().getSimulation(myParams);
 				myMain.setSimOption(simOption); 
 				if (simOption == null) { //if cant read simuation type
 					noSimulation();
@@ -102,7 +101,6 @@ public class SplashScreen {
 				}
 				try{
 					myMain.startystart();
-					System.out.println("help me");
 					} catch (Exception e2) { //if xml file contents are bad
 						String errorMessage = simOption.getExceptionMessage();
 						handleError(errorMessage);						
@@ -133,8 +131,6 @@ public class SplashScreen {
 		gridSizeDefault.setText("500");
 		gridSizeDefault.setAlignment(Pos.CENTER);
 		vb.getChildren().addAll(gridSize, gridSizeDefault);
-		//System.out.println(gridSizeDefault.getText());
-
 	}
 	
 	private void numCellsField(){
@@ -144,7 +140,6 @@ public class SplashScreen {
 		numCellsDefault.setText("100");
 		numCellsDefault.setAlignment(Pos.CENTER);
 		vb.getChildren().addAll(numCells, numCellsDefault);
-
 	}
 	
 	private void gridTypeDropdown(){

@@ -27,8 +27,9 @@ public class Life extends Simulation {
 	 * @param Number of cells
 	 * @param Number of cells with state alive at beginning
 	 */
-	public Life(int size, int numCells, int numAlive, boolean toroidal, boolean triangular) {
-		super(TITLE, size, numCells, toroidal, triangular);
+
+	public Life(int size, int numCells, int numAlive, boolean tor, boolean tri) {
+		super(TITLE, size, numCells, tor, tri);
 		cellsAlive = numAlive;
 	}
 	/**

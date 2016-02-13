@@ -9,8 +9,6 @@
 
 	<parameters>
 		<probcatch> .88 </probcatch>
-		<size> 500 </size>
-		<numcells> 255 </numcells>
 	</parameters>
 
 </simulation>

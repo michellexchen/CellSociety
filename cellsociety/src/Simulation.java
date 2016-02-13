@@ -299,6 +299,7 @@ public abstract class Simulation {
 	public List<GridCell> getEmptyCells(){
 		return emptyCells;
 	}
+
 	/**
 	 * This method updates the current states of each cell to the next determined state of each cell
 	 */
