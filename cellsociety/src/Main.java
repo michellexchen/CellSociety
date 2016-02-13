@@ -188,7 +188,7 @@ public class Main extends Application {
 //						String errorMessage = simOption.getExceptionMessage();
 //						handleError(errorMessage); //method below							
 //				}
-			currentSim = new Ants("Ants",500,15,false);
+			currentSim = new Ants("Ants",500,5,false);
 			myStage.setTitle(currentSim.getTitle());
 			myScene = currentSim.init();
 			myStage.setHeight(currentSim.getSceneSize() + BUTTONHEIGHT + BUTTONPADDING);

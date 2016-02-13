@@ -49,8 +49,8 @@ public class Ants extends Simulation {
 		antCap = 10;
 		pherCap = 1000; 
 		pherMin = 0;
-		evapRate = 0.001;
-		diffRate = 0.001;
+		evapRate = 0.0001;
+		diffRate = 0.0001;
 	}
 	
 	public Scene init(){

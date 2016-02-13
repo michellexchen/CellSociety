@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.List;
 
 import javafx.scene.paint.Color;
 
@@ -85,20 +86,28 @@ public class AntCell extends AnimalCell {
 	}
 	
 	public void evaporate(){
-		setPher(homePher*(1-evapRate),"NEST");
-		setPher(foodPher*(1-evapRate),"FOOD");
+		addPher(-homePher*evapRate,"NEST");
+		addPher(-foodPher*evapRate,"FOOD");
 	}
 	
-	public void receivePher(double amt){
-		setPher(homePher*(1+amt),"NEST");
-		setPher(foodPher*(1+amt),"FOOD");
+	public void addPher(double amt,String pherKind){
+		switch(pherKind){
+		case "NEST":
+			setPher(homePher+amt,"NEST");
+			break;
+		case "FOOD":
+			setPher(foodPher+amt,"FOOD");
+		}
 	}
 	
 	public void diffuse(){
-		ArrayList<AntCell> neighbors = new ArrayList<AntCell>(); //get neighbors
-		for(AntCell neighbor: neighbors){
-			neighbor.receivePher(diffRate);
+		List<GridCell> neighbors = getAllNeighbors();//get neighbors
+		for(GridCell neighbor: neighbors){
+			((AntCell)neighbor).addPher(homePher*diffRate,"NEST");
+			((AntCell)neighbor).addPher(foodPher*diffRate,"FOOD");
 		}
+		addPher(-homePher*diffRate,"NEST");
+		addPher(-foodPher*diffRate,"FOOD");
 		
 	}
 	
