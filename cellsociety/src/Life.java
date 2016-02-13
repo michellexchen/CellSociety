@@ -43,6 +43,26 @@ public class Life extends Simulation {
 		super.displayGrid();
 		return super.getMyScene();
 	}
+	
+	@Override
+	public Scene init(String[] cols){
+		super.init();
+		for(int i = 0; i < cols.length; i++){
+			for(int j = 0; j < cols.length; j++){
+				if(cols[i].charAt(j) == '1'){
+					super.getCells()[i][j] = new GridCell(ALIVE, ALIVECOLOR, i, j);
+				}
+				else{
+					super.getCells()[i][j] = new GridCell(DEAD, DEADCOLOR, i, j);
+
+				}
+			}
+		}
+		
+		super.displayGrid();
+		return super.getMyScene();
+	}
+	
 	/**
 	 * Updates state of grid cells
 	 * Sets live cells to dead and dead cells to alive based on states of their neighbors

@@ -13,15 +13,13 @@ public class Slime extends Simulation{
 	private final double CAMP = 2;
 	private final double threshold = 2;
 	private int numAgents;
-	private Collection<SlimeAgent> myAgents;
-	private Collection<SlimeCell> myEmpties;
+	private List<SlimeAgent> myAgents;
 	
 	
 	public Slime(int size, int numCells, boolean toroidal, boolean triangular, int numSlime) {
 		super(TITLE,size,numCells, toroidal, triangular);
 		numAgents = numSlime;
 		myAgents = new ArrayList<SlimeAgent>();		
-		myEmpties = new ArrayList<SlimeCell>();
 	}
 	
 	@Override
@@ -50,7 +48,6 @@ public class Slime extends Simulation{
 				if(super.getCells()[i][j] == null){
 					SlimeCell temp = new SlimeCell(EMPTY, EMPTYCOLOR, i,j,DIFF,EVAP);
 					super.getCells()[i][j] = temp;
-					myEmpties.add(temp);
 				}
 			}
 		}
@@ -58,6 +55,7 @@ public class Slime extends Simulation{
 	
 	@Override
 	public void update() {
+		Collections.shuffle(myAgents);
 		for(SlimeAgent temp: myAgents){
 			temp.update();
 		}

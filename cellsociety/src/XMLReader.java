@@ -147,7 +147,7 @@ public class XMLReader {
         Integer size = Integer.parseInt(getNodeValue(attributes, "size"));
         Integer numCells = Integer.parseInt(getNodeValue(attributes, "numcells"));
 		 
-		return new Fire(size, numCells, probCatch, true, true);
+		return new Fire(size, numCells, probCatch);
 	}
 	
 	/**

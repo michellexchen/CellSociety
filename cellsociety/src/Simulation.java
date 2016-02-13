@@ -39,7 +39,10 @@ public abstract class Simulation {
 	/**
 	 * This method is generally responsible for determining the next state for each cell based on certain parameters, as defined by each type of simulation 
 	 */
-	public abstract void update(); 
+	public abstract void update();
+	public Scene init(String[] columns){
+		return myScene;
+	}
 
 	/** 
 	 * This method is generally responsible for setting the color that is to be displayed to reflect the current state of a cell
@@ -137,19 +140,6 @@ public abstract class Simulation {
 		}
 	}
 
-	/**
-	 * This method updates the current states of each cell to the next determined state of each cell
-	 */
-	public void updateStates(){
-		for (int m = 0; m<gridSize; m++) {
-			for (int n = 0; n<gridSize; n++) {
-				GridCell curr = myCells[m][n];
-				curr.setState(curr.getNextState());
-				curr.setNextState(null);
-			}
-		}
-	}
-	
 	public void step(){
 		update();
 
@@ -309,7 +299,23 @@ public abstract class Simulation {
 	public List<GridCell> getEmptyCells(){
 		return emptyCells;
 	}
-
+	/**
+	 * This method updates the current states of each cell to the next determined state of each cell
+	 */
+	public void updateStates(){
+		for (int m = 0; m<gridSize; m++) {
+			for (int n = 0; n<gridSize; n++) {
+				GridCell curr = myCells[m][n];
+				curr.setState(curr.getNextState());
+				curr.setNextState(null);
+			}
+		}
+	}
+	
+	/**
+	 * This method returns the 2-D array representing the simulation's grid 
+	 * @return
+	 */
 	public GridCell[][] getCells(){
 		return myCells;
 	}

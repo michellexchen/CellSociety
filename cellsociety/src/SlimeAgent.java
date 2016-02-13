@@ -15,7 +15,7 @@ public class SlimeAgent {
 	}
 
 	public void update(){
-		List<GridCell> neighbors = myCell.getRangeNeighbors(myDirection, 2);
+		List<GridCell> neighbors = myCell.getRangeNeighbors(myDirection, 3);
 
 		for(int i = 0; i < neighbors.size(); i++){
 			if(neighbors.get(i).getNextState() == Slime.AGENT)

@@ -69,6 +69,9 @@ public class Main extends Application {
 	 * responsible for setting up the simulation timeline
 	 * 
 	 */
+	
+	private String[] cols = {"01010", "00000", "11111", "01010", "11111"};
+
 	@Override
 
 	public void start(Stage gameStage) {
@@ -78,8 +81,9 @@ public class Main extends Application {
 		myScreen = new SplashScreen();
 		splashScene = myScreen.SplashScreen(this, SIZE);
 		//myStage.setScene(splashScene);
-		Simulation temp = new Slime(500, 100, false, false, 3000);
-		myStage.setScene(temp.init());
+		Simulation temp = new Life(500, 5, -1, false, false);//Slime(500, 100, false, false, 3000);
+		myStage.setScene(temp.init(cols));
+		
 		myStage.setTitle("Simulations Home Screen");
 		myStage.show();
 
@@ -87,7 +91,7 @@ public class Main extends Application {
 		animation = new Timeline();
 		animation.setCycleCount(Timeline.INDEFINITE);
 		animation.getKeyFrames().add(frame);
-		animation.play();
+		//animation.play();
 	
 	}
 	
