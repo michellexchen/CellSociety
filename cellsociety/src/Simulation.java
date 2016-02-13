@@ -234,43 +234,45 @@ public abstract class Simulation {
 	 * This method initializes the cells to be displayed such that they appear on the grid as colored squares 
 	 */
 	public void displayGrid(){
-
-		/*for(int i = 0; i < this.gridSize; i++){
+		double left =0;
+		double top=0;
+		for(int i = 0; i < this.gridSize; i++){
 			for(int j = 0; j < this.gridSize; j++){
 				GridCell d = myCells[i][j];
+				setAllNeighbors(i,j);
 				Rectangle temp = new Rectangle(left, top, gridCellSize, gridCellSize);
 				temp.setFill(d.getMyColor());
-				d.setMySquare(temp);
+				d.setMyShape(temp);
 				root.getChildren().add(temp);
 				top += gridCellSize;
 			}
 			top = 0;
 			left += gridCellSize;
-		}	*/
-		double dx = gridCellSize*2;
-		double dy = dx*Math.sqrt(3)/4;
-		double y1 = 0;
-		double y2 = dy;
-		double left = 0;
-		double right = dx;
-		
-		for(int i = 0; i < gridSize; i ++){
-			for(int j = 0; j < gridSize; j++){
-				GridCell current = myCells[i][j];
-				setAllNeighbors(i,j);
-				double[] temp = {left, y1, right, y1, (left+right)/2, y2};
-				Polygon next = new Polygon(temp);
-				next.setFill(current.getMyColor());
-				current.setMyShape(next);
-				root.getChildren().add(next);
-				y1 += dy*2*((j+1+i)%2);
-				y2 +=  dy*2*((j+i)%2);
-			}
-			y1 = dy * ((i+1)%2);
-			y2 = dy * (i%2);
-			left += dx/2;
-			right += dx/2;
-		}
+		}	
+//		double dx = gridCellSize*2;
+//		double dy = dx*Math.sqrt(3)/4;
+//		double y1 = 0;
+//		double y2 = dy;
+//		double left = 0;
+//		double right = dx;
+//		
+//		for(int i = 0; i < gridSize; i ++){
+//			for(int j = 0; j < gridSize; j++){
+//				GridCell current = myCells[i][j];
+//				setAllNeighbors(i,j);
+//				double[] temp = {left, y1, right, y1, (left+right)/2, y2};
+//				Polygon next = new Polygon(temp);
+//				next.setFill(current.getMyColor());
+//				current.setMyShape(next);
+//				root.getChildren().add(next);
+//				y1 += dy*2*((j+1+i)%2);
+//				y2 +=  dy*2*((j+i)%2);
+//			}
+//			y1 = dy * ((i+1)%2);
+//			y2 = dy * (i%2);
+//			left += dx/2;
+//			right += dx/2;
+//		}
 	}
 
 	/**

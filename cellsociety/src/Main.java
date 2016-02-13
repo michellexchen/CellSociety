@@ -168,26 +168,33 @@ public class Main extends Application {
 		start = new Button(myResources.getString("Upload"));
 		start.setMinWidth(115);
 		start.setOnMouseClicked(e -> {
-				simOption = new XMLReader().getSimulation();
-				gotSim = true;
-				if (simOption == null) { //if cant read simuation type
-					noSimulation();
-					return;
-				}
-				//CAN WE GET ERRORS TO PRINT???
-				try{
-					currentSim = simOption.getSimulation();
-					myStage.setTitle(currentSim.getTitle());
-					myScene = currentSim.init();
-					myStage.setHeight(currentSim.getSceneSize() + BUTTONHEIGHT + BUTTONPADDING);
-					addButtons();
-					//gotSim = false;
-					myStage.setScene(myScene);
-					} catch (Exception e2) { //if xml file contents are bad
-						//gotSim = false;
-						String errorMessage = simOption.getExceptionMessage();
-						handleError(errorMessage); //method below							
-				}
+//				simOption = new XMLReader().getSimulation();
+//				gotSim = true;
+//				if (simOption == null) { //if cant read simuation type
+//					noSimulation();
+//					return;
+//				}
+//				//CAN WE GET ERRORS TO PRINT???
+//				try{
+//					currentSim = simOption.getSimulation();
+//					myStage.setTitle(currentSim.getTitle());
+//					myScene = currentSim.init();
+//					myStage.setHeight(currentSim.getSceneSize() + BUTTONHEIGHT + BUTTONPADDING);
+//					addButtons();
+//					//gotSim = false;
+//					myStage.setScene(myScene);
+//					} catch (Exception e2) { //if xml file contents are bad
+//						//gotSim = false;
+//						String errorMessage = simOption.getExceptionMessage();
+//						handleError(errorMessage); //method below							
+//				}
+			currentSim = new Ants("Ants",500,15,false);
+			myStage.setTitle(currentSim.getTitle());
+			myScene = currentSim.init();
+			myStage.setHeight(currentSim.getSceneSize() + BUTTONHEIGHT + BUTTONPADDING);
+			addButtons();
+			//gotSim = false;
+			myStage.setScene(myScene);
 			//}
 				
 					
