@@ -45,21 +45,45 @@ public class Segregation extends Simulation {
 		
 		super.getStateMap().put(GROUP1, GROUP1COLOR);
 		super.getStateMap().put(GROUP2, GROUP2COLOR);
+		initialize();
 	}
+	
+	public Segregation(String[] columns, int size, double thresh, boolean tor, boolean tri){
+		super(columns, TITLE, size, tor, tri);
+		myThreshold = thresh;
+	}
+	
+	@Override
+	public void initExplicit(char current, int col, int row) {
+		if(emptyCells == null){
+			emptyCells = new ArrayList<GridCell>();
+		}
+
+		if(current == '0'){
+			GridCell empty = new GridCell(EMPTY, BACKGROUND, col, row);
+			emptyCells.add(empty);
+			getCells()[col][row] = empty;
+		}
+		else if(current == '1'){
+			getCells()[col][row] = new GridCell(GROUP1, GROUP1COLOR, col, row);
+		}
+		else if(current == '2'){
+			getCells()[col][row] = new GridCell(GROUP2, GROUP2COLOR, col, row);
+		}
+		cellList = getCellList();
+
+	}
+	
 	/**
 	 * Initializes a Scene with randomly distributed members of group1 and group 2
 	 */
-	@Override
-	public Scene init(){
+
+	public void initialize(){
 		super.init();
 		randomInit(myPopulation, percentGroup1, GROUP1, GROUP2, EMPTY, GROUP1COLOR, GROUP2COLOR, BACKGROUND); 
 		emptyCells = getEmptyCells();
-		super.displayGrid();
-
 		cellList = getCellList();
-		displayGrid();
-		
-		return super.getMyScene();
+		super.displayGrid();
 	}
 	/**
 	 * Updates state of cellls
@@ -70,6 +94,8 @@ public class Segregation extends Simulation {
 	 */
 	@Override
 	public void update(){
+		cellList = super.getCellList();
+		
 		for(GridCell e: emptyCells){
 			e.setNextState(EMPTY);
 			e.setNextColor(BACKGROUND);
@@ -96,7 +122,6 @@ public class Segregation extends Simulation {
 					}
 				}
 			}
-		
 		emptyCells.addAll(nextEmpty);
 		nextEmpty.clear();
 		//setting current state to next state and clearing next state
