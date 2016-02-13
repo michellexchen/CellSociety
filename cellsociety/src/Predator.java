@@ -66,16 +66,7 @@ public class Predator extends Simulation {
 		myCells = super.getCells();
 		cellList = getCellList();
 		
-//		ArrayList<Integer> dataVals = new ArrayList<Integer>();
-//		dataVals.add(numSharks);
-//		dataVals.add(numFish);
-//		
-//		ArrayList<String> dataNames = new ArrayList<String>();
-//		dataNames.add("Shark");
-//		dataNames.add("Fish");
-//		
-//		//DataChart chart = new DataChart(dataVals,dataNames);
-//		chart.init();
+		initChart();
 		
 		return super.getMyScene();
 	}
@@ -128,6 +119,7 @@ public class Predator extends Simulation {
 				else if(dieGrid[x][y]+1==sharkDieTime){ 
 					cell.setNextState(EMPTY);
 					cell.setNextColor(BACKGROUND);
+					numSharks--;
 					breedGrid[x][y]=0;
 					dieGrid[x][y]=0;
 				}
@@ -193,6 +185,7 @@ public class Predator extends Simulation {
 	 * @param emptyNeighbors A list of empty cells neighboring the shark
 	 */
 	private void eatFish(GridCell shark, GridCell fish, List<GridCell> emptyNeighbors) {
+		numFish--;
 		fish.setState(EMPTY); //so you don't look at it when iterating through fish
 		fish.setNextState(SHARK);
 		fish.setNextColor(SHARKCOLOR);
@@ -228,7 +221,13 @@ public class Predator extends Simulation {
 	 */
 	private void breedAnimal(GridCell animal, List<GridCell> emptyNeighbors) { 
 		GridCell newAnimal = getRandomCell(emptyNeighbors);
-		if(newAnimal!=null){ 
+		if(newAnimal!=null){
+			if(animal.getState()==SHARK){
+				numSharks++;
+			}
+			else if(animal.getState()==FISH){
+				numFish++;
+			}
 			newAnimal.setNextState(animal.getState());
 			newAnimal.setNextColor(animal.getMyColor());
 			breedGrid[animal.getX()][animal.getY()]=0;
@@ -271,6 +270,21 @@ public class Predator extends Simulation {
 	
 	public void updateChart(){
 		
+	}
+	@Override
+	public List<Integer> getDataVals() {
+		ArrayList<Integer> dataVals = new ArrayList<Integer>();
+		dataVals.add(numSharks);
+		dataVals.add(numFish);
+		return dataVals;
+	}
+	
+	@Override
+	public List<String> getDataLabels() {
+		ArrayList<String> dataLabels = new ArrayList<String>();
+		dataLabels.add("Sharks");
+		dataLabels.add("Fish");
+		return dataLabels;
 	}
 
 }

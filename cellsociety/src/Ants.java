@@ -27,7 +27,6 @@ public class Ants extends Simulation {
 	private double diffRate;
 	private DataChart dataChart;
 	private Chart myChart;
-	private static final int MAX_X_POINTS = 20;
 	
 
 	public Ants(String title, int size, int numCells, boolean tor) { //ArrayList<int[]> nest, ArrayList<int[]> food, int maxAnts, int antLife, int antBreed, int numNest, double minPher, double maxPher, double evaporation, double diffusion, ArrayList<int[]> obstacles, int k, int n
@@ -76,25 +75,23 @@ public class Ants extends Simulation {
 			cell.initBackwardNeighbors();
 		}
 		
-		ArrayList<Integer> dataVals = new ArrayList<Integer>();
-		dataVals.add(ants.size());
-		
-		ArrayList<String> dataNames = new ArrayList<String>();
-		dataNames.add("Ants");
-		
-		dataChart = new DataChart(dataVals,dataNames,this);
-		myChart = dataChart.init();
-		
-		Group root = getRoot();
-		root.getChildren().add(myChart);
+		initChart();
 		
 		return super.getMyScene();
 	}
 	
-	private void updateChart(){
-		ArrayList<Integer> newData = new ArrayList<Integer>();
-		newData.add(ants.size());
-		dataChart.update(newData);
+	@Override
+	public List<Integer> getDataVals(){
+		ArrayList<Integer> dataVals = new ArrayList<Integer>();
+		dataVals.add(ants.size());
+		return dataVals;
+	}
+	
+	@Override
+	public List<String> getDataLabels(){
+		ArrayList<String> dataNames = new ArrayList<String>();
+		dataNames.add("Ants");
+		return dataNames;
 	}
 	
 	private void populateCells(String state, Color color, ArrayList<int[]> coordinates, ArrayList<GridCell> cellDest){
@@ -134,7 +131,6 @@ public class Ants extends Simulation {
 	
 	@Override
 	public void update() {
-		updateChart();
 		for(Ant ant: ants){
 			if(ant.hasFoodItem()){
 				returnToNest(ant);

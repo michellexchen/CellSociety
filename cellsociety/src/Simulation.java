@@ -108,7 +108,7 @@ public abstract class Simulation {
 		return myScene; 
 	}
 	
-	private void initChart(){
+	public void initChart(){
 		ArrayList<Integer> dataVals = (ArrayList<Integer>) getDataVals();
 		ArrayList<String> dataNames = (ArrayList<String>) getDataLabels();
 		
@@ -316,6 +316,7 @@ public abstract class Simulation {
 	
 	public void step(){
 		stepCount++;
+		updateChart();
 		update();
 		//updateColors();
 

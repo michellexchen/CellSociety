@@ -52,7 +52,7 @@ public class DataChart {
 		return seriesList;
 	}
 	
-	public void update(ArrayList<Integer> newVals){
+	public void update(List<Integer> newVals){
 		if(seriesList.get(0).getData().size()>MAX_X_POINTS){
 			for(XYChart.Series<Number,Number> series: seriesList){
 				series.getData().remove(0);
