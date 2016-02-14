@@ -14,12 +14,14 @@ public class Slime extends Simulation{
 	private final double threshold = 2;
 	private int numAgents;
 	private List<SlimeAgent> myAgents;
+	private int totalCamp;
 	
 	public Slime(int size, int numCells, boolean toroidal, boolean triangular, int numSlime) {
 		super(TITLE,size,numCells, toroidal, triangular);
 		numAgents = numSlime;
 		myAgents = new ArrayList<SlimeAgent>();
 		initialize();
+		initChart();
 	}
 	
 	public Slime(String[] columns, int size,boolean tor, boolean tri){
@@ -76,6 +78,7 @@ public class Slime extends Simulation{
 	
 	@Override
 	public void update() {
+		totalCamp = 0;
 		Collections.shuffle(myAgents);
 		for(SlimeAgent temp: myAgents){
 			temp.update();
@@ -102,6 +105,7 @@ public class Slime extends Simulation{
 						e.setNextColor(e.getMyColor());
 					}
 				}
+				totalCamp += e.getCamp();
 				e.setPrevCamp(e.getCamp());
 			}
 		}
@@ -110,14 +114,16 @@ public class Slime extends Simulation{
 
 	@Override
 	public List<Integer> getDataVals() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Integer> dataVals = new ArrayList<Integer>();
+		dataVals.add(totalCamp);
+		return dataVals;
 	}
 
 	@Override
 	public List<String> getDataLabels() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> dataLabels = new ArrayList<String>();
+		dataLabels.add("Camp");
+		return dataLabels;
 	}
 
 }
