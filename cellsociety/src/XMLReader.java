@@ -1,4 +1,5 @@
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -92,14 +93,13 @@ public class XMLReader {
 		        return randomSim();
 	        } else {
 	        	parseCustom(attributes);
+	        	return customSim();
 	        }
 		} catch(Exception e){
 			System.out.println("invalid file");
 		}	
 		
 		return new SimulationOptional(null, null);
-
-
 	}
 	
 
@@ -111,6 +111,26 @@ public class XMLReader {
         	break;
         case "Fire":
         	simulation = getFire(attributes);
+        	break;
+        case "Segregation":
+        	simulation = getSegregation(attributes);
+        	break;
+        case "Life":
+        	simulation = getLife(attributes);
+        	break;
+        default: //IT'S HERE.. add return button OR create from here?
+        	return null;
+        }
+        return new SimulationOptional(simulation, null);
+    }
+
+	private SimulationOptional customSim(){
+		switch(simType){
+        case "Predator":
+        	simulation = getPredator(attributes);
+        	break;
+        case "Fire":
+        	simulation = getFireCustom(attributes);
         	break;
         case "Segregation":
         	simulation = getSegregation(attributes);
@@ -202,7 +222,24 @@ public class XMLReader {
 	}
 	
 	private Simulation getFireCustom(Element attributes) {
-		
+		System.out.println("ur in custom fire");
+		columns(attributes);
+        Double probCatch = Double.parseDouble(getNodeValue(attributes, "probcatch"));
+		return new Fire(columns, gridSize, probCatch, gridType, cellType);
+	}
+	
+	private List<String> columns;
+	private NodeList colTag;
+	
+	private List<String> columns(Element attributes){
+		colTag = doc.getElementsByTagName("col");
+		columns = new ArrayList<String>();
+		for (int i = 0; i < colTag.getLength(); i++) {
+			Node node = colTag.item(i);
+			Element eElement = (Element) node;
+			columns.add(eElement.getAttribute("states"));
+		}
+		return columns;
 	}
 	/**
 	 * 

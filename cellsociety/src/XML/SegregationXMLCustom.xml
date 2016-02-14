@@ -11,6 +11,14 @@
 		<popsize> 500 </popsize>
 		<satisfaction> .9 </satisfaction>
 		<percentone> .5 </percentone>
+		<gridsize> 600> </gridsize>
 	</parameters>
 
+	<matrix>
+		<col states = "11111"></col>
+		<col states = "00000"></col>
+		<col states = "21212"></col>
+		<col states = "00000"></col>
+		<col states = "11111"></col>
+	</matrix>
 </simulation>

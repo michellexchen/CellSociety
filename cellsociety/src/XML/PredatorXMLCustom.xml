@@ -13,6 +13,15 @@
 		<sharkdie> 7 </sharkdie>
 		<population> 500 </population>
 		<fishpercent> .4 </fishpercent>
+		<gridsize> 600> </gridsize>	
 	</parameters>
+	
+	<matrix>
+		<col states = "11111"></col>
+		<col states = "00000"></col>
+		<col states = "21212"></col>
+		<col states = "00000"></col>
+		<col states = "11111"></col>
+	</matrix>
 
 </simulation>

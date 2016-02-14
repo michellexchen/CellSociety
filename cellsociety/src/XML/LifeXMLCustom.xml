@@ -9,6 +9,15 @@
 
 	<parameters>
 		<numalive> 7500 </numalive>
+		<gridsize> 600> </gridsize>
 	</parameters>
+	
+	<matrix>
+		<col states = "11111"></col>
+		<col states = "00000"></col>
+		<col states = "21212"></col>
+		<col states = "00000"></col>
+		<col states = "11111"></col>
+	</matrix>
 
 </simulation>
