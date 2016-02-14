@@ -1,7 +1,6 @@
 import java.util.*;
 
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.chart.Chart;
 import javafx.scene.paint.Color;
@@ -174,7 +173,6 @@ public abstract class Simulation {
 				}
 				if(this.adjacentMap.containsKey(x+i) && this.adjacentMap.containsKey(y+j)){
 					GridCell neighbor = myCells[adjacentMap.get(x+i)][adjacentMap.get(y+j)];
-					int[] dir = {i,j};
 					cell.addNeighbor(dirCodes[count-1], neighbor);
 					count++;
 				}

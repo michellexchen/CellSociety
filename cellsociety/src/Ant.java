@@ -7,7 +7,6 @@ public class Ant extends Animal {
 
 	public Ant(int antLife, int x, int y) {
 		super(NAME, BREED, antLife, x, y);
-		// TODO Auto-generated constructor stub
 	}
 	
 	public int getX(){

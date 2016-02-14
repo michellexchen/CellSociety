@@ -3,12 +3,21 @@ import java.util.*;
 import javafx.scene.paint.Color;
 
 public class Ants extends Simulation {
+	public static final String NEST = "NEST";
+	public static final String FOOD = "FOOD";
+	public static final String GROUND = "GROUND";
+	private static final String OBSTACLE = "OBSTACLE";
+	private static final Color OBSTACLECOLOR = Color.DARKGRAY;
+	private static final Color NESTCOLOR = Color.BEIGE;
+	private static final Color FOODCOLOR = Color.BLUE;
+	private static final Color GROUNDCOLOR = Color.GREEN;
+	private static final String ANT_LABEL = "Ants";
+	private static final int ANTCAP = 10; //had to hardcode ant cell capacity because of bug
+	
 	ArrayList<int[]> obstacleCoords;
 	ArrayList<int[]> nestCoords;
 	ArrayList<int[]> foodCoords;
-	ArrayList<GridCell> nestCells ;
-	ArrayList<GridCell> foodCells = new ArrayList<GridCell>();
-	ArrayList<GridCell> obstacleCells = new ArrayList<GridCell>();
+	ArrayList<GridCell> nestCells;
 	ArrayList<GridCell> cellList = new ArrayList<GridCell>();
 	ArrayList<Ant> ants = new ArrayList<Ant>();
 	private int startAnts;
@@ -62,21 +71,21 @@ public class Ants extends Simulation {
 		}
 
 		if(current == '0'){
-			AntCell temp = new AntCell("NEST", Color.BEIGE, col, row, 10, pherCap, pherMin, evapRate, diffRate, KVal, NVal);
+			AntCell temp = new AntCell(NEST, NESTCOLOR, col, row, ANTCAP, pherCap, pherMin, evapRate, diffRate, KVal, NVal);
 			nestCells.add(temp);
 			getCells()[col][row] = temp;
 			populateAnts(nestCells, startAnts);
 		}
 		else if(current == '1'){
-			AntCell temp = new AntCell("FOOD", Color.BLUE, col, row, 10, pherCap, pherMin, evapRate, diffRate, KVal, NVal);
+			AntCell temp = new AntCell(FOOD, FOODCOLOR, col, row, ANTCAP, pherCap, pherMin, evapRate, diffRate, KVal, NVal);
 			getCells()[col][row] = temp;
 		}
 		else if(current == '2'){
-			AntCell temp = new AntCell("OBSTACLE", Color.GRAY, col, row, 10, pherCap, pherMin, evapRate, diffRate, KVal, NVal);
+			AntCell temp = new AntCell(OBSTACLE, OBSTACLECOLOR, col, row, ANTCAP, pherCap, pherMin, evapRate, diffRate, KVal, NVal);
 			getCells()[col][row] = temp;
 		}
 		else if(current == '3'){
-			AntCell ground = new AntCell("GROUND", Color.GREEN, col, row,10, pherCap, pherMin, evapRate, diffRate, KVal, NVal);
+			AntCell ground = new AntCell(GROUND, GROUNDCOLOR, col, row,ANTCAP, pherCap, pherMin, evapRate, diffRate, KVal, NVal);
 			getCells()[col][row] = ground;
 
 		}
@@ -92,7 +101,7 @@ public class Ants extends Simulation {
 	@Override
 	public List<String> getDataLabels(){
 		ArrayList<String> dataNames = new ArrayList<String>();
-		dataNames.add("Ants");
+		dataNames.add(ANT_LABEL);
 		return dataNames;
 	}
 	
@@ -100,18 +109,15 @@ public class Ants extends Simulation {
 		Random rnd = new Random();
 		int i = amt;
 		while(i>0){
-			//ArrayList<GridCell> refined = (ArrayList<GridCell>) refineLocations(selections);
-			GridCell chosen = selections.get(rnd.nextInt(selections.size()));
-			//GridCell chosen = refined.get(rnd.nextInt(refined.size()));
-			if(!((AntCell)chosen).atCapacity()){
-				Ant ant = new Ant(dieThresh,chosen.getX(),chosen.getY());
-				((AntCell)chosen).addAnimal(ant);
-				ants.add(ant);
-				i--;
+			ArrayList<GridCell> refined = (ArrayList<GridCell>) refineLocations(selections);
+			if(refined.size()==0){
+				return;
 			}
-			else{
-				continue;
-			}
+			GridCell chosen = refined.get(rnd.nextInt(refined.size()));
+			Ant ant = new Ant(dieThresh,chosen.getX(),chosen.getY());
+			((AntCell)chosen).addAnimal(ant);
+			ants.add(ant);
+			i--;
 		}
 	}
 	
@@ -153,20 +159,20 @@ public class Ants extends Simulation {
 		ArrayList<GridCell> neighbors = (ArrayList<GridCell>) cell.getAllNeighbors();
 		ArrayList<GridCell> forwardNeighbors = (ArrayList<GridCell>) cell.getForwardNeighbors(ant.getOrientation());
 		ArrayList<GridCell> backwardNeighbors = (ArrayList<GridCell>) cell.getBackwardNeighbors(ant.getOrientation());
-		if(super.getCells()[ant.getX()][ant.getY()].getState()=="FOOD"){
-			GridCell maxHomePher = getMaxNeighbor(neighbors,"NEST");
+		if(super.getCells()[ant.getX()][ant.getY()].getState()==FOOD){
+			GridCell maxHomePher = getMaxNeighbor(neighbors,NEST);
 			ant.setOrientation(cell.getOrientationTo(maxHomePher));
 		}
-		AnimalCell nextLoc = getMaxNeighbor(forwardNeighbors,"NEST");
+		AnimalCell nextLoc = getMaxNeighbor(forwardNeighbors,NEST);
 		if(nextLoc==null){
-			nextLoc = getMaxNeighbor(backwardNeighbors,"NEST");
+			nextLoc = getMaxNeighbor(backwardNeighbors,NEST);
 		}
 		if(nextLoc!=null){
-			dropPheromones(ant,"FOOD");
+			dropPheromones(ant,FOOD);
 			ant.setOrientation(cell.getOrientationTo(nextLoc));
 			nextLoc.addAnimal(ant);
 			((AntCell)super.getCells()[ant.getX()][ant.getY()]).removeAnimal(ant);
-			if(nextLoc.getState()=="NEST"){
+			if(nextLoc.getState()==NEST){
 				ant.dropFood();
 			}
 		}
@@ -178,8 +184,8 @@ public class Ants extends Simulation {
 		List<GridCell> neighbors = cell.getAllNeighbors();
 		ArrayList<GridCell> forwardNeighbors = (ArrayList<GridCell>) cell.getForwardNeighbors(ant.getOrientation());
 		ArrayList<GridCell> backwardNeighbors = (ArrayList<GridCell>) cell.getBackwardNeighbors(ant.getOrientation());
-		if(super.getCells()[ant.getX()][ant.getY()].getState()=="NEST"){
-			GridCell maxFoodPher = getMaxNeighbor(neighbors,"FOOD");
+		if(super.getCells()[ant.getX()][ant.getY()].getState()==NEST){
+			GridCell maxFoodPher = getMaxNeighbor(neighbors,FOOD);
 			ant.setOrientation(cell.getOrientationTo(maxFoodPher));
 		}
 		AntCell nextLoc = selectLocation(forwardNeighbors);
@@ -187,11 +193,11 @@ public class Ants extends Simulation {
 			nextLoc = selectLocation(backwardNeighbors);
 		}
 		if(nextLoc!=null){
-			dropPheromones(ant, "NEST");
+			dropPheromones(ant, NEST);
 			ant.setOrientation(cell.getOrientationTo(nextLoc));
 			((AntCell)super.getCells()[ant.getX()][ant.getY()]).removeAnimal(ant);
 			nextLoc.addAnimal(ant);
-			if(nextLoc.getState()=="FOOD"){
+			if(nextLoc.getState()==FOOD){
 				ant.pickUpFood();
 			}
 		}
@@ -202,13 +208,7 @@ public class Ants extends Simulation {
 		if(neighbors==null){
 			return null;
 		}
-		//ArrayList<GridCell> refinedNeighbors = (ArrayList<GridCell>) refineLocations(neighbors);
-		ArrayList<GridCell> refinedNeighbors = new ArrayList<GridCell>();
-		for(GridCell cell: neighbors){
-			if(cell.getState()!="OBSTACLE" && !((AntCell)cell).atCapacity()){
-				refinedNeighbors.add(cell);
-			}
-		}
+		ArrayList<GridCell> refinedNeighbors = (ArrayList<GridCell>) refineLocations(neighbors);
 		if(refinedNeighbors.size()==0){
 			return null;
 		}
@@ -220,7 +220,7 @@ public class Ants extends Simulation {
 	private List<GridCell> refineLocations(ArrayList<GridCell> locations){
 		ArrayList<GridCell> refined = new ArrayList<GridCell>();
 		for(GridCell cell: locations){
-			if(cell.getState()!="OBSTACLE" && !((AntCell)cell).atCapacity()){
+			if(cell.getState()!=OBSTACLE && !((AntCell)cell).atCapacity()){
 				refined.add(cell);
 			}
 		}
@@ -269,7 +269,7 @@ public class Ants extends Simulation {
 		AntCell maxCell = null;
 		for(GridCell cell: list){
 			AntCell antCell = (AntCell) cell;
-			if (antCell.getPher(pherKind)>=maxNum && antCell.getState()!="OBSTACLE" && !antCell.atCapacity()){
+			if (antCell.getPher(pherKind)>=maxNum && antCell.getState()!=OBSTACLE && !antCell.atCapacity()){
 				maxNum = antCell.getPher(pherKind);
 				maxCell = antCell;
 			}
