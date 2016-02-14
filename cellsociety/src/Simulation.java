@@ -44,17 +44,18 @@ public abstract class Simulation {
 	public abstract void update();
 	public abstract void initExplicit(char current, int col, int row);
 	
-	public Simulation(String[] columns, String title, int size, boolean tor, boolean tri){
-		this(title, size, columns.length, tor, tri);
+	public Simulation(List<String> columns, String title, int size, boolean tor, boolean tri){
+		this(title, size, columns.size(), tor, tri);
 		init();
-		System.out.println(myCells.length);
 		for(int i = 0; i < myCells.length; i++){
 			for(int j = 0; j < myCells.length; j++){
-				char currentCell = columns[i].charAt(j);
+				char currentCell = columns.get(i).charAt(j);
 				initExplicit(currentCell, i, j);
 			}
 		}
+
 		displayGrid();
+
 	}
 
 	/** 
@@ -107,6 +108,7 @@ public abstract class Simulation {
 	
 	public void displayGrid(){
 		if(!isTriangular){
+
 			int top = 0;
 			int left = 0;
 			
@@ -119,11 +121,13 @@ public abstract class Simulation {
 					d.setMyShape(temp);
 					root.getChildren().add(temp);
 					top += gridCellSize;
+
 				}
 				top = 0;
 				left += gridCellSize;
 			}	
 		}
+		
 		else{
 			double dx = gridCellSize*2;
 			double dy = dx*Math.sqrt(3)/4;
@@ -186,9 +190,9 @@ public abstract class Simulation {
 		root.getChildren().add(myChart);
 	}
 	
-	private void updateChart(){
-		dataChart.update(getDataVals());
-	}
+//	private void updateChart(){
+//		dataChart.update(getDataVals());
+//	}
 	
 	public abstract List<Integer> getDataVals();
 	public abstract List<String> getDataLabels();
@@ -340,7 +344,7 @@ public abstract class Simulation {
 	
 	public void step(){
 		stepCount++;
-		updateChart();
+		//updateChart();
 		update();
 
 		for(GridCell[] c: myCells){

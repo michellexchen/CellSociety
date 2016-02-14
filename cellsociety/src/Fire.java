@@ -86,7 +86,6 @@ public class Fire extends Simulation {
 			for (int y = 0; y<super.getGridSize(); y++) {
 				GridCell curr = getCells()[x][y];
 				String currState = curr.getState();
-				System.out.println(currState);
 				if (currState == EMPTY){
 					curr.setNextState(currState);
 					curr.setNextColor(BACKGROUND);

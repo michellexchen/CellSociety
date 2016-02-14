@@ -33,9 +33,10 @@ public class Life extends Simulation {
 		super(TITLE, size, numCells, tor, tri);
 		cellsAlive = numAlive;
 		initialize();
+		
 	}
 	
-	public Life(String[] columns, int size, boolean tor, boolean tri){
+	public Life(List<String> columns, int size, boolean tor, boolean tri){
 		super(columns, TITLE, size, tor, tri);
 	}
 	
@@ -54,10 +55,10 @@ public class Life extends Simulation {
 	public void initExplicit(char current, int col, int row) {
 		
 		if(current == '1'){
-			super.getCells()[col][row] = new GridCell(ALIVE, ALIVECOLOR, col, row);
+			super.getCells()[col][row] = new GridCell(ALIVE, Color.BLUE, col, row);
 		}
 		else if(current == '0'){
-			super.getCells()[col][row] = new GridCell(DEAD, DEADCOLOR, col, row);
+			super.getCells()[col][row] = new GridCell(DEAD, Color.GRAY, col, row);
 		}
 	}	
 	

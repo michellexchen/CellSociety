@@ -48,7 +48,7 @@ public class Segregation extends Simulation {
 		initialize();
 	}
 	
-	public Segregation(String[] columns, int size, double thresh, boolean tor, boolean tri){
+	public Segregation(List<String> columns, int size, double thresh, boolean tor, boolean tri){
 		super(columns, TITLE, size, tor, tri);
 		myThreshold = thresh;
 	}

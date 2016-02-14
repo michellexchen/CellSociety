@@ -53,7 +53,7 @@ public class Predator extends Simulation {
 		fishBreedTime = fishBreed;
 		initialize();
 	}
-	public Predator(String[] columns, int size, int fishBreed, int sharkBreed, int sharkDie, boolean tor, boolean tri){
+	public Predator(List<String> columns, int size, int fishBreed, int sharkBreed, int sharkDie, boolean tor, boolean tri){
 		super(columns, TITLE, size, tor, tri);
 		sharkBreedTime = sharkBreed;
 		sharkDieTime = sharkDie;

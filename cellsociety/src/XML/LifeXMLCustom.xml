@@ -8,14 +8,16 @@
 	</info> 
 
 	<parameters>
-		<numalive> 7500 </numalive>
-		<gridsize> 600> </gridsize>
+		<custom> true </custom>
+		<gridsize> 600 </gridsize>
+		<gridtype> toroidal </gridtype>
+		<celltype>square</celltype>
 	</parameters>
 	
 	<matrix>
-		<col states = "11111"></col>
+		<col states = "01010"></col>
 		<col states = "00000"></col>
-		<col states = "21212"></col>
+		<col states = "01010"></col>
 		<col states = "00000"></col>
 		<col states = "11111"></col>
 	</matrix>
