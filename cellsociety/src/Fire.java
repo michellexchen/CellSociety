@@ -1,8 +1,6 @@
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 /**
  * 
@@ -23,6 +21,8 @@ public class Fire extends Simulation {
 	private static final Color TREECOLOR = Color.GREEN;
 	private static final Color BACKGROUND = Color.YELLOW;
 	private double myProbCatch;
+	private int numTree;
+	private int numBurning;
 
 
 	public Fire(int size, int numCells, double probCatch, boolean tor, boolean tri) {
@@ -61,16 +61,19 @@ public class Fire extends Simulation {
 			for (int b = 0; b<gridSize; b++) {
 				if (a == (gridSize-1)/2&& b == (gridSize-1)/2) {
 					myCells[a][b] = new GridCell(BURNING, BURNINGCOLOR,a,b);
+					numBurning++;
 				}
 				else if (a == 0 || b == 0 || a == gridSize-1 || b == gridSize-1){
 					myCells[a][b] = new GridCell(EMPTY, BACKGROUND,a,b);
 				}
 				else {
 					myCells[a][b] = new GridCell(TREE, TREECOLOR,a,b);
+					numTree++;
 				}
 			}
 		}
-		displayGrid();		
+		displayGrid();	
+		initChart();	
 	}
 	
 	/**
@@ -102,6 +105,8 @@ public class Fire extends Simulation {
 					}
 					if (blah.contains(BURNING)) {
 						if (Math.random()<myProbCatch) {
+							numBurning++;
+							numTree--;
 							curr.setNextState(BURNING);
 							curr.setNextColor(BURNINGCOLOR);
 						}
@@ -122,14 +127,18 @@ public class Fire extends Simulation {
 
 	@Override
 	public List<Integer> getDataVals() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Integer> dataVals = new ArrayList<Integer>();
+		dataVals.add(numBurning);
+		dataVals.add(numTree);
+		return dataVals;
 	}
 
 	@Override
 	public List<String> getDataLabels() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> dataLabels = new ArrayList<String>();
+		dataLabels.add("Burning");
+		dataLabels.add("Trees");
+		return dataLabels;
 	}
 
 }

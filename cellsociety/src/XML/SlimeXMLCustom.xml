@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<simulation>
+	<info>
+		<name>Slime</name>
+		<title>Slime Simulation </title>
+		<author>Group 12 </author>
+	</info> 
+
+	<parameters>
+		<numslime> 10 </numslime>
+		<gridsize> 500 </gridsize>
+		<gridtype> toroidal </gridtype>
+		<celltype>square</celltype>
+		
+	</parameters>
+
+</simulation>
+ 

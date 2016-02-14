@@ -125,6 +125,7 @@ public class Main extends Application {
 			animation.stop();
 			animation.setRate(1);
 			myStage.setHeight(SIZE+BUTTONHEIGHT-BUTTONPADDING);
+			myStage.setWidth(SIZE+BUTTONHEIGHT-BUTTONPADDING);
 
 		});
 
@@ -148,6 +149,7 @@ public class Main extends Application {
 		myStage.setTitle(currentSim.getTitle());
 		myScene = currentSim.getMyScene();
 		myStage.setHeight(currentSim.getSceneSize() + BUTTONHEIGHT + BUTTONPADDING);
+		myStage.setWidth(currentSim.getSceneSize()*2);
 		addButtons(myResources, animation);
 		myStage.setScene(myScene);
 	}

@@ -181,12 +181,18 @@ public abstract class Simulation {
 		}
 	}
 	
+	public int getChartY(){
+		return gridSize*gridSize;
+	}
+	
 	public void initChart(){
 		ArrayList<Integer> dataVals = (ArrayList<Integer>) getDataVals();
 		ArrayList<String> dataNames = (ArrayList<String>) getDataLabels();
 		
-		dataChart = new DataChart(dataVals,dataNames,this);
+		dataChart = new DataChart(dataVals,dataNames,this,getChartY(),sceneSize);
 		Chart myChart = dataChart.init();
+		myChart.setLayoutX(sceneSize);
+		myChart.setPrefSize(sceneSize, sceneSize);
 		root.getChildren().add(myChart);
 	}
 	

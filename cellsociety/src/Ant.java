@@ -1,11 +1,12 @@
-import javafx.scene.paint.Color;
 
 public class Ant extends Animal {
+	private static final String NAME = "ANT";
+	private static final int BREED = 0;
 	
 	private boolean hasFood;
 
-	public Ant(int animalLife, int x, int y) {
-		super("ANT", 0, animalLife, x, y);
+	public Ant(int antLife, int x, int y) {
+		super(NAME, BREED, antLife, x, y);
 		// TODO Auto-generated constructor stub
 	}
 	

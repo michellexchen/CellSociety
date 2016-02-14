@@ -22,6 +22,10 @@ public class Segregation extends Simulation {
 	private static final Color GROUP2COLOR = Color.BLUE;
 	private static final Color BACKGROUND = Color.GAINSBORO;
 	private int myPopulation;
+	private int group1Pop;
+	private int group1Dis;
+	private int group2Pop;
+	private int group2Dis;
 	private double percentGroup1;
 	private double myThreshold;
 	private List<GridCell> emptyCells;
@@ -40,6 +44,8 @@ public class Segregation extends Simulation {
 	public Segregation(int size, int numCells, int population, double group1population, double threshold, boolean tor, boolean tri) {
 		super(TITLE,size,numCells, tor, tri);
 		myPopulation = population;
+		group1Pop = (int)(population*group1population);
+		group2Pop = population-group1Pop;
 		percentGroup1 = group1population;
 		myThreshold = threshold;
 		
@@ -66,9 +72,11 @@ public class Segregation extends Simulation {
 		}
 		else if(current == '1'){
 			getCells()[col][row] = new GridCell(GROUP1, GROUP1COLOR, col, row);
+			group1Pop++;
 		}
 		else if(current == '2'){
 			getCells()[col][row] = new GridCell(GROUP2, GROUP2COLOR, col, row);
+			group2Pop++;
 		}
 		cellList = getCellList();
 
@@ -83,8 +91,22 @@ public class Segregation extends Simulation {
 		randomInit(myPopulation, percentGroup1, GROUP1, GROUP2, EMPTY, GROUP1COLOR, GROUP2COLOR, BACKGROUND); 
 		emptyCells = getEmptyCells();
 		cellList = getCellList();
+		initChartStats();
+		initChart();
 		super.displayGrid();
 	}
+	
+	private void initChartStats(){
+		for(GridCell cell: cellList){
+			if(isDissatisfied(cell)&&cell.getState()==GROUP1){
+				group1Dis++;
+			}
+			if(isDissatisfied(cell)&&cell.getState()==GROUP2){
+				group2Dis++;
+			}
+		}
+	}
+	
 	/**
 	 * Updates state of cellls
 	 * Checks if populated cells are satisfied
@@ -94,6 +116,8 @@ public class Segregation extends Simulation {
 	 */
 	@Override
 	public void update(){
+		group1Dis = 0;
+		group2Dis = 0;
 		cellList = super.getCellList();
 		
 		for(GridCell e: emptyCells){
@@ -106,6 +130,12 @@ public class Segregation extends Simulation {
 				if(currState != EMPTY)
 				{
 					if(isDissatisfied(cell)){ //if not satisfied and can move, move
+						if(currState==GROUP1){
+							group1Dis++;
+						}
+						else if(currState==GROUP2){
+							group2Dis++;
+						}
 						GridCell empty = getRandEmpty();
 						if(empty != null){
 							empty.setNextState(currState);
@@ -162,13 +192,23 @@ public class Segregation extends Simulation {
 	}
 	@Override
 	public List<Integer> getDataVals() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Integer> dataVals = new ArrayList<Integer>();
+		dataVals.add(group1Pop-group1Dis);
+		dataVals.add(group2Pop-group2Dis);
+		return dataVals;
 	}
 	@Override
 	public List<String> getDataLabels() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> dataLabels = new ArrayList<String>();
+		dataLabels.add("# Group 1 Satisfied");
+		dataLabels.add("# Group 2 Satisfied");
+		return dataLabels;
+		
+	}
+	
+	@Override
+	public int getChartY(){
+		return Math.max(group1Pop,group2Pop);
 	}
 
 }		

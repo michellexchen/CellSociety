@@ -1,5 +1,3 @@
-import javafx.scene.Scene;
-import javafx.scene.chart.LineChart;
 import javafx.scene.paint.Color;
 import java.util.*;
 /**
@@ -51,6 +49,8 @@ public class Predator extends Simulation {
 		sharkBreedTime = sharkBreed;
 		sharkDieTime = sharkDie;
 		fishBreedTime = fishBreed;
+		numFish = (int)(population*percentFish);
+		numSharks = (int)(population*(1-percentFish));
 		initialize();
 	}
 	public Predator(List<String> columns, int size, int fishBreed, int sharkBreed, int sharkDie, boolean tor, boolean tri){

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<simulation>
+	<info>
+		<name>Ant</name>
+		<title>Ant Simulation </title>
+		<author>Group 12 </author>
+	</info> 
+
+	<parameters>
+		<gridsize> 500 </gridsize>
+		<gridtype> toroidal </gridtype>
+		<celltype>square</celltype>
+		<maxants> 10 </maxants>
+		<antlife> 50 </antlife>
+		<antbreed> 2 </antbreed>
+		<numnest> 2 </numnest>
+		<minpher>0</minpher>
+		<maxpher>1000</maxpher>
+		<evaporation>.0001</evaporation>
+		<diffusion>.0001</diffusion>
+		<k>.001</k>
+		<n>10</n>
+	</parameters>
+
+</simulation>
+ 

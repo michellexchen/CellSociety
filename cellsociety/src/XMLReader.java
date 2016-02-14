@@ -54,11 +54,9 @@ public class XMLReader {
 	public String chooseFile(){
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Open XML File");		
-		fileChooser.getExtensionFilters().addAll( //xml file check
-		        new ExtensionFilter("XML Files", "*.xml"));
-		
+		fileChooser.getExtensionFilters().addAll(
+		        new ExtensionFilter("XML Files", "*.xml"));		
 		File file = fileChooser.showOpenDialog(null);
-
 		String fileName = "";
 		if (file != null) {
 			fileName = file.getPath();
@@ -81,12 +79,10 @@ public class XMLReader {
 	            = DocumentBuilderFactory.newInstance();
 	        dbFactory.setIgnoringElementContentWhitespace(true);
 	        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();	        
-	        doc = dBuilder.parse(inputFile);
-	        
+	        doc = dBuilder.parse(inputFile);       
 	        //simulation type
 	        Element simulation2 = (Element) doc.getElementsByTagName("info").item(0) ;
-	        simType = simulation2.getElementsByTagName("name").item(0).getTextContent();	        
-	        
+	        simType = simulation2.getElementsByTagName("name").item(0).getTextContent();	        	        
 	        //getting nodes
 			listParam = doc.getElementsByTagName("parameters");
 	        attributes = (Element) listParam.item(0);
@@ -97,12 +93,9 @@ public class XMLReader {
 	        	parseCustom(attributes);
 	        	return customSim();
 	        }
-
 		} catch(Exception e){			
 			return new SimulationOptional(null, e);
-
-		}	
-		
+		}			
 	}
 	
 
@@ -121,10 +114,11 @@ public class XMLReader {
         case "Life":
         	simulation = getLife(attributes);
         	break;
-//        case "Slime":
-//        	simulation = getSlime(attributes);
+        case "Slime":
+        	simulation = getSlime(attributes);
+        	break;
 //        case "Ant":
-//        	simulation = getAnt(attributes);
+//        	simulation = getAntCustom(attributes);
         default: 
         	return null;
         }
@@ -244,6 +238,15 @@ public class XMLReader {
 	}	
 	
 	
+	private Simulation getSlime(Element attributes) throws Exception{
+		Integer numSlime = Integer.parseInt(getNodeValue(attributes, "numslime"));
+        if(numSlime > numCells*numCells){
+        	Exception e = new Exception();
+        	throw new Exception("The population is too large for this grid!");
+        }
+        
+        return new Slime(gridSize, numCells, gridType, cellType, numSlime);
+	}
 	
 	/**
 	 * 
@@ -276,6 +279,7 @@ public class XMLReader {
 	 * 
 	 */
 	private Simulation getSegregation(Element attributes){
+
         Integer population = Integer.parseInt(getNodeValue(attributes, "popsize"));
         Double percent1 = Double.parseDouble(getNodeValue(attributes, "percentone"));
         Double satisfaction = Double.parseDouble(getNodeValue(attributes, "satisfaction"));
