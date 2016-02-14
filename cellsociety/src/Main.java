@@ -1,4 +1,8 @@
 import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -52,7 +56,8 @@ public class Main extends Application {
 	 * 
 	 */
 	
-	private String[] cols = {"11111", "00000", "22222", "00000", "11111"};
+	private String[] col1 = {"22222", "11111", "22022", "11111", "22222"};
+	private List<String> cols = new ArrayList<String>(Arrays.asList(col1));
 
 	@Override
 
@@ -77,17 +82,21 @@ public class Main extends Application {
 		//Simulation temp = new Fire(cols, 500, .8, false, false); 
 		//Simulation temp = new Segregation(cols, 500, .5, false, false);  WORKING
 		//Simulation temp = new Predator(cols, 500, 3,3,3,true, true); WORKING
-		
-		//myStage.setScene(temp.getMyScene());
+		Simulation temp = new Ants(cols, 500, false, false, 10, 500, 2, 2, 0, 1000, .0001, .0001, .001, 10);
+				
+				//(List<String> columns, int size, boolean tor, boolean tri, int maxAnts, int antLife, int antBreed, int numNest, double minPher, 
+					//	double maxPher, double evaporation, double diffusion, double k, double n){	
+				
+		myStage.setScene(temp.getMyScene());
 		
 		myStage.setTitle("Simulations Home Screen");
 		myStage.show();
 
-		KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> currentSim.step());
+		KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> temp.step());
 		animation = new Timeline();
 		animation.setCycleCount(Timeline.INDEFINITE);
 		animation.getKeyFrames().add(frame);
-
+		animation.play();
 	}
 	
 	/**
@@ -145,6 +154,7 @@ public class Main extends Application {
 		myStage.setTitle(currentSim.getTitle());
 		myScene = currentSim.getMyScene();
 		myStage.setHeight(currentSim.getSceneSize() + BUTTONHEIGHT + BUTTONPADDING);
+		myStage.setWidth(currentSim.getSceneSize()*2);
 		addButtons(myResources, animation);
 		myStage.setScene(myScene);
 	}

@@ -47,7 +47,6 @@ public abstract class Simulation {
 	public Simulation(List<String> columns, String title, int size, boolean tor, boolean tri){
 		this(title, size, columns.size(), tor, tri);
 		init();
-		System.out.println(myCells.length);
 		for(int i = 0; i < myCells.length; i++){
 			for(int j = 0; j < myCells.length; j++){
 				char currentCell = columns.get(i).charAt(j);
@@ -177,18 +176,25 @@ public abstract class Simulation {
 		}
 	}
 	
+	public int getChartY(){
+		return gridSize*gridSize;
+	}
+	
 	public void initChart(){
 		ArrayList<Integer> dataVals = (ArrayList<Integer>) getDataVals();
 		ArrayList<String> dataNames = (ArrayList<String>) getDataLabels();
 		
-		dataChart = new DataChart(dataVals,dataNames,this);
+		dataChart = new DataChart(dataVals,dataNames,this,getChartY(),sceneSize);
 		Chart myChart = dataChart.init();
+		myChart.setLayoutX(sceneSize);
+		myChart.setPrefSize(sceneSize, sceneSize);
 		root.getChildren().add(myChart);
 	}
 	
-	private void updateChart(){
+	/*private void updateChart(){
 		dataChart.update(getDataVals());
 	}
+	*/
 	
 	public abstract List<Integer> getDataVals();
 	public abstract List<String> getDataLabels();
@@ -340,7 +346,7 @@ public abstract class Simulation {
 	
 	public void step(){
 		stepCount++;
-		updateChart();
+		//updateChart();
 		update();
 
 		for(GridCell[] c: myCells){

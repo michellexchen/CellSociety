@@ -10,10 +10,10 @@ public class AntCell extends AnimalCell {
 	private double diffRate;
 	private double maxPher;
 	private double minPher;
-	private double K= 0.001;
-	private double N = 10;
+	private double K;
+	private double N;
 	
-	public AntCell(String state, Color color, int x, int y, int antMax, double pherMax, double pherMin, double evaporation, double diffusion) {
+	public AntCell(String state, Color color, int x, int y, int antMax, double pherMax, double pherMin, double evaporation, double diffusion, double K, double N) {
 		super(state, color, x, y, antMax);
 		evapRate = evaporation;
 		diffRate = diffusion;
@@ -25,6 +25,8 @@ public class AntCell extends AnimalCell {
 		else if(state=="FOOD"){
 			foodPher = maxPher;
 		}
+		this.K = K;
+		this.N = N;
 	}
 	
 	public void setPher(double amtPher,String pherKind){
