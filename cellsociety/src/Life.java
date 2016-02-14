@@ -1,8 +1,6 @@
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 /**
  * This class represents the Game of Life simulation
@@ -20,6 +18,7 @@ public class Life extends Simulation {
 	private final Color DEADCOLOR = Color.GRAY;
 	private final Color ALIVECOLOR = Color.BLUE;
 	private int cellsAlive;
+	private int numAlive;
 	
 	/**
 	 * Randomly allocates alive cells through the grid
@@ -29,9 +28,10 @@ public class Life extends Simulation {
 	 * @param Number of cells with state alive at beginning
 	 */
 
-	public Life(int size, int numCells, int numAlive, boolean tor, boolean tri) {
+	public Life(int size, int numCells, int alive, boolean tor, boolean tri) {
 		super(TITLE, size, numCells, tor, tri);
-		cellsAlive = numAlive;
+		cellsAlive = alive;
+		numAlive = alive;
 		initialize();
 	}
 	
@@ -55,6 +55,7 @@ public class Life extends Simulation {
 		
 		if(current == '1'){
 			super.getCells()[col][row] = new GridCell(ALIVE, ALIVECOLOR, col, row);
+			numAlive++;
 		}
 		else if(current == '0'){
 			super.getCells()[col][row] = new GridCell(DEAD, DEADCOLOR, col, row);
@@ -85,12 +86,15 @@ public class Life extends Simulation {
 					else{
 						d.setNextState(DEAD);
 						d.setNextColor(DEADCOLOR);
+						numAlive--;
+
 					}
 				}
 				else{
 					if(liveNeighbors == 3){
 						d.setNextState(ALIVE);
 						d.setNextColor(ALIVECOLOR);
+						numAlive++;
 					}
 					else{
 						d.setNextState(DEAD);
@@ -104,13 +108,15 @@ public class Life extends Simulation {
 	}
 	@Override
 	public List<Integer> getDataVals() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Integer> dataVals = new ArrayList<Integer>();
+		dataVals.add(numAlive);
+		return dataVals;
 	}
 	@Override
 	public List<String> getDataLabels() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> dataLabels = new ArrayList<String>();
+		dataLabels.add("Alive");
+		return dataLabels;
 	}
 	
 }
