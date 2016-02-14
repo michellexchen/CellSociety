@@ -93,7 +93,7 @@ public class XMLReader {
 	        	parseCustom(attributes);
 	        	return customSim();
 	        }
-		} catch(Exception e){			
+		} catch(Exception e){	
 			return new SimulationOptional(null, e);
 		}			
 	}
@@ -117,8 +117,9 @@ public class XMLReader {
         case "Slime":
         	simulation = getSlime(attributes);
         	break;
-//        case "Ant":
-//        	simulation = getAntCustom(attributes);
+        case "Ant":
+        	simulation = getAntCustom(attributes);
+        	break;
         default: 
         	return null;
         }
@@ -139,10 +140,12 @@ public class XMLReader {
         case "Life":
         	simulation = getLifeCustom(attributes);
         	break;
-//      case "Slime":
-//        	simulation = getSlimeCustom(attributes);
-//      case "Ant":
-//        	simulation = getAntCustom(attributes);
+      case "Slime":
+    	  simulation = getSlimeCustom(attributes);
+        	break;
+      case "Ant":
+        	simulation = getAntCustom(attributes);
+        	break;
         default: 
         	return null;
         }
@@ -248,6 +251,10 @@ public class XMLReader {
         return new Slime(gridSize, numCells, gridType, cellType, numSlime);
 	}
 	
+	private Simulation getSlimeCustom(Element attributes){
+		columns(attributes);
+		return new Slime(columns, gridSize, gridType, cellType);
+	}
 	/**
 	 * 
 	 * @param doc
@@ -285,7 +292,6 @@ public class XMLReader {
         Double satisfaction = Double.parseDouble(getNodeValue(attributes, "satisfaction"));
 		
 		return new Segregation(gridSize,numCells,population,percent1,satisfaction, gridType, cellType);
-		
 	}
 	
 	
@@ -315,6 +321,26 @@ public class XMLReader {
 	private Simulation getLifeCustom(Element attributes){
 		columns(attributes);
 		return new Life(columns, gridSize, gridType, cellType);
+	}
+	
+
+
+	private Simulation getAntCustom(Element attributes) {
+		columns(attributes);
+		Integer maxAnts = Integer.parseInt(getNodeValue(attributes, "maxants"));
+		Integer antLife = Integer.parseInt(getNodeValue(attributes, "antlife"));
+		Integer antBreed = Integer.parseInt(getNodeValue(attributes, "antbreed"));
+		Integer numNest = Integer.parseInt(getNodeValue(attributes, "numnest"));
+		Double minPher = Double.parseDouble(getNodeValue(attributes, "minpher"));
+		Double maxPher = Double.parseDouble(getNodeValue(attributes, "maxpher"));
+		Double evaporation = Double.parseDouble(getNodeValue(attributes, "evaporation"));
+		Double diffusion = Double.parseDouble(getNodeValue(attributes, "diffusion"));
+		Double k = Double.parseDouble(getNodeValue(attributes, "k"));
+		Double n = Double.parseDouble(getNodeValue(attributes, "k"));
+		
+		//System.out.println(""+ columns+ gridSize+ gridType+ cellType+ maxAnts+ antLife+antBreed+ numNest+ minPher+maxPher+ evaporation+ diffusion+ k+n);
+		//return Ants(columns, gridSize, gridType, cellType, maxAnts, antLife, antBreed, numNest, minPher, maxPher, evaporation, diffusion, k, n);
+		return new Fire(500, 100, .65, false, false);
 	}
 	
 }

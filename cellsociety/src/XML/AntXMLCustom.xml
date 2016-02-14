@@ -7,7 +7,10 @@
 		<author>Group 12 </author>
 	</info> 
 
+
+	
 	<parameters>
+		<custom> true </custom>
 		<gridsize> 500 </gridsize>
 		<gridtype> toroidal </gridtype>
 		<celltype>square</celltype>
@@ -22,6 +25,14 @@
 		<k>.001</k>
 		<n>10</n>
 	</parameters>
+	
+	<matrix>
+		<col states = "01010"></col>
+		<col states = "00000"></col>
+		<col states = "01010"></col>
+		<col states = "00000"></col>
+		<col states = "11111"></col>
+	</matrix>
 
 </simulation>
  

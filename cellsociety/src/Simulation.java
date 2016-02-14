@@ -196,9 +196,9 @@ public abstract class Simulation {
 		root.getChildren().add(myChart);
 	}
 	
-//	private void updateChart(){
-//		dataChart.update(getDataVals());
-//	}
+	private void updateChart(){
+		dataChart.update(getDataVals());
+	}
 	
 	public abstract List<Integer> getDataVals();
 	public abstract List<String> getDataLabels();
@@ -350,7 +350,7 @@ public abstract class Simulation {
 	
 	public void step(){
 		stepCount++;
-		//updateChart();
+		updateChart();
 		update();
 
 		for(GridCell[] c: myCells){

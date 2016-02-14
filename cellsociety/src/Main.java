@@ -145,7 +145,9 @@ public class Main extends Application {
 	}
 	
 	public void startystart(){ //starts simulation
-		currentSim = new Ants("ANTS",500,5,false,false);//simOption.getSimulation();
+		//currentSim = new Fire(500, 100, .65, false,false);
+		//currentSim = new Ants("ANTS", 500, 5, false, false);
+		currentSim = simOption.getSimulation();
 		myStage.setTitle(currentSim.getTitle());
 		myScene = currentSim.getMyScene();
 		myStage.setHeight(currentSim.getSceneSize() + BUTTONHEIGHT + BUTTONPADDING);

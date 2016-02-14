@@ -8,12 +8,20 @@
 	</info> 
 
 	<parameters>
+		<custom> true </custom>
 		<numslime> 10 </numslime>
 		<gridsize> 500 </gridsize>
 		<gridtype> toroidal </gridtype>
-		<celltype>square</celltype>
-		
+		<celltype>square</celltype>		
 	</parameters>
 
+	<matrix>
+		<col states = "11111"></col>
+		<col states = "00000"></col>
+		<col states = "01010"></col>
+		<col states = "00000"></col>
+		<col states = "11111"></col>
+	</matrix>
+	
 </simulation>
  

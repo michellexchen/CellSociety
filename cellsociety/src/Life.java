@@ -33,11 +33,14 @@ public class Life extends Simulation {
 		cellsAlive = alive;
 		numAlive = alive;
 		initialize();
+		initChart();
 		
 	}
 	
 	public Life(List<String> columns, int size, boolean tor, boolean tri){
 		super(columns, TITLE, size, tor, tri);
+		initChart();
+
 	}
 	
 	/**

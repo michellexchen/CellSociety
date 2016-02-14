@@ -52,11 +52,15 @@ public class Segregation extends Simulation {
 		super.getStateMap().put(GROUP1, GROUP1COLOR);
 		super.getStateMap().put(GROUP2, GROUP2COLOR);
 		initialize();
+		initChart();
+
 	}
 	
 	public Segregation(List<String> columns, int size, double thresh, boolean tor, boolean tri){
 		super(columns, TITLE, size, tor, tri);
 		myThreshold = thresh;
+		initChart();
+
 	}
 	
 	@Override
@@ -92,7 +96,7 @@ public class Segregation extends Simulation {
 		emptyCells = getEmptyCells();
 		cellList = getCellList();
 		initChartStats();
-		initChart();
+		//initChart();
 		super.displayGrid();
 	}
 	

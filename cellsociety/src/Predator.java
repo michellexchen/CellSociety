@@ -52,6 +52,8 @@ public class Predator extends Simulation {
 		numFish = (int)(population*percentFish);
 		numSharks = (int)(population*(1-percentFish));
 		initialize();
+		initChart();
+
 	}
 	public Predator(List<String> columns, int size, int fishBreed, int sharkBreed, int sharkDie, boolean tor, boolean tri){
 		super(columns, TITLE, size, tor, tri);
@@ -63,6 +65,8 @@ public class Predator extends Simulation {
 		breedGrid = new int[gridSize][gridSize];
 		dieGrid = new int[gridSize][gridSize];
 		cellList = getCellList();
+		initChart();
+
 	}
 	
 	/**
@@ -76,7 +80,7 @@ public class Predator extends Simulation {
 		randomInit(myPopulation, percentFish, FISH, SHARK, EMPTY, FISHCOLOR, SHARKCOLOR, BACKGROUND);
 		super.displayGrid();
 		cellList = getCellList();
-		initChart();
+		//initChart();
 	}
 	
 	@Override
