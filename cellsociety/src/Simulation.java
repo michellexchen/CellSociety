@@ -47,13 +47,15 @@ public abstract class Simulation {
 	public Simulation(List<String> columns, String title, int size, boolean tor, boolean tri){
 		this(title, size, columns.size(), tor, tri);
 		init();
+	}
+	
+	public void customInit(List<String> columns){
 		for(int i = 0; i < myCells.length; i++){
 			for(int j = 0; j < myCells.length; j++){
 				char currentCell = columns.get(i).charAt(j);
 				initExplicit(currentCell, i, j);
 			}
 		}
-		displayGrid();
 	}
 
 	/** 

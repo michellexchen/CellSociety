@@ -56,7 +56,7 @@ public class Main extends Application {
 	 * 
 	 */
 	
-	private String[] col1 = {"22222", "11111", "22022", "11111", "22222"};
+	private String[] col1 = {"33333", "11111", "33033", "11111", "33333"};
 	private List<String> cols = new ArrayList<String>(Arrays.asList(col1));
 
 	@Override
@@ -151,6 +151,7 @@ public class Main extends Application {
 	
 	public void startystart(){ //starts simulation
 		currentSim = simOption.getSimulation();
+		//currentSim = new Ants("ANTs",500,5,false,false);
 		myStage.setTitle(currentSim.getTitle());
 		myScene = currentSim.getMyScene();
 		myStage.setHeight(currentSim.getSceneSize() + BUTTONHEIGHT + BUTTONPADDING);
