@@ -1,8 +1,4 @@
 import java.net.MalformedURLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 import java.util.ResourceBundle;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -56,8 +52,6 @@ public class Main extends Application {
 	 * 
 	 */
 	
-	private String[] col1 = {"33333", "11111", "33033", "11111", "33333"};
-	private List<String> cols = new ArrayList<String>(Arrays.asList(col1));
 
 	@Override
 

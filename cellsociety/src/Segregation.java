@@ -1,7 +1,5 @@
 
 import java.util.*;
-
-import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 /**
  * 
@@ -21,6 +19,9 @@ public class Segregation extends Simulation {
 	private static final Color GROUP1COLOR = Color.RED;
 	private static final Color GROUP2COLOR = Color.BLUE;
 	private static final Color BACKGROUND = Color.GAINSBORO;
+	private static final String GROUP1_LABEL = "# Group 1 Satisfied";
+	private static final String GROUP2_LABEL = "# Group 2 Satisfied";
+	
 	private int myPopulation;
 	private int group1Pop;
 	private int group1Dis;
@@ -96,7 +97,6 @@ public class Segregation extends Simulation {
 		emptyCells = getEmptyCells();
 		cellList = getCellList();
 		initChartStats();
-		//initChart();
 		super.displayGrid();
 	}
 	
@@ -122,6 +122,7 @@ public class Segregation extends Simulation {
 	public void update(){
 		group1Dis = 0;
 		group2Dis = 0;
+		
 		cellList = super.getCellList();
 		
 		for(GridCell e: emptyCells){
@@ -204,8 +205,8 @@ public class Segregation extends Simulation {
 	@Override
 	public List<String> getDataLabels() {
 		ArrayList<String> dataLabels = new ArrayList<String>();
-		dataLabels.add("# Group 1 Satisfied");
-		dataLabels.add("# Group 2 Satisfied");
+		dataLabels.add(GROUP1_LABEL);
+		dataLabels.add(GROUP2_LABEL);
 		return dataLabels;
 		
 	}

@@ -9,7 +9,7 @@
 
 	<parameters>
 		<custom> true </custom>
-		<satisfaction> .9 </satisfaction>
+		<satisfaction> .5 </satisfaction>
 		<gridsize> 600 </gridsize>
 		<gridtype> toroidal </gridtype>
 		<celltype>square</celltype>
