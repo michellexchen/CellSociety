@@ -4,7 +4,7 @@ public class Animal {
 	private int dieTime;
 	private int breedThresh;
 	private int dieThresh;
-	private int[] location;
+	private int[] location = new int[2];
 	private int orientation;
 
 	public Animal(String name, int animalBreed, int animalLife, int x, int y) {

@@ -3,23 +3,21 @@ import java.util.*;
 
 public class AnimalCell extends GridCell {
 	private ArrayList<Animal> animals = new ArrayList<Animal>();
-	private int capacity;
+	private int maxCapacity;
 	
 	public AnimalCell(String state, Color color, int x, int y, int maxCap) {
 		super(state, color, x, y);
-		capacity = maxCap;
+		maxCapacity = maxCap;
 	}
 	
 	public void addAnimal(Animal animal){
 		animals.add(animal);
 		animal.setX(super.getX());
 		animal.setY(super.getY());
-		capacity++;
 	}
 	
 	public void removeAnimal(Animal animal){
 		animals.remove(animal);
-		capacity--;
 	}
 	
 	public Animal getAnimal(){
@@ -37,8 +35,11 @@ public class AnimalCell extends GridCell {
 	}
 	
 	public boolean atCapacity(){
-		return animals.size()==capacity;
+		return animals.size()==maxCapacity;
 	}
 	
+	public int getCapacity(){
+		return animals.size();
+	}
 
 }

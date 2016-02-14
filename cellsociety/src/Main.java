@@ -1,24 +1,11 @@
 import java.net.MalformedURLException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
-import javax.xml.parsers.ParserConfigurationException;
-import org.xml.sax.SAXException;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
-import javafx.stage.FileChooser;
-import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -46,18 +33,13 @@ public class Main extends Application {
 	private final int BUTTONHEIGHT = 50;
 	private final int BUTTONPADDING = 40;
 	private final int SIZE = 500;
-	
-	private String address1;
-	private String address2;
+
 	private ResourceBundle myResources;
-	private Button start;
-	private Text welcome;
 	private Stage myStage;
 	private Scene myScene;
 	private SplashScreen myScreen;
 	
 	private SimulationOptional simOption;
-	private boolean gotSim;
 	private Simulation currentSim;
 
 	private Timeline animation;
@@ -71,7 +53,7 @@ public class Main extends Application {
 	 */
 	
 	private String[] cols = {"11111", "00000", "22222", "00000", "11111"};
-	
+
 	@Override
 
 	public void start(Stage gameStage) {
@@ -81,7 +63,8 @@ public class Main extends Application {
 		myStage = gameStage;
 		myScreen = new SplashScreen();
 		splashScene = myScreen.SplashScreen(this, SIZE);
-		//myStage.setScene(splashScene);
+
+		myStage.setScene(splashScene);
 		
 		//Simulation temp = new Slime(500, 50, false, false, 500); WORKING
 		//Simulation temp = new Life(500, 50, 1000, false, false);  WORKING
@@ -91,19 +74,20 @@ public class Main extends Application {
 		
 		//Simulation temp = new Slime(cols, 500,false, false); WORKING BUT BUGGY
 		//Simulation temp = new Life(cols, 500, false, false); WORKING BUT BUGGY
-		//Simulation temp = new Fire(cols, 500, .8, false, false); WORKING
+		//Simulation temp = new Fire(cols, 500, .8, false, false); 
 		//Simulation temp = new Segregation(cols, 500, .5, false, false);  WORKING
 		//Simulation temp = new Predator(cols, 500, 3,3,3,true, true); WORKING
 		
-		myStage.setScene(temp.getMyScene());
+		//myStage.setScene(temp.getMyScene());
+		
 		myStage.setTitle("Simulations Home Screen");
 		myStage.show();
 
-		KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> temp.step());
+		KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> currentSim.step());
 		animation = new Timeline();
 		animation.setCycleCount(Timeline.INDEFINITE);
 		animation.getKeyFrames().add(frame);
-		animation.play();
+
 	}
 	
 	/**
@@ -137,10 +121,7 @@ public class Main extends Application {
 
 		Button switchSim = new Button(myResources.getString("Switch"));
 		switchSim.setOnMouseClicked(e -> {
-			myStage.setScene(splashScene);
-			animation.stop();
-			animation.setRate(1);
-			myStage.setHeight(SIZE+BUTTONHEIGHT-BUTTONPADDING);
+			myStage.setScene(myScreen.SplashScreen(this, SIZE));
 
 		});
 
@@ -153,6 +134,7 @@ public class Main extends Application {
 		currentSim.getRoot().getChildren().add(buttons);
 
 	}
+
 	
 	public void setSimOption(SimulationOptional sim){
 		 simOption = sim;

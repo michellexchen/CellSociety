@@ -108,4 +108,16 @@ public class Slime extends Simulation{
 		updateStates();
 	}
 
+	@Override
+	public List<Integer> getDataVals() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<String> getDataLabels() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

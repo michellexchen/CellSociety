@@ -1,4 +1,5 @@
 import javafx.scene.Scene;
+import javafx.scene.chart.LineChart;
 import javafx.scene.paint.Color;
 import java.util.*;
 /**
@@ -29,6 +30,8 @@ public class Predator extends Simulation {
 	private int fishBreedTime;
 	private List<GridCell> taken = new ArrayList<GridCell>();
 	private List<GridCell> cellList = new ArrayList<GridCell>();
+	private int numSharks;
+	private int numFish;
 	
 	/**
 	 * Initializes fields
@@ -73,7 +76,7 @@ public class Predator extends Simulation {
 		randomInit(myPopulation, percentFish, FISH, SHARK, EMPTY, FISHCOLOR, SHARKCOLOR, BACKGROUND);
 		super.displayGrid();
 		cellList = getCellList();
-		
+		initChart();
 	}
 	
 	@Override
@@ -83,9 +86,11 @@ public class Predator extends Simulation {
 		}
 		else if(current == '1'){
 			super.getCells()[col][row] = new GridCell(FISH, Color.GREEN, col, row);
+			numFish++;
 		}
 		else if(current == '2'){
 			super.getCells()[col][row] = new GridCell(SHARK, Color.YELLOW, col, row);
+			numSharks++;
 		}
 		
 	}
@@ -139,6 +144,7 @@ public class Predator extends Simulation {
 				else if(dieGrid[x][y]+1==sharkDieTime){ 
 					cell.setNextState(EMPTY);
 					cell.setNextColor(BACKGROUND);
+					numSharks--;
 					breedGrid[x][y]=0;
 					dieGrid[x][y]=0;
 				}
@@ -204,6 +210,7 @@ public class Predator extends Simulation {
 	 * @param emptyNeighbors A list of empty cells neighboring the shark
 	 */
 	private void eatFish(GridCell shark, GridCell fish, List<GridCell> emptyNeighbors) {
+		numFish--;
 		fish.setState(EMPTY); //so you don't look at it when iterating through fish
 		fish.setNextState(SHARK);
 		fish.setNextColor(SHARKCOLOR);
@@ -239,7 +246,13 @@ public class Predator extends Simulation {
 	 */
 	private void breedAnimal(GridCell animal, List<GridCell> emptyNeighbors) { 
 		GridCell newAnimal = getRandomCell(emptyNeighbors);
-		if(newAnimal!=null){ 
+		if(newAnimal!=null){
+			if(animal.getState()==SHARK){
+				numSharks++;
+			}
+			else if(animal.getState()==FISH){
+				numFish++;
+			}
 			newAnimal.setNextState(animal.getState());
 			newAnimal.setNextColor(animal.getMyColor());
 			breedGrid[animal.getX()][animal.getY()]=0;
@@ -278,6 +291,22 @@ public class Predator extends Simulation {
 			}
 		}
 		return special;
+	}
+	
+	@Override
+	public List<Integer> getDataVals() {
+		ArrayList<Integer> dataVals = new ArrayList<Integer>();
+		dataVals.add(numSharks);
+		dataVals.add(numFish);
+		return dataVals;
+	}
+	
+	@Override
+	public List<String> getDataLabels() {
+		ArrayList<String> dataLabels = new ArrayList<String>();
+		dataLabels.add("Sharks");
+		dataLabels.add("Fish");
+		return dataLabels;
 	}
 
 }

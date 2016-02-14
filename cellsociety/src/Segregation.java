@@ -160,6 +160,16 @@ public class Segregation extends Simulation {
 		emptyCells.remove(empty);
 		return empty;
 	}
+	@Override
+	public List<Integer> getDataVals() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public List<String> getDataLabels() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }		
 	
