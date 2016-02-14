@@ -59,7 +59,7 @@ public class Ants extends Simulation {
 		diffRate = 0.0001;
 	}
 	
-	public Scene init(){
+	public void init(){
 		super.init();
 		myCells = super.getCells();
 		gridSize = super.getGridSize();
@@ -77,7 +77,6 @@ public class Ants extends Simulation {
 		
 		initChart();
 		
-		return super.getMyScene();
 	}
 	
 	@Override

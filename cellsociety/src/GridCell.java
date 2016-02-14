@@ -35,6 +35,7 @@ public class GridCell {
 		currState = state;
 		myColor = color;
 		myCoordinates = new int[]{x,y};
+
 	}
 	
 	private int mod8(int i){

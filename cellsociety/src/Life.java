@@ -12,6 +12,7 @@ import javafx.scene.paint.Color;
  * @author Saumya Jain, Collette Torres, Michelle Chen
  *
  */
+
 public class Life extends Simulation {
 	private static final String TITLE = "Game of Life";
 	private final String DEAD = "DEAD";
@@ -31,38 +32,34 @@ public class Life extends Simulation {
 	public Life(int size, int numCells, int numAlive, boolean tor, boolean tri) {
 		super(TITLE, size, numCells, tor, tri);
 		cellsAlive = numAlive;
+		initialize();
 	}
+	
+	public Life(String[] columns, int size, boolean tor, boolean tri){
+		super(columns, TITLE, size, tor, tri);
+	}
+	
 	/**
 	 * Initializes grid and scene. Currently assigns live cells to random locations.
 	 */
-	@Override
-	public Scene init(){  
+	public void initialize(){  
 		
 		super.init();
 		super.randomInit(cellsAlive, 1, ALIVE, DEAD, DEAD, ALIVECOLOR, DEADCOLOR, DEADCOLOR); 
 		super.initEmpty(DEAD, DEADCOLOR);
 		super.displayGrid();
-		return super.getMyScene();
 	}
 	
 	@Override
-	public Scene init(String[] cols){
-		super.init();
-		for(int i = 0; i < cols.length; i++){
-			for(int j = 0; j < cols.length; j++){
-				if(cols[i].charAt(j) == '1'){
-					super.getCells()[i][j] = new GridCell(ALIVE, ALIVECOLOR, i, j);
-				}
-				else{
-					super.getCells()[i][j] = new GridCell(DEAD, DEADCOLOR, i, j);
-
-				}
-			}
-		}
+	public void initExplicit(char current, int col, int row) {
 		
-		super.displayGrid();
-		return super.getMyScene();
-	}
+		if(current == '1'){
+			super.getCells()[col][row] = new GridCell(ALIVE, ALIVECOLOR, col, row);
+		}
+		else if(current == '0'){
+			super.getCells()[col][row] = new GridCell(DEAD, DEADCOLOR, col, row);
+		}
+	}	
 	
 	/**
 	 * Updates state of grid cells
