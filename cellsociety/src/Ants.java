@@ -50,6 +50,7 @@ public class Ants extends Simulation {
 		foodCoords = new ArrayList<int[]>();
 		foodCoords.add(new int[]{3,3});
 		startAnts = 2;
+		breedPerStep = 2;
 		dieThresh = 500;
 		antCap = 10;
 		pherCap = 1000; 
@@ -58,34 +59,27 @@ public class Ants extends Simulation {
 		diffRate = 0.0001;
 		KVal = 0.001;
 		NVal = 10;
+		initialize();
 	}
 	
-	public void init(){
+	public void initialize(){
 		super.init();
 		myCells = super.getCells();
 		gridSize = super.getGridSize();
-		initCells();
-		displayGrid();
-		cellList = super.getCellList();
-		initNeighbors();
-		
-		initChart();
-		
-	}
-
-	private void initCells() {
 		populateCells("OBSTACLE",Color.YELLOW ,obstacleCoords, obstacleCells);
 		populateCells("NEST",Color.BEIGE,nestCoords,nestCells);
 		populateCells("FOOD",Color.BLUE,foodCoords,foodCells);
 		populateAnts(nestCells,startAnts);
 		populateEmpty();
-	}
-
-	private void initNeighbors() {
+		displayGrid();
+		cellList = super.getCellList();
 		for(GridCell cell: cellList){
 			cell.initForwardNeighbors();
 			cell.initBackwardNeighbors();
 		}
+		
+		initChart();
+		
 	}
 	
 	@Override
@@ -123,8 +117,9 @@ public class Ants extends Simulation {
 		Random rnd = new Random();
 		int i = amt;
 		while(i>0){
-			ArrayList<GridCell> refined = (ArrayList<GridCell>) refineLocations(selections);
-			GridCell chosen = refined.get(rnd.nextInt(refined.size()));
+			//ArrayList<GridCell> refined = (ArrayList<GridCell>) refineLocations(selections);
+			GridCell chosen = selections.get(rnd.nextInt(selections.size()));
+			//GridCell chosen = refined.get(rnd.nextInt(refined.size()));
 			if(!((AntCell)chosen).atCapacity()){
 				Ant ant = new Ant(dieThresh,chosen.getX(),chosen.getY());
 				((AntCell)chosen).addAnimal(ant);
@@ -154,10 +149,11 @@ public class Ants extends Simulation {
 	}
 
 	private void updateAnts() {
+		ArrayList<Ant> toRemove = new ArrayList<Ant>();
 		for(Ant ant: ants){
 			if(ant.timeToDie()){
 				((AntCell)myCells[ant.getX()][ant.getY()]).removeAnimal(ant);
-				ants.remove(ant);
+				toRemove.add(ant);
 				continue;
 			}
 			if(ant.hasFoodItem()){
@@ -167,6 +163,7 @@ public class Ants extends Simulation {
 				findFoodSource(ant);
 			}
 		}
+		ants.removeAll(toRemove);
 	}
 	
 	private void returnToNest(Ant ant){
@@ -223,7 +220,13 @@ public class Ants extends Simulation {
 		if(neighbors==null){
 			return null;
 		}
-		ArrayList<GridCell> refinedNeighbors = (ArrayList<GridCell>) refineLocations(neighbors);
+		//ArrayList<GridCell> refinedNeighbors = (ArrayList<GridCell>) refineLocations(neighbors);
+		ArrayList<GridCell> refinedNeighbors = new ArrayList<GridCell>();
+		for(GridCell cell: neighbors){
+			if(cell.getState()!="OBSTACLE" && !((AntCell)cell).atCapacity()){
+				refinedNeighbors.add(cell);
+			}
+		}
 		if(refinedNeighbors.size()==0){
 			return null;
 		}
