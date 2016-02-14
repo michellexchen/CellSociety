@@ -1,24 +1,11 @@
 import java.net.MalformedURLException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
-import javax.xml.parsers.ParserConfigurationException;
-import org.xml.sax.SAXException;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
-import javafx.stage.FileChooser;
-import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -41,23 +28,18 @@ import javafx.util.Duration;
  */
 public class Main extends Application {
 
-	private final int MILLISECOND_DELAY = 1000 / 5;
+	private final int MILLISECOND_DELAY = 1000 / 1;
 	private final double SPEED = .5;
 	private final int BUTTONHEIGHT = 50;
 	private final int BUTTONPADDING = 40;
 	private final int SIZE = 500;
-	
-	private String address1;
-	private String address2;
+
 	private ResourceBundle myResources;
-	private Button start;
-	private Text welcome;
 	private Stage myStage;
 	private Scene myScene;
 	private SplashScreen myScreen;
 	
 	private SimulationOptional simOption;
-	private boolean gotSim;
 	private Simulation currentSim;
 
 	private Timeline animation;
@@ -70,19 +52,33 @@ public class Main extends Application {
 	 * 
 	 */
 	
-	private String[] cols = {"01010", "00000", "11111", "01010", "11111"};
+	private String[] cols = {"11111", "00000", "22222", "00000", "11111"};
 
 	@Override
 
 	public void start(Stage gameStage) {
 		myResources = ResourceBundle.getBundle("Resources/English");
+		System.setProperty("glass.accessible.force", "false");
 
 		myStage = gameStage;
 		myScreen = new SplashScreen();
 		splashScene = myScreen.SplashScreen(this, SIZE);
+
 		myStage.setScene(splashScene);
-		//Simulation temp = new Life(500, 5, -1, false, false);//Slime(500, 100, false, false, 3000);
-		//myStage.setScene(temp.init(cols));
+		
+		//Simulation temp = new Slime(500, 50, false, false, 500); WORKING
+		//Simulation temp = new Life(500, 50, 1000, false, false);  WORKING
+		//Simulation temp = new Segregation(500, 50, 1000, .5, .51, false, false); WORKING
+		//Simulation temp = new Predator(500, 50, 3, 3, 3, 1000, .5, false, false); WORKING
+		//Simulation temp = new Fire(500, 50, .8, false, false); WORKING
+		
+		//Simulation temp = new Slime(cols, 500,false, false); WORKING BUT BUGGY
+		//Simulation temp = new Life(cols, 500, false, false); WORKING BUT BUGGY
+		//Simulation temp = new Fire(cols, 500, .8, false, false); 
+		//Simulation temp = new Segregation(cols, 500, .5, false, false);  WORKING
+		//Simulation temp = new Predator(cols, 500, 3,3,3,true, true); WORKING
+		
+		//myStage.setScene(temp.getMyScene());
 		
 		myStage.setTitle("Simulations Home Screen");
 		myStage.show();
@@ -91,8 +87,7 @@ public class Main extends Application {
 		animation = new Timeline();
 		animation.setCycleCount(Timeline.INDEFINITE);
 		animation.getKeyFrames().add(frame);
-		//animation.play();
-	
+
 	}
 	
 	/**
@@ -142,6 +137,7 @@ public class Main extends Application {
 		currentSim.getRoot().getChildren().add(buttons);
 
 	}
+
 	
 	public void setSimOption(SimulationOptional sim){
 		 simOption = sim;
@@ -150,7 +146,7 @@ public class Main extends Application {
 	public void startystart(){ //starts simulation
 		currentSim = simOption.getSimulation();
 		myStage.setTitle(currentSim.getTitle());
-		myScene = currentSim.init();
+		myScene = currentSim.getMyScene();
 		myStage.setHeight(currentSim.getSceneSize() + BUTTONHEIGHT + BUTTONPADDING);
 		addButtons(myResources, animation);
 		myStage.setScene(myScene);

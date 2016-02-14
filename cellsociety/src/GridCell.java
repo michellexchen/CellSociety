@@ -3,7 +3,6 @@ import java.util.ArrayList;
 import java.util.*;
 
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 
 public class GridCell {
@@ -36,34 +35,44 @@ public class GridCell {
 		currState = state;
 		myColor = color;
 		myCoordinates = new int[]{x,y};
-		
-		//forwardNeighbors = initForwardNeighbors();
-		//backwardNeighbors = initBackwardNeighbors();
-		
+
 	}
 	
-	private Map<Integer,ArrayList<GridCell>> initForwardNeighbors(){
+	private int mod8(int i){
+		if(i%8<0){
+			return 8+(i%8);
+		}
+		return i%8;
+	}
+	
+	public void initForwardNeighbors(){
 		Map<Integer,ArrayList<GridCell>> neighborMap = new HashMap<Integer,ArrayList<GridCell>>();
-		for(int i=0; i<8; i++){
+		for(int i=0; i<allNeighbors.size(); i++){
 			ArrayList<GridCell> neighbors = new ArrayList<GridCell>();
-			neighbors.add(myNeighbors.get((i-1)%8));
-			neighbors.add(myNeighbors.get(i));
-			neighbors.add(myNeighbors.get((i+1)%8));
+			int[] indices = new int[]{i-1,i,i+1};
+			for(int x: indices){
+				GridCell neighbor = myNeighbors.get(mod8(x));
+				if(neighbor!=null){
+					neighbors.add(neighbor);
+				}
+			}
 			neighborMap.put(i, neighbors);
 		}
-		return forwardNeighbors;
+		forwardNeighbors = neighborMap;
 	}
 	
-	private Map<Integer,ArrayList<GridCell>> initBackwardNeighbors(){
+	public void initBackwardNeighbors(){
 		Map<Integer,ArrayList<GridCell>> neighborMap = new HashMap<Integer,ArrayList<GridCell>>();
-		for(int i=0; i<8; i++){
+		for(int i=0; i<allNeighbors.size(); i++){
 			ArrayList<GridCell> neighbors = new ArrayList<GridCell>();
-			Collections.copy(neighbors, allNeighbors);
-			ArrayList<GridCell> forward = forwardNeighbors.get(i);
-			neighbors.removeAll(forward);
+			for(GridCell neighbor: allNeighbors){
+				if(!forwardNeighbors.get(i).contains(neighbor)){
+					neighbors.add(neighbor);
+				}
+			}
 			neighborMap.put(i,neighbors);
 		}	
-		return neighborMap;
+		backwardNeighbors = neighborMap;
 	}
 	
 	public List<GridCell> getRangeNeighbors(int direction, int range){ //returns neighbors within a specified range from direcetion. Ex: (5, 2) returns neighbors from 3-7 inclusive
@@ -154,6 +163,15 @@ public class GridCell {
 	
 	public List<GridCell> getBackwardNeighbors(int direction){
 		return backwardNeighbors.get(direction);
+	}
+	
+	public int getOrientationTo(GridCell cell){
+		for(int key: myNeighbors.keySet()){
+			if(myNeighbors.get(key).equals(cell)){
+				return key;
+			}
+		}
+		return 0; //not sure what to return here for default
 	}
 
 }

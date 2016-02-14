@@ -15,21 +15,42 @@ public class Slime extends Simulation{
 	private int numAgents;
 	private List<SlimeAgent> myAgents;
 	
-	
 	public Slime(int size, int numCells, boolean toroidal, boolean triangular, int numSlime) {
 		super(TITLE,size,numCells, toroidal, triangular);
 		numAgents = numSlime;
-		myAgents = new ArrayList<SlimeAgent>();		
+		myAgents = new ArrayList<SlimeAgent>();
+		initialize();
 	}
 	
-	@Override
-	public Scene init(){
+	public Slime(String[] columns, int size,boolean tor, boolean tri){
+		super(columns, TITLE, size, tor, tri);
+	}
+
+	public void initialize(){
 		super.init();
 		List<int[]> agentLocs = super.getRandomCoordinates(numAgents);
 		initAgents(agentLocs);
 		initEmpty();
 		super.displayGrid();
-		return super.getMyScene();
+	}
+
+	@Override
+	public void initExplicit(char current, int col, int row) {
+		if(myAgents == null){
+			myAgents = new ArrayList<SlimeAgent>();
+		}
+		
+		if(current == '0'){
+			getCells()[col][row] = new SlimeCell(EMPTY, EMPTYCOLOR, col, row, DIFF, EVAP);
+		}
+		
+		else if(current == '1'){
+			SlimeCell newCell = new SlimeCell(AGENT, AGENTCOLOR, col, row, DIFF, EVAP);
+			int direction = (int) (Math.random()*8);
+			SlimeAgent temp = new SlimeAgent(newCell, direction, CAMP, threshold);
+			myAgents.add(temp);
+			getCells()[col][row] = newCell;
+		}
 	}
 
 	private void initAgents(List<int[]> locs){
@@ -68,6 +89,7 @@ public class Slime extends Simulation{
 		
 		for(GridCell[] c: super.getCells()){
 			for(GridCell d:c){
+				
 				SlimeCell e = (SlimeCell) d;
 				if(e.getNextState() == EMPTY && e.getState() == EMPTY){
 					if(e.getPrevCamp() > e.getCamp()){
@@ -82,8 +104,20 @@ public class Slime extends Simulation{
 				}
 				e.setPrevCamp(e.getCamp());
 			}
-		}	
+		}
 		updateStates();
+	}
+
+	@Override
+	public List<Integer> getDataVals() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<String> getDataLabels() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -23,23 +23,40 @@ public class Fire extends Simulation {
 	private static final Color TREECOLOR = Color.GREEN;
 	private static final Color BACKGROUND = Color.YELLOW;
 	private double myProbCatch;
-	private int gridSize;
-	private GridCell[][] myCells;
 
 
 	public Fire(int size, int numCells, double probCatch, boolean tor, boolean tri) {
 		super(TITLE,size,numCells, tor, tri);
 		myProbCatch = probCatch;
+		initialize();
 	}
-
+	
+	public Fire(String[] columns, int size, double probCatch, boolean tor, boolean tri){
+		super(columns, TITLE, size, tor, tri);
+		myProbCatch = probCatch;
+	}
+	
+	@Override
+	public void initExplicit(char current, int col, int row) {
+		if(current == '0'){
+			getCells()[col][row] = new GridCell(EMPTY, BACKGROUND, col, row);
+		}
+		else if(current == '1'){
+			getCells()[col][row] = new GridCell(TREE, TREECOLOR, col, row);
+		}
+		else if(current == '2'){
+			getCells()[col][row] = new GridCell(BURNING, BURNINGCOLOR, col, row);
+		}
+	}
+	
 	/**
 	 *  Initializes the scene and sets up the grid with a burning tree in the middle, surrounded by healthy trees. 
 	 *  The grid is bordered by empty cells.
 	 */
-	public Scene init(){
+	public void initialize(){
 		super.init();
-		myCells = super.getCells();
-		gridSize = super.getGridSize();
+		GridCell[][]myCells = super.getCells();
+		int gridSize = super.getGridSize();
 		for (int a = 0; a<gridSize; a++) { //row
 			for (int b = 0; b<gridSize; b++) {
 				if (a == (gridSize-1)/2&& b == (gridSize-1)/2) {
@@ -54,7 +71,6 @@ public class Fire extends Simulation {
 			}
 		}
 		displayGrid();		
-		return super.getMyScene();
 	}
 	
 	/**
@@ -66,10 +82,11 @@ public class Fire extends Simulation {
 	 */
 	@Override
 	public void update() {
-		for (int x = 0; x<gridSize; x++) { 
-			for (int y = 0; y<gridSize; y++) {
-				GridCell curr = myCells[x][y];
+		for (int x = 0; x<super.getGridSize(); x++) { 
+			for (int y = 0; y<super.getGridSize(); y++) {
+				GridCell curr = getCells()[x][y];
 				String currState = curr.getState();
+				System.out.println(currState);
 				if (currState == EMPTY){
 					curr.setNextState(currState);
 					curr.setNextColor(BACKGROUND);
@@ -104,6 +121,16 @@ public class Fire extends Simulation {
 		updateStates();		
 	}
 
+	@Override
+	public List<Integer> getDataVals() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
+	@Override
+	public List<String> getDataLabels() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

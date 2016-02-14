@@ -1,9 +1,9 @@
 import java.util.*;
-import java.util.Random;
 
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.chart.Chart;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
@@ -35,13 +35,26 @@ public abstract class Simulation {
 	private Map<String, Color> stateMap = new HashMap<String, Color>();
 	private Map<Integer, Integer> adjacentMap;
 	private int[] dirCodes = {5, 6, 7, 4, 0, 3, 2, 1};
+	private int stepCount;
+	DataChart dataChart;
 	
 	/**
 	 * This method is generally responsible for determining the next state for each cell based on certain parameters, as defined by each type of simulation 
 	 */
 	public abstract void update();
-	public Scene init(String[] columns){
-		return myScene;
+	public abstract void initExplicit(char current, int col, int row);
+	
+	public Simulation(String[] columns, String title, int size, boolean tor, boolean tri){
+		this(title, size, columns.length, tor, tri);
+		init();
+		System.out.println(myCells.length);
+		for(int i = 0; i < myCells.length; i++){
+			for(int j = 0; j < myCells.length; j++){
+				char currentCell = columns[i].charAt(j);
+				initExplicit(currentCell, i, j);
+			}
+		}
+		displayGrid();
 	}
 
 	/** 
@@ -75,10 +88,9 @@ public abstract class Simulation {
 	 * This method is responsible for initializing the 2-D grid of cells and creating the scene for this grid
 	 * @return the scene on which the simulation grid is displayed 
 	 */
-	public Scene init(){
+	public void init(){
 		myCells = new GridCell[gridSize][gridSize];
 		myScene = new Scene(root,sceneSize,sceneSize);
-		return myScene; 
 	}
 	
 	private void initAdj(){
@@ -140,17 +152,6 @@ public abstract class Simulation {
 		}
 	}
 
-	public void step(){
-		update();
-
-		for(GridCell[] c: myCells){
-			for(GridCell d: c){
-				d.updateColor();
-				Shape temp = d.getMySquare();
-				temp.setFill(d.getMyColor());
-			}			
-		}	
-	}
 	
 	/**
 	 * This method returns all the neighbors surrounding a specified cell 
@@ -175,6 +176,22 @@ public abstract class Simulation {
 			}	
 		}
 	}
+	
+	public void initChart(){
+		ArrayList<Integer> dataVals = (ArrayList<Integer>) getDataVals();
+		ArrayList<String> dataNames = (ArrayList<String>) getDataLabels();
+		
+		dataChart = new DataChart(dataVals,dataNames,this);
+		Chart myChart = dataChart.init();
+		root.getChildren().add(myChart);
+	}
+	
+	private void updateChart(){
+		dataChart.update(getDataVals());
+	}
+	
+	public abstract List<Integer> getDataVals();
+	public abstract List<String> getDataLabels();
 	
 	/**
 	 * This method creates a list of random coordinates based on a user-determined amount
@@ -321,6 +338,26 @@ public abstract class Simulation {
 		return myCells;
 	}
 	
+	public void step(){
+		stepCount++;
+		updateChart();
+		update();
+
+		for(GridCell[] c: myCells){
+			for(GridCell d: c){
+				d.updateColor();
+				Shape temp = d.getMySquare();
+				temp.setFill(d.getMyColor());
+
+			}			
+			
+		}	
+	}
+	
+	public int getStepCount(){
+		return stepCount;
+	}
+
 	/**
 	 * This method returns the scene of the simulation
 	 * @return the simulation scene

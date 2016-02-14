@@ -25,12 +25,10 @@ public class SlimeAgent {
 			nextCell = myCell;	
 		}
 		else if(myCell.getCamp() >= thresh){
-			followCamp(neighbors);		
+			followCamp(neighbors);	
 		}	
 		else{
-			//nextCell = (SlimeCell) neighbors.get((int)(Math.random()*neighbors.size()));
 			nextCell = myCell;	
-
 		}
 		
 		myCell.addCamp(campDrop);

@@ -1,4 +1,5 @@
 import javafx.scene.Scene;
+import javafx.scene.chart.LineChart;
 import javafx.scene.paint.Color;
 import java.util.*;
 /**
@@ -10,16 +11,16 @@ import java.util.*;
  * It passes this information to a superclass Simulation that updates a visual display 
  *
  */
+
 public class Predator extends Simulation {
 	private static final String TITLE = "WA-TOR";
 	private static final String SHARK = "SHARK";
 	private static final String FISH = "FISH";
 	private static final String EMPTY = "EMPTY";
-	private Color FISHCOLOR = Color.GREEN;
-	private Color SHARKCOLOR = Color.YELLOW;
-	private Color BACKGROUND = Color.BLUE;
+	private final Color FISHCOLOR = Color.GREEN;
+	private final Color SHARKCOLOR = Color.YELLOW;
+	private final Color BACKGROUND = Color.BLUE;
 	private int gridSize;
-	private GridCell[][] myCells;
 	private int[][] breedGrid;
 	private int[][] dieGrid;
 	private int myPopulation;
@@ -29,6 +30,8 @@ public class Predator extends Simulation {
 	private int fishBreedTime;
 	private List<GridCell> taken = new ArrayList<GridCell>();
 	private List<GridCell> cellList = new ArrayList<GridCell>();
+	private int numSharks;
+	private int numFish;
 	
 	/**
 	 * Initializes fields
@@ -48,22 +51,50 @@ public class Predator extends Simulation {
 		sharkBreedTime = sharkBreed;
 		sharkDieTime = sharkDie;
 		fishBreedTime = fishBreed;
+		initialize();
 	}
+	public Predator(String[] columns, int size, int fishBreed, int sharkBreed, int sharkDie, boolean tor, boolean tri){
+		super(columns, TITLE, size, tor, tri);
+		sharkBreedTime = sharkBreed;
+		sharkDieTime = sharkDie;
+		fishBreedTime = fishBreed;
+		
+		gridSize = super.getGridSize();
+		breedGrid = new int[gridSize][gridSize];
+		dieGrid = new int[gridSize][gridSize];
+		cellList = getCellList();
+	}
+	
 	/**
 	 * Assigns fish, sharks, and empty cells - returns a Scene with these attributes
 	 */
-	public Scene init(){ 
+	public void initialize(){ 
 		super.init();
 		gridSize = super.getGridSize();
 		breedGrid = new int[gridSize][gridSize];
 		dieGrid = new int[gridSize][gridSize];
 		randomInit(myPopulation, percentFish, FISH, SHARK, EMPTY, FISHCOLOR, SHARKCOLOR, BACKGROUND);
 		super.displayGrid();
-		myCells = super.getCells();
 		cellList = getCellList();
-		
-		return super.getMyScene();
+		initChart();
 	}
+	
+	@Override
+	public void initExplicit(char current, int col, int row) {
+		if(current == '0'){
+			super.getCells()[col][row] = new GridCell(EMPTY, Color.BLUE, col, row);
+		}
+		else if(current == '1'){
+			super.getCells()[col][row] = new GridCell(FISH, Color.GREEN, col, row);
+			numFish++;
+		}
+		else if(current == '2'){
+			super.getCells()[col][row] = new GridCell(SHARK, Color.YELLOW, col, row);
+			numSharks++;
+		}
+		
+	}
+
 	/**
 	 * Updates state of cells
 	 */
@@ -113,6 +144,7 @@ public class Predator extends Simulation {
 				else if(dieGrid[x][y]+1==sharkDieTime){ 
 					cell.setNextState(EMPTY);
 					cell.setNextColor(BACKGROUND);
+					numSharks--;
 					breedGrid[x][y]=0;
 					dieGrid[x][y]=0;
 				}
@@ -178,6 +210,7 @@ public class Predator extends Simulation {
 	 * @param emptyNeighbors A list of empty cells neighboring the shark
 	 */
 	private void eatFish(GridCell shark, GridCell fish, List<GridCell> emptyNeighbors) {
+		numFish--;
 		fish.setState(EMPTY); //so you don't look at it when iterating through fish
 		fish.setNextState(SHARK);
 		fish.setNextColor(SHARKCOLOR);
@@ -213,7 +246,13 @@ public class Predator extends Simulation {
 	 */
 	private void breedAnimal(GridCell animal, List<GridCell> emptyNeighbors) { 
 		GridCell newAnimal = getRandomCell(emptyNeighbors);
-		if(newAnimal!=null){ 
+		if(newAnimal!=null){
+			if(animal.getState()==SHARK){
+				numSharks++;
+			}
+			else if(animal.getState()==FISH){
+				numFish++;
+			}
 			newAnimal.setNextState(animal.getState());
 			newAnimal.setNextColor(animal.getMyColor());
 			breedGrid[animal.getX()][animal.getY()]=0;
@@ -252,6 +291,22 @@ public class Predator extends Simulation {
 			}
 		}
 		return special;
+	}
+	
+	@Override
+	public List<Integer> getDataVals() {
+		ArrayList<Integer> dataVals = new ArrayList<Integer>();
+		dataVals.add(numSharks);
+		dataVals.add(numFish);
+		return dataVals;
+	}
+	
+	@Override
+	public List<String> getDataLabels() {
+		ArrayList<String> dataLabels = new ArrayList<String>();
+		dataLabels.add("Sharks");
+		dataLabels.add("Fish");
+		return dataLabels;
 	}
 
 }
