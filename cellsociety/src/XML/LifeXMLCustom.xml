@@ -1,24 +1,23 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding = "UTF-8"?>
 
 <simulation>
 	<info>
-		<name>Fire</name>
-		<title>Fire Simulation </title>
+		<name>Life</name>
+		<title>Life Simulation </title>
 		<author>Group 12 </author>
 	</info> 
 
 	<parameters>
 		<custom> true </custom>
-		<probcatch> .88 </probcatch>
 		<gridsize> 600 </gridsize>
 		<gridtype> toroidal </gridtype>
 		<celltype>square</celltype>
 	</parameters>
 	
 	<matrix>
-		<col states = "11111"></col>
+		<col states = "01010"></col>
 		<col states = "00000"></col>
-		<col states = "21212"></col>
+		<col states = "01010"></col>
 		<col states = "00000"></col>
 		<col states = "11111"></col>
 	</matrix>

@@ -40,6 +40,8 @@ public class Ants extends Simulation {
 		diffRate = diffusion;
 		KVal = k;
 		NVal = n;
+		
+		initChart();
 				
 		for(GridCell cell: super.getCellList()){
 			cell.initForwardNeighbors();
@@ -105,7 +107,6 @@ public class Ants extends Simulation {
 				Ant ant = new Ant(dieThresh,chosen.getX(),chosen.getY());
 				((AntCell)chosen).addAnimal(ant);
 				ants.add(ant);
-				System.out.println("added an ant");
 				i--;
 			}
 			else{

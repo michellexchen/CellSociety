@@ -26,6 +26,7 @@ public class Slime extends Simulation{
 	
 	public Slime(List<String> columns, int size,boolean tor, boolean tri){
 		super(columns, TITLE, size, tor, tri);
+		initChart();
 	}
 
 	public void initialize(){
@@ -124,6 +125,11 @@ public class Slime extends Simulation{
 		ArrayList<String> dataLabels = new ArrayList<String>();
 		dataLabels.add("Camp");
 		return dataLabels;
+	}
+	
+	@Override
+	public int getChartY(){
+		return 10000;
 	}
 
 }

@@ -34,6 +34,7 @@ public class Fire extends Simulation {
 	public Fire(List<String> columns, int size, double probCatch, boolean tor, boolean tri){
 		super(columns, TITLE, size, tor, tri);
 		myProbCatch = probCatch;
+		initChart();
 	}
 	
 	@Override
@@ -89,16 +90,11 @@ public class Fire extends Simulation {
 			for (int y = 0; y<super.getGridSize(); y++) {
 				GridCell curr = getCells()[x][y];
 				String currState = curr.getState();
-				System.out.println(currState);
 				if (currState == EMPTY){
-					curr.setNextState(currState);
-					curr.setNextColor(BACKGROUND);
-				}
-				if (currState == BURNING) {
-					curr.setNextState(EMPTY);
-					curr.setNextColor(BURNINGCOLOR);
-				}
-				if (currState == TREE) {
+					setNext(curr, currState, BACKGROUND);
+				} else if (currState == BURNING) {
+					setNext(curr, EMPTY, BACKGROUND);
+				} else if (currState == TREE) {
 					List<GridCell> neighbors = curr.getCardinalNeighbors();
 					List<String> blah = new ArrayList<String>();
 					for (GridCell cell: neighbors){
@@ -108,17 +104,14 @@ public class Fire extends Simulation {
 						if (Math.random()<myProbCatch) {
 							numBurning++;
 							numTree--;
-							curr.setNextState(BURNING);
-							curr.setNextColor(BURNINGCOLOR);
+							setNext(curr, BURNING, BURNINGCOLOR);
 						}
 						else {
-							curr.setNextState(currState);
-							curr.setNextColor(TREECOLOR);
+							setNext(curr, currState, TREECOLOR);
 						}
 					}
 					else {
-						curr.setNextState(currState);
-						curr.setNextColor(TREECOLOR);
+						setNext(curr, currState, TREECOLOR);
 					}						
 				}
 			}
@@ -126,6 +119,10 @@ public class Fire extends Simulation {
 		updateStates();		
 	}
 
+	public void setNext(GridCell curr, String currState, Color color){
+		curr.setNextState(currState);
+		curr.setNextColor(color);
+	}
 	@Override
 	public List<Integer> getDataVals() {
 		ArrayList<Integer> dataVals = new ArrayList<Integer>();

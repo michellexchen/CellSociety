@@ -8,7 +8,7 @@
 	</info> 
 
 	<parameters>
-		<probcatch></probcatch>
+		<probcatch>.65</probcatch>
 		<size> 500 </size>
 		<numcells> 100 </numcells>
 	</parameters>

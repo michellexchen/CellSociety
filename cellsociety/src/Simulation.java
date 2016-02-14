@@ -53,7 +53,9 @@ public abstract class Simulation {
 				initExplicit(currentCell, i, j);
 			}
 		}
+
 		displayGrid();
+
 	}
 
 
@@ -107,6 +109,7 @@ public abstract class Simulation {
 	
 	public void displayGrid(){
 		if(!isTriangular){
+
 			int top = 0;
 			int left = 0;
 			
@@ -119,11 +122,13 @@ public abstract class Simulation {
 					d.setMyShape(temp);
 					root.getChildren().add(temp);
 					top += gridCellSize;
+
 				}
 				top = 0;
 				left += gridCellSize;
 			}	
 		}
+		
 		else{
 			double dx = gridCellSize*2;
 			double dy = dx*Math.sqrt(3)/4;
@@ -192,10 +197,10 @@ public abstract class Simulation {
 		root.getChildren().add(myChart);
 	}
 	
-	/*private void updateChart(){
+	private void updateChart(){
 		dataChart.update(getDataVals());
 	}
-	*/
+	
 	
 	public abstract List<Integer> getDataVals();
 	public abstract List<String> getDataLabels();
@@ -347,7 +352,7 @@ public abstract class Simulation {
 	
 	public void step(){
 		stepCount++;
-		//updateChart();
+		updateChart();
 		update();
 
 		for(GridCell[] c: myCells){

@@ -70,33 +70,15 @@ public class Main extends Application {
 		splashScene = myScreen.SplashScreen(this, SIZE);
 
 		myStage.setScene(splashScene);
-		
-		//Simulation temp = new Slime(500, 50, false, false, 500); WORKING
-		//Simulation temp = new Life(500, 50, 1000, false, false);  WORKING
-		//Simulation temp = new Segregation(500, 50, 1000, .5, .51, false, false); WORKING
-		//Simulation temp = new Predator(500, 50, 3, 3, 3, 1000, .5, false, false); WORKING
-		//Simulation temp = new Fire(500, 50, .8, false, false); WORKING
-		
-		//Simulation temp = new Slime(cols, 500,false, false); WORKING BUT BUGGY
-		//Simulation temp = new Life(cols, 500, false, false); WORKING BUT BUGGY
-		//Simulation temp = new Fire(cols, 500, .8, false, false); 
-		//Simulation temp = new Segregation(cols, 500, .5, false, false);  WORKING
-		//Simulation temp = new Predator(cols, 500, 3,3,3,true, true); WORKING
-		Simulation temp = new Ants(cols, 500, false, false, 10, 500, 2, 2, 0, 1000, .0001, .0001, .001, 10);
-				
-				//(List<String> columns, int size, boolean tor, boolean tri, int maxAnts, int antLife, int antBreed, int numNest, double minPher, 
-					//	double maxPher, double evaporation, double diffusion, double k, double n){	
-				
-		myStage.setScene(temp.getMyScene());
+
 		
 		myStage.setTitle("Simulations Home Screen");
 		myStage.show();
 
-		KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> temp.step());
+		KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> currentSim.step());
 		animation = new Timeline();
 		animation.setCycleCount(Timeline.INDEFINITE);
 		animation.getKeyFrames().add(frame);
-		animation.play();
 	}
 	
 	/**
@@ -131,6 +113,10 @@ public class Main extends Application {
 		Button switchSim = new Button(myResources.getString("Switch"));
 		switchSim.setOnMouseClicked(e -> {
 			myStage.setScene(myScreen.SplashScreen(this, SIZE));
+			animation.stop();
+			animation.setRate(1);
+			myStage.setHeight(SIZE+BUTTONHEIGHT-BUTTONPADDING);
+			myStage.setWidth(SIZE+BUTTONHEIGHT-BUTTONPADDING);
 
 		});
 
@@ -151,7 +137,6 @@ public class Main extends Application {
 	
 	public void startystart(){ //starts simulation
 		currentSim = simOption.getSimulation();
-		//currentSim = new Ants("ANTs",500,5,false,false);
 		myStage.setTitle(currentSim.getTitle());
 		myScene = currentSim.getMyScene();
 		myStage.setHeight(currentSim.getSceneSize() + BUTTONHEIGHT + BUTTONPADDING);
