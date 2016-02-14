@@ -1,6 +1,5 @@
 import java.util.*;
 
-import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 
 public class Ants extends Simulation {
@@ -53,7 +52,7 @@ public class Ants extends Simulation {
 		diffRate = 0.0001;
 	}
 	
-	public Scene init(){
+	public void init(){
 		super.init();
 		myCells = super.getCells();
 		gridSize = super.getGridSize();
@@ -71,7 +70,6 @@ public class Ants extends Simulation {
 		
 		initChart();
 		
-		return super.getMyScene();
 	}
 	
 	@Override
@@ -259,16 +257,15 @@ public class Ants extends Simulation {
 		return maxCell;
 	}
 
-
-	//edit this
-	@Override
-	public void updateColors() {
-
-	}
-
 	@Override
 	public int getChartY() {
 		return gridSize*gridSize*antCap;
+	}
+
+	@Override
+	public void initExplicit(char current, int col, int row) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

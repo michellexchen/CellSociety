@@ -1,6 +1,3 @@
-import javafx.scene.Scene;
-import javafx.scene.chart.Chart;
-import javafx.scene.chart.LineChart;
 import javafx.scene.paint.Color;
 import java.util.*;
 /**
@@ -12,16 +9,16 @@ import java.util.*;
  * It passes this information to a superclass Simulation that updates a visual display 
  *
  */
+
 public class Predator extends Simulation {
 	private static final String TITLE = "WA-TOR";
 	private static final String SHARK = "SHARK";
 	private static final String FISH = "FISH";
 	private static final String EMPTY = "EMPTY";
-	private Color FISHCOLOR = Color.GREEN;
-	private Color SHARKCOLOR = Color.YELLOW;
-	private Color BACKGROUND = Color.BLUE;
+	private final Color FISHCOLOR = Color.GREEN;
+	private final Color SHARKCOLOR = Color.YELLOW;
+	private final Color BACKGROUND = Color.BLUE;
 	private int gridSize;
-	private GridCell[][] myCells;
 	private int[][] breedGrid;
 	private int[][] dieGrid;
 	private int myPopulation;
@@ -52,26 +49,52 @@ public class Predator extends Simulation {
 		sharkBreedTime = sharkBreed;
 		sharkDieTime = sharkDie;
 		fishBreedTime = fishBreed;
+		numFish = (int)(population*percentFish);
 		numSharks = (int)(population*(1-percentFish));
-		numFish = (int)(population*(percentFish));
+		initialize();
 	}
+	public Predator(String[] columns, int size, int fishBreed, int sharkBreed, int sharkDie, boolean tor, boolean tri){
+		super(columns, TITLE, size, tor, tri);
+		sharkBreedTime = sharkBreed;
+		sharkDieTime = sharkDie;
+		fishBreedTime = fishBreed;
+		
+		gridSize = super.getGridSize();
+		breedGrid = new int[gridSize][gridSize];
+		dieGrid = new int[gridSize][gridSize];
+		cellList = getCellList();
+	}
+	
 	/**
 	 * Assigns fish, sharks, and empty cells - returns a Scene with these attributes
 	 */
-	public Scene init(){ 
+	public void initialize(){ 
 		super.init();
 		gridSize = super.getGridSize();
 		breedGrid = new int[gridSize][gridSize];
 		dieGrid = new int[gridSize][gridSize];
 		randomInit(myPopulation, percentFish, FISH, SHARK, EMPTY, FISHCOLOR, SHARKCOLOR, BACKGROUND);
 		super.displayGrid();
-		myCells = super.getCells();
 		cellList = getCellList();
-
 		initChart();
-		
-		return super.getMyScene();
 	}
+	
+	@Override
+	public void initExplicit(char current, int col, int row) {
+		if(current == '0'){
+			super.getCells()[col][row] = new GridCell(EMPTY, Color.BLUE, col, row);
+		}
+		else if(current == '1'){
+			super.getCells()[col][row] = new GridCell(FISH, Color.GREEN, col, row);
+			numFish++;
+		}
+		else if(current == '2'){
+			super.getCells()[col][row] = new GridCell(SHARK, Color.YELLOW, col, row);
+			numSharks++;
+		}
+		
+	}
+
 	/**
 	 * Updates state of cells
 	 */

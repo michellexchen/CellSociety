@@ -30,9 +30,11 @@ public class SlimeCell extends GridCell {
 			this.setNextState(Slime.EMPTY);
 			this.setNextColor(Slime.EMPTYCOLOR.darker());
 		}
-		
 		diffuse();
-		evaporate();
+		
+		if(this.getState() == Slime.EMPTY){
+			evaporate();
+		}
 	}
 	
 	public void diffuse(){

@@ -1,5 +1,4 @@
 import java.util.*;
-import javafx.animation.Timeline;
 import javafx.scene.chart.Chart;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;

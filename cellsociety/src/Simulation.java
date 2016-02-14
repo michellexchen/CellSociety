@@ -42,8 +42,19 @@ public abstract class Simulation {
 	 * This method is generally responsible for determining the next state for each cell based on certain parameters, as defined by each type of simulation 
 	 */
 	public abstract void update();
-	public Scene init(String[] columns){
-		return myScene;
+	public abstract void initExplicit(char current, int col, int row);
+	
+	public Simulation(String[] columns, String title, int size, boolean tor, boolean tri){
+		this(title, size, columns.length, tor, tri);
+		init();
+		System.out.println(myCells.length);
+		for(int i = 0; i < myCells.length; i++){
+			for(int j = 0; j < myCells.length; j++){
+				char currentCell = columns[i].charAt(j);
+				initExplicit(currentCell, i, j);
+			}
+		}
+		displayGrid();
 	}
 
 	/** 
@@ -77,10 +88,9 @@ public abstract class Simulation {
 	 * This method is responsible for initializing the 2-D grid of cells and creating the scene for this grid
 	 * @return the scene on which the simulation grid is displayed 
 	 */
-	public Scene init(){
+	public void init(){
 		myCells = new GridCell[gridSize][gridSize];
 		myScene = new Scene(root,sceneSize,sceneSize);
-		return myScene; 
 	}
 	
 	private void initAdj(){

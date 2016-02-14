@@ -183,7 +183,7 @@ public class XMLReader {
 	 * 
 	 */
 	private Simulation getSegregation(NodeList listParam, Element attributes){
-        Integer population = Integer.parseInt(getNodeValue(attributes, "popgridSize"));
+        Integer population = Integer.parseInt(getNodeValue(attributes, "popsize"));
         Double percent1 = Double.parseDouble(getNodeValue(attributes, "percentone"));
         Double satisfaction = Double.parseDouble(getNodeValue(attributes, "satisfaction"));
 		
