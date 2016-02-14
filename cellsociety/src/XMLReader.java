@@ -141,14 +141,21 @@ public class XMLReader {
 	 * 
 	 * This method is called in getSimulation() when the predator attribute is read and returns the predator simulation based on user inputed attributes from the XML file
 	 * Attributes included in the XML file include fishBreed, sharkBreed, sharkDie, population, percentFish, gridSize, and numCells
+	 * @throws Exception 
 	 * 
 	 */
-	private Simulation getPredator(NodeList listParam, Element attributes){
+	private Simulation getPredator(NodeList listParam, Element attributes) throws Exception{
         Integer fishBreed = Integer.parseInt(getNodeValue(attributes, "fishbreed"));
         Integer sharkBreed = Integer.parseInt(getNodeValue(attributes, "sharkbreed"));
         Integer sharkDie = Integer.parseInt(getNodeValue(attributes, "sharkdie"));
         Integer population = Integer.parseInt(getNodeValue(attributes, "population"));
         Double percentFish = Double.parseDouble(getNodeValue(attributes, "fishpercent"));
+        
+        if(population > numCells*numCells){
+        	System.out.println("error!!!");
+        	Exception e = new Exception();
+        	throw new Exception("The population is too large for this grid!");
+        }
         
         return new Predator(gridSize,numCells,fishBreed,sharkBreed,sharkDie,population,percentFish, gridType, cellType);
 	}	

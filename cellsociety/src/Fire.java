@@ -31,7 +31,7 @@ public class Fire extends Simulation {
 		initialize();
 	}
 	
-	public Fire(String[] columns, int size, double probCatch, boolean tor, boolean tri){
+	public Fire(List<String> columns, int size, double probCatch, boolean tor, boolean tri){
 		super(columns, TITLE, size, tor, tri);
 		myProbCatch = probCatch;
 	}

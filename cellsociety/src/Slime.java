@@ -24,7 +24,7 @@ public class Slime extends Simulation{
 		initChart();
 	}
 	
-	public Slime(String[] columns, int size,boolean tor, boolean tri){
+	public Slime(List<String> columns, int size,boolean tor, boolean tri){
 		super(columns, TITLE, size, tor, tri);
 	}
 
