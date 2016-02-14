@@ -40,9 +40,7 @@ public class Ants extends Simulation {
 		diffRate = diffusion;
 		KVal = k;
 		NVal = n;
-		
-		super.customInit(columns);
-		
+				
 		for(GridCell cell: super.getCellList()){
 			cell.initForwardNeighbors();
 			cell.initBackwardNeighbors();
@@ -62,21 +60,21 @@ public class Ants extends Simulation {
 		}
 
 		if(current == '0'){
-			AntCell temp = new AntCell("NEST", Color.BEIGE, col, row, antCap, pherCap, pherMin, evapRate, diffRate, KVal, NVal);
+			AntCell temp = new AntCell("NEST", Color.BEIGE, col, row, 10, pherCap, pherMin, evapRate, diffRate, KVal, NVal);
 			nestCells.add(temp);
 			getCells()[col][row] = temp;
 			populateAnts(nestCells, startAnts);
 		}
 		else if(current == '1'){
-			AntCell temp = new AntCell("FOOD", Color.BLUE, col, row, antCap, pherCap, pherMin, evapRate, diffRate, KVal, NVal);
+			AntCell temp = new AntCell("FOOD", Color.BLUE, col, row, 10, pherCap, pherMin, evapRate, diffRate, KVal, NVal);
 			getCells()[col][row] = temp;
 		}
 		else if(current == '2'){
-			AntCell temp = new AntCell("OBSTACLE", Color.GRAY, col, row, antCap, pherCap, pherMin, evapRate, diffRate, KVal, NVal);
+			AntCell temp = new AntCell("OBSTACLE", Color.GRAY, col, row, 10, pherCap, pherMin, evapRate, diffRate, KVal, NVal);
 			getCells()[col][row] = temp;
 		}
 		else if(current == '3'){
-			AntCell ground = new AntCell("GROUND", Color.GREEN, col, row,antCap, pherCap, pherMin, evapRate, diffRate, KVal, NVal);
+			AntCell ground = new AntCell("GROUND", Color.GREEN, col, row,10, pherCap, pherMin, evapRate, diffRate, KVal, NVal);
 			getCells()[col][row] = ground;
 
 		}
