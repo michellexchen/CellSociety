@@ -14,6 +14,7 @@ public class Ants extends Simulation {
 	private GridCell[][] myCells;
 	private int gridSize;
 	private int startAnts;
+	private int breedPerStep;
 	private int dieThresh;
 	private int antCap;
 	private double pherCap;
@@ -24,56 +25,67 @@ public class Ants extends Simulation {
 	private double NVal;
 	
 
-	public Ants(String title, int size, int numCells, boolean tor, boolean tri,ArrayList<int[]> nest, ArrayList<int[]> food, int maxAnts, int antLife, int antBreed, int numNest, double minPher, double maxPher, double evaporation, double diffusion, ArrayList<int[]> obstacles, double k, double n){
+	public Ants(String title, int size, int numCells, boolean tor, boolean tri){//,ArrayList<int[]> nest, ArrayList<int[]> food, int maxAnts, int antLife, int antBreed, int numNest, double minPher, double maxPher, double evaporation, double diffusion, ArrayList<int[]> obstacles, double k, double n){
 		super(title,size,numCells,tor,tri);
-		obstacleCoords = obstacles;
-		nestCoords = nest;
-		foodCoords = food;
-		startAnts = numNest;
-		dieThresh = antLife;
-		antCap = maxAnts;
-		pherCap = maxPher; 
-		pherMin = minPher;
-		evapRate = evaporation;
-		diffRate = diffusion;
-		KVal = k;
-		NVal = n;
-//		obstacleCoords = new ArrayList<int[]>();
-//		obstacleCoords.add(new int[]{1,2});
-//		obstacleCoords.add(new int[]{4,4});
-//		obstacleCoords.add(new int[]{3,4});
-//		obstacleCoords.add(new int[]{2,2});
-//		nestCoords = new ArrayList<int[]>();
-//		nestCoords.add(new int[]{1,1});
-//		foodCoords = new ArrayList<int[]>();
-//		foodCoords.add(new int[]{3,3});
-//		startAnts = 2;
-//		dieThresh = 500;
-//		antCap = 10;
-//		pherCap = 1000; 
-//		pherMin = 0;
-//		evapRate = 0.0001;
-//		diffRate = 0.0001;
+//		obstacleCoords = obstacles;
+//		nestCoords = nest;
+//		foodCoords = food;
+//		startAnts = numNest;
+//		breedPerStep = antBreed;
+//		dieThresh = antLife;
+//		antCap = maxAnts;
+//		pherCap = maxPher; 
+//		pherMin = minPher;
+//		evapRate = evaporation;
+//		diffRate = diffusion;
+//		KVal = k;
+//		NVal = n;
+		obstacleCoords = new ArrayList<int[]>();
+		obstacleCoords.add(new int[]{1,2});
+		obstacleCoords.add(new int[]{4,4});
+		obstacleCoords.add(new int[]{3,4});
+		obstacleCoords.add(new int[]{2,2});
+		nestCoords = new ArrayList<int[]>();
+		nestCoords.add(new int[]{1,1});
+		foodCoords = new ArrayList<int[]>();
+		foodCoords.add(new int[]{3,3});
+		startAnts = 2;
+		dieThresh = 500;
+		antCap = 10;
+		pherCap = 1000; 
+		pherMin = 0;
+		evapRate = 0.0001;
+		diffRate = 0.0001;
+		KVal = 0.001;
+		NVal = 10;
 	}
 	
 	public void init(){
 		super.init();
 		myCells = super.getCells();
 		gridSize = super.getGridSize();
+		initCells();
+		displayGrid();
+		cellList = super.getCellList();
+		initNeighbors();
+		
+		initChart();
+		
+	}
+
+	private void initCells() {
 		populateCells("OBSTACLE",Color.YELLOW ,obstacleCoords, obstacleCells);
 		populateCells("NEST",Color.BEIGE,nestCoords,nestCells);
 		populateCells("FOOD",Color.BLUE,foodCoords,foodCells);
 		populateAnts(nestCells,startAnts);
 		populateEmpty();
-		displayGrid();
-		cellList = super.getCellList();
+	}
+
+	private void initNeighbors() {
 		for(GridCell cell: cellList){
 			cell.initForwardNeighbors();
 			cell.initBackwardNeighbors();
 		}
-		
-		initChart();
-		
 	}
 	
 	@Override
@@ -111,7 +123,8 @@ public class Ants extends Simulation {
 		Random rnd = new Random();
 		int i = amt;
 		while(i>0){
-			GridCell chosen = selections.get(rnd.nextInt(selections.size()));
+			ArrayList<GridCell> refined = (ArrayList<GridCell>) refineLocations(selections);
+			GridCell chosen = refined.get(rnd.nextInt(refined.size()));
 			if(!((AntCell)chosen).atCapacity()){
 				Ant ant = new Ant(dieThresh,chosen.getX(),chosen.getY());
 				((AntCell)chosen).addAnimal(ant);
@@ -119,7 +132,7 @@ public class Ants extends Simulation {
 				i--;
 			}
 			else{
-				break;
+				continue;
 			}
 		}
 	}
@@ -127,10 +140,25 @@ public class Ants extends Simulation {
 	
 	@Override
 	public void update() {
+		updateAnts();
+		updatePheromones();
+		populateAnts(nestCells,breedPerStep);
+	}
+
+	private void updatePheromones() {
+		for(GridCell cell: cellList){
+			AntCell antCell = (AntCell) cell;
+			antCell.diffuse();
+			antCell.evaporate();
+		}
+	}
+
+	private void updateAnts() {
 		for(Ant ant: ants){
 			if(ant.timeToDie()){
 				((AntCell)myCells[ant.getX()][ant.getY()]).removeAnimal(ant);
 				ants.remove(ant);
+				continue;
 			}
 			if(ant.hasFoodItem()){
 				returnToNest(ant);
@@ -139,12 +167,6 @@ public class Ants extends Simulation {
 				findFoodSource(ant);
 			}
 		}
-		for(GridCell cell: cellList){
-			AntCell antCell = (AntCell) cell;
-			antCell.diffuse();
-			antCell.evaporate();
-		}
-		populateAnts(nestCells,2);
 	}
 	
 	private void returnToNest(Ant ant){
@@ -201,18 +223,23 @@ public class Ants extends Simulation {
 		if(neighbors==null){
 			return null;
 		}
-		ArrayList<GridCell> refinedNeighbors = new ArrayList<GridCell>();
-		for(GridCell cell: neighbors){
-			if(cell.getState()!="OBSTACLE" && !((AntCell)cell).atCapacity()){
-				refinedNeighbors.add(cell);
-			}
-		}
+		ArrayList<GridCell> refinedNeighbors = (ArrayList<GridCell>) refineLocations(neighbors);
 		if(refinedNeighbors.size()==0){
 			return null;
 		}
 		else{
 			return (AntCell) pickByProbability(refinedNeighbors);
 		}
+	}
+	
+	private List<GridCell> refineLocations(ArrayList<GridCell> locations){
+		ArrayList<GridCell> refined = new ArrayList<GridCell>();
+		for(GridCell cell: locations){
+			if(cell.getState()!="OBSTACLE" && !((AntCell)cell).atCapacity()){
+				refined.add(cell);
+			}
+		}
+		return refined;
 	}
 	
 	private GridCell pickByProbability(ArrayList<GridCell> neighbors){
