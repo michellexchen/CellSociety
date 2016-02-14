@@ -7,26 +7,26 @@ import javafx.scene.chart.XYChart;
 
 public class DataChart {
 	private static final int MAX_X_POINTS = 20;
-	private static final int MAX_Y_POINTS = 100;
+	private int maxYPoints;
 	private List<Integer> variables;
 	private List<String> varNames;
-	private XYChart.Series<Number,Number> dataSeries;
 	private List<XYChart.Series<Number,Number>> seriesList = new ArrayList<XYChart.Series<Number,Number>>();
 	private NumberAxis xAxis;
 	private NumberAxis yAxis;
 	private Simulation mySimulation;
+	private int chartHeight;
 	
-	public DataChart(List<Integer> data, List<String> labels, Simulation simulation) {
+	public DataChart(List<Integer> data, List<String> labels, Simulation simulation, int maxY, int height) {
 		variables = data;
 		varNames = labels;
 		mySimulation = simulation;
+		maxYPoints = maxY;
+		chartHeight = height;
 	}
 	
 	public Chart init(){
 		xAxis = new NumberAxis(0,MAX_X_POINTS+1,1);
-		yAxis = new NumberAxis(0,MAX_Y_POINTS+1,10);
-		xAxis.setAnimated(false);
-		yAxis.setAnimated(false);
+		yAxis = new NumberAxis(0,maxYPoints+1,maxYPoints/chartHeight);
 		
 		LineChart<Number,Number> chart = new LineChart<Number,Number>(xAxis,yAxis);
 		
@@ -34,6 +34,7 @@ public class DataChart {
 		chart.getYAxis().setTickLabelsVisible(false);
 		chart.getXAxis().setOpacity(0);
 		chart.getYAxis().setOpacity(0);
+		chart.setCreateSymbols(false);
 		
 		chart.setAnimated(false);
 		

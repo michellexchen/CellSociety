@@ -1,4 +1,5 @@
 import javafx.scene.Scene;
+import javafx.scene.chart.Chart;
 import javafx.scene.chart.LineChart;
 import javafx.scene.paint.Color;
 import java.util.*;
@@ -66,7 +67,7 @@ public class Predator extends Simulation {
 		super.displayGrid();
 		myCells = super.getCells();
 		cellList = getCellList();
-		
+
 		initChart();
 		
 		return super.getMyScene();

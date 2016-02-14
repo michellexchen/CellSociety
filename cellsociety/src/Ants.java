@@ -1,10 +1,6 @@
 import java.util.*;
 
-import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.chart.Chart;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.XYChart;
 import javafx.scene.paint.Color;
 
 public class Ants extends Simulation {
@@ -25,8 +21,6 @@ public class Ants extends Simulation {
 	private double pherMin;
 	private double evapRate;
 	private double diffRate;
-	private DataChart dataChart;
-	private Chart myChart;
 	
 
 	public Ants(String title, int size, int numCells, boolean tor, boolean tri) { //ArrayList<int[]> nest, ArrayList<int[]> food, int maxAnts, int antLife, int antBreed, int numNest, double minPher, double maxPher, double evaporation, double diffusion, ArrayList<int[]> obstacles, int k, int n
@@ -270,6 +264,11 @@ public class Ants extends Simulation {
 	@Override
 	public void updateColors() {
 
+	}
+
+	@Override
+	public int getChartY() {
+		return gridSize*gridSize*antCap;
 	}
 
 }

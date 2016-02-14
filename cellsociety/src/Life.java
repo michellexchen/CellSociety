@@ -88,12 +88,15 @@ public class Life extends Simulation {
 					else{
 						d.setNextState(DEAD);
 						d.setNextColor(DEADCOLOR);
+						//numAlive--;
+
 					}
 				}
 				else{
 					if(liveNeighbors == 3){
 						d.setNextState(ALIVE);
 						d.setNextColor(ALIVECOLOR);
+						//numAlive++;
 					}
 					else{
 						d.setNextState(DEAD);
