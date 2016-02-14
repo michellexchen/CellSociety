@@ -59,6 +59,12 @@ public class Ants extends Simulation {
 		diffRate = 0.0001;
 	}
 	
+	@Override
+	public void initExplicit(char current, int col, int row) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 	public void init(){
 		super.init();
 		myCells = super.getCells();
@@ -262,13 +268,6 @@ public class Ants extends Simulation {
 			}
 		}
 		return maxCell;
-	}
-
-
-	//edit this
-	@Override
-	public void updateColors() {
-
 	}
 
 }
