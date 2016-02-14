@@ -11,7 +11,7 @@
 		<fishbreed> 15 </fishbreed>
 		<sharkbreed> 5 </sharkbreed>
 		<sharkdie> 10 </sharkdie>
-		<population> 20 </population>
+		<population> 200 </population>
 		<fishpercent> .8 </fishpercent>
 	</parameters>
 
