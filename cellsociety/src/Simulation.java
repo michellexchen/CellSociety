@@ -47,7 +47,6 @@ public abstract class Simulation {
 	public Simulation(List<String> columns, String title, int size, boolean tor, boolean tri){
 		this(title, size, columns.size(), tor, tri);
 		init();
-		System.out.println(myCells.length);
 		for(int i = 0; i < myCells.length; i++){
 			for(int j = 0; j < myCells.length; j++){
 				char currentCell = columns.get(i).charAt(j);
@@ -56,6 +55,7 @@ public abstract class Simulation {
 		}
 		displayGrid();
 	}
+
 
 	/** 
 	 * This method is generally responsible for setting the color that is to be displayed to reflect the current state of a cell
@@ -192,9 +192,10 @@ public abstract class Simulation {
 		root.getChildren().add(myChart);
 	}
 	
-	private void updateChart(){
+	/*private void updateChart(){
 		dataChart.update(getDataVals());
 	}
+	*/
 	
 	public abstract List<Integer> getDataVals();
 	public abstract List<String> getDataLabels();
@@ -346,7 +347,7 @@ public abstract class Simulation {
 	
 	public void step(){
 		stepCount++;
-		updateChart();
+		//updateChart();
 		update();
 
 		for(GridCell[] c: myCells){

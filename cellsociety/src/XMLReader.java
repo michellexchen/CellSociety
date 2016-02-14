@@ -187,13 +187,18 @@ public class XMLReader {
 	 * 
 	 * This method is called in getSimulation() when the segregation attribute is read and returns the segregation simulation based on user inputed attributes from the XML file
 	 * Attributes included in the XML file include population, percent1, satisfaction, gridSize, and numCells
+	 * @throws Exception 
 	 * 
 	 */
-	private Simulation getSegregation(NodeList listParam, Element attributes){
+	private Simulation getSegregation(NodeList listParam, Element attributes) throws Exception{
+
         Integer population = Integer.parseInt(getNodeValue(attributes, "popsize"));
         Double percent1 = Double.parseDouble(getNodeValue(attributes, "percentone"));
         Double satisfaction = Double.parseDouble(getNodeValue(attributes, "satisfaction"));
-		
+		if(population > gridSize*gridSize){
+			throw new Exception("Population is too large for grid!");
+		}
+        
 		return new Segregation(gridSize,numCells,population,percent1,satisfaction, gridType, cellType);
 	}
 	
@@ -204,11 +209,15 @@ public class XMLReader {
 	 * 
 	 * This method is called in getSimulation() when the life attribute is read and returns the life simulation based on user inputed attributes from the XML file
 	 * Attributes included in the XML file include numAlive, gridSize, and numCells
+	 * @throws Exception 
 	 * 
 	 */
-	private Simulation getLife(NodeList listParam, Element attributes){
+	private Simulation getLife(NodeList listParam, Element attributes) throws Exception{
 		Integer numAlive = Integer.parseInt(getNodeValue(attributes, "numalive"));		
-		
+		if(numAlive > gridSize*gridSize){
+			throw new Exception("Population is too large for grid!");
+
+		}
 		return new Life(gridSize,numCells,numAlive, gridType, cellType);
 	}
 }
