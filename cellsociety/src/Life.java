@@ -35,7 +35,7 @@ public class Life extends Simulation {
 		initialize();
 	}
 	
-	public Life(String[] columns, int size, boolean tor, boolean tri){
+	public Life(List<String> columns, int size, boolean tor, boolean tri){
 		super(columns, TITLE, size, tor, tri);
 	}
 	

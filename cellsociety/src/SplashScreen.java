@@ -126,8 +126,7 @@ public class SplashScreen {
 					} catch (Exception e2) { //if xml file contents are bad
 						String errorMessage = simOption.getExceptionMessage();
 						handleError(errorMessage);		
-				}
-							
+				}			
 		});
 	}
 	
@@ -269,7 +268,7 @@ public class SplashScreen {
 	public void handleError(String errorMessage) {
 		Text msg = new Text(myResources.getString("Error"));
 		Text msg2 = new Text(myResources.getString("Error2"));
-		Button ok = new Button(myResources.getString("OK"));		
+		Button ok = new Button(myResources.getString("OK"));
 		clearForError(msg, msg2, ok);
 		pressedOK(ok, msg, msg2);
 	}
