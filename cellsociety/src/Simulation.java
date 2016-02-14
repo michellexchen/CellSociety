@@ -58,6 +58,7 @@ public abstract class Simulation {
 
 	}
 
+
 	/** 
 	 * This method is generally responsible for setting the color that is to be displayed to reflect the current state of a cell
 	 */
@@ -199,6 +200,7 @@ public abstract class Simulation {
 	private void updateChart(){
 		dataChart.update(getDataVals());
 	}
+	
 	
 	public abstract List<Integer> getDataVals();
 	public abstract List<String> getDataLabels();

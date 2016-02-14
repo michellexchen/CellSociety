@@ -31,7 +31,7 @@ public class Ant extends Animal {
 	}
 	
 	public boolean timeToDie(){
-		return super.timeToBreed();
+		return super.timeToDie();
 	}
 	
 	public boolean hasFoodItem(){

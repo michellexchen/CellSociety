@@ -27,11 +27,11 @@
 	</parameters>
 	
 	<matrix>
-		<col states = "01010"></col>
-		<col states = "00000"></col>
-		<col states = "01010"></col>
-		<col states = "00000"></col>
-		<col states = "11111"></col>
+		<col states = "33333"></col>
+		<col states = "33303"></col>
+		<col states = "32222"></col>
+		<col states = "13333"></col>
+		<col states = "33333"></col>
 	</matrix>
 
 </simulation>
