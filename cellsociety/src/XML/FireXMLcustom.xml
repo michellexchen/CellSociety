@@ -10,8 +10,17 @@
 	<parameters>
 		<custom> true </custom>
 		<probcatch> .88 </probcatch>
-		<numcells> 100 </numcells>
 		<gridsize> 600> </gridsize>
+		<gridtype> toroidal </gridtype>
+		<celltype>triangle</celltype>
 	</parameters>
+	
+	<matrix>
+		<col1>11111</col1>
+		<col2>00000</col2>
+		<col3>22222</col3>
+		<col4>00000</col4>
+		<col5>11111</col5>
+	</matrix>
 
 </simulation>

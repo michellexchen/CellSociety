@@ -37,6 +37,11 @@ public class XMLReader {
 	private Integer numCells;
 	private Boolean gridType;
 	private Boolean cellType;
+	
+	private String simType;
+    private Simulation simulation;
+    private NodeList listParam;
+    private Element attributes;
 
 	public XMLReader() {
 		file = chooseFile();
@@ -76,42 +81,51 @@ public class XMLReader {
 	        
 	        //simulation type
 	        Element simulation2 = (Element) doc.getElementsByTagName("info").item(0) ;
-	        String simType = simulation2.getElementsByTagName("name").item(0).getTextContent();	        
+	        simType = simulation2.getElementsByTagName("name").item(0).getTextContent();	        
 	        
 	        //getting nodes
-			NodeList listParam = doc.getElementsByTagName("parameters");
-	        Element attributes = (Element) listParam.item(0);
+			listParam = doc.getElementsByTagName("parameters");
+	        attributes = (Element) listParam.item(0);
 	        
-	        Simulation simulation;
-	        
-	        parseMap(myParams);
-	        
-	        switch(simType){
-	        case "Predator":
-	        	simulation = getPredator(listParam, attributes);
-	        	break;
-	        case "Fire":
-	        	simulation = getFire(listParam, attributes);
-	        	break;
-	        case "Segregation":
-	        	simulation = getSegregation(listParam, attributes);
-	        	break;
-	        case "Life":
-	        	simulation = getLife(listParam, attributes);
-	        	break;
-	        default: //IT'S HERE.. add return button OR create from here?
-	        	return null;
+	        if (attributes.getElementsByTagName("custom").getLength() == 0) {
+		        parseRandom(myParams);
+		        return randomSim();
+	        } else {
+	        	parseCustom(attributes);
 	        }
-	        return new SimulationOptional(simulation, null);
-        }
-		catch(Exception e){
-			return new SimulationOptional(null, e);
-		}
+		} catch(Exception e){
+			System.out.println("invalid file");
+		}	
+		
+		return new SimulationOptional(null, null);
+
+
 	}
 	
+
+
+	private SimulationOptional randomSim(){
+		switch(simType){
+        case "Predator":
+        	simulation = getPredator(attributes);
+        	break;
+        case "Fire":
+        	simulation = getFire(attributes);
+        	break;
+        case "Segregation":
+        	simulation = getSegregation(attributes);
+        	break;
+        case "Life":
+        	simulation = getLife(attributes);
+        	break;
+        default: //IT'S HERE.. add return button OR create from here?
+        	return null;
+        }
+        return new SimulationOptional(simulation, null);
+    }
+
 	
-	
-	private void parseMap(Map myParams){
+	private void parseRandom(Map myParams){
 		 gridSize = Integer.parseInt((String) myParams.get("gridSize"));
 	     numCells = Integer.parseInt((String) myParams.get("numCells"));
 	     if (myParams.get("gridType") == "Finite") {
@@ -124,6 +138,26 @@ public class XMLReader {
 	     } else {
 	    	 cellType = true;
 	     }
+	}
+	
+	private void parseCustom(Element attributes) { //LEFT OFF HERE
+		String isTor = getNodeValue(attributes, "gridtype");
+		String isTri = getNodeValue(attributes, "celltype");
+		if (attributes.getElementsByTagName("gridtype").getLength() > 0 && isTor.equals("toroidal")) {
+				gridType = true;
+	     } else {
+	    	 gridType = false;
+	     }
+		
+		if (attributes.getElementsByTagName("celltype").getLength() > 0 && isTri.equals("triangle")) {
+			cellType = true;
+		} else {
+			cellType = false;
+		}
+					
+		//need to read in matrix and turn into array
+		gridSize = 500;
+		numCells = 100;
 	}
 	
 	private String getNodeValue(Element attributes, String tagName){ // THIS IS A CHECK FOR WHEN IT'S EMPTY. CHECK FOR WHEN DONT INCLUDE FOR WHEN ITS EMPTY
@@ -143,14 +177,13 @@ public class XMLReader {
 	 * Attributes included in the XML file include fishBreed, sharkBreed, sharkDie, population, percentFish, gridSize, and numCells
 	 * 
 	 */
-	private Simulation getPredator(NodeList listParam, Element attributes){
-        Integer fishBreed = Integer.parseInt(getNodeValue(attributes, "fishbreed"));
-        Integer sharkBreed = Integer.parseInt(getNodeValue(attributes, "sharkbreed"));
-        Integer sharkDie = Integer.parseInt(getNodeValue(attributes, "sharkdie"));
-        Integer population = Integer.parseInt(getNodeValue(attributes, "population"));
-        Double percentFish = Double.parseDouble(getNodeValue(attributes, "fishpercent"));
-        
-        return new Predator(gridSize,numCells,fishBreed,sharkBreed,sharkDie,population,percentFish, gridType, cellType);
+	private Simulation getPredator(Element attributes){
+		Integer fishBreed = Integer.parseInt(getNodeValue(attributes, "fishbreed"));
+	    Integer sharkBreed = Integer.parseInt(getNodeValue(attributes, "sharkbreed"));
+	    Integer sharkDie = Integer.parseInt(getNodeValue(attributes, "sharkdie"));
+	    Integer population = Integer.parseInt(getNodeValue(attributes, "population"));
+	    Double percentFish = Double.parseDouble(getNodeValue(attributes, "fishpercent"));        
+	    return new Predator(gridSize,numCells,fishBreed,sharkBreed,sharkDie,population,percentFish, gridType, cellType);   
 	}	
 	
 	
@@ -163,16 +196,14 @@ public class XMLReader {
 	 * Attributes included in the XML file include probCatch, gridSize, and numCells
 	 * 
 	 */
-	private Simulation getFire(NodeList listParam, Element attributes){
-		System.out.println("i'm here");
-//	    if (getNodeValue(attributes, "custom").toString() == "true") {
-//	    	System.out.println("hehehahahohoh");
-//	    }
+	private Simulation getFire(Element attributes){
         Double probCatch = Double.parseDouble(getNodeValue(attributes, "probcatch"));
-		 
 		return new Fire(gridSize, numCells, probCatch, gridType, cellType);
 	}
 	
+	private Simulation getFireCustom(Element attributes) {
+		
+	}
 	/**
 	 * 
 	 * @param doc
@@ -182,7 +213,7 @@ public class XMLReader {
 	 * Attributes included in the XML file include population, percent1, satisfaction, gridSize, and numCells
 	 * 
 	 */
-	private Simulation getSegregation(NodeList listParam, Element attributes){
+	private Simulation getSegregation(Element attributes){
         Integer population = Integer.parseInt(getNodeValue(attributes, "popgridSize"));
         Double percent1 = Double.parseDouble(getNodeValue(attributes, "percentone"));
         Double satisfaction = Double.parseDouble(getNodeValue(attributes, "satisfaction"));
@@ -199,7 +230,7 @@ public class XMLReader {
 	 * Attributes included in the XML file include numAlive, gridSize, and numCells
 	 * 
 	 */
-	private Simulation getLife(NodeList listParam, Element attributes){
+	private Simulation getLife(Element attributes){
 		Integer numAlive = Integer.parseInt(getNodeValue(attributes, "numalive"));		
 		
 		return new Life(gridSize,numCells,numAlive, gridType, cellType);

@@ -127,6 +127,9 @@ public class Main extends Application {
 		Button switchSim = new Button(myResources.getString("Switch"));
 		switchSim.setOnMouseClicked(e -> {
 			myStage.setScene(myScreen.SplashScreen(this, SIZE));
+			animation.stop();
+			animation.setRate(1);
+			myStage.setHeight(SIZE+BUTTONHEIGHT-BUTTONPADDING);
 
 		});
 
