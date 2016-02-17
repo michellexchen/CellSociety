@@ -29,6 +29,8 @@ import javafx.stage.Stage;
  * 
  */
 
+
+
 public class XMLReader {
 	private String file;
 	private Document doc;	
