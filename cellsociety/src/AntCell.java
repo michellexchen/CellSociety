@@ -4,6 +4,8 @@ import java.util.List;
 import javafx.scene.paint.Color;
 
 public class AntCell extends AnimalCell {
+	private static final int RED_MAX = 255;
+	private static final int RED_ADJUST = 10;
 	private double homePher;
 	private double foodPher;
 	private double evapRate;
@@ -19,10 +21,10 @@ public class AntCell extends AnimalCell {
 		diffRate = diffusion;
 		maxPher = pherMax;
 		minPher = pherMin;
-		if(state=="NEST"){
+		if(state==Ants.NEST){
 			homePher = maxPher;
 		}
-		else if(state=="FOOD"){
+		else if(state==Ants.FOOD){
 			foodPher = maxPher;
 		}
 		this.K = K;
@@ -30,37 +32,28 @@ public class AntCell extends AnimalCell {
 	}
 	
 	public void setPher(double amtPher,String pherKind){
-		switch(pherKind){
-		case "NEST":
-			if(amtPher>maxPher){
-				homePher = maxPher;
-			}
-			else if (amtPher<minPher){
-				homePher = minPher;
-			}
-			else{
-				homePher = amtPher;
-			}
-			break;
-		case "FOOD":
-			if(amtPher>maxPher){
-				foodPher = maxPher;
-			}
-			else if (amtPher<minPher){
-				foodPher = minPher;
-			}
-			else{
-				foodPher = amtPher;
-			}
-			break;
+		if(amtPher>maxPher){
+			amtPher = maxPher;
 		}
+		else if (amtPher<minPher){
+			amtPher = minPher;
+		}
+		switch(pherKind){
+			case Ants.NEST:
+				homePher = amtPher;
+				break;
+			case Ants.FOOD:
+				foodPher = amtPher;
+				break;
+		}
+		
 	}
 	
 	public double getPher(String pherKind){
 		switch(pherKind){
-		case "NEST":
+		case Ants.NEST:
 			return homePher;
-		case "FOOD":
+		case Ants.FOOD:
 			return foodPher;
 		default:
 			return -1;
@@ -88,31 +81,31 @@ public class AntCell extends AnimalCell {
 	}
 	
 	public void evaporate(){
-		addPher(-homePher*evapRate,"NEST");
-		addPher(-foodPher*evapRate,"FOOD");
+		addPher(-homePher*evapRate,Ants.NEST);
+		addPher(-foodPher*evapRate,Ants.FOOD);
 	}
 	
 	public void addPher(double amt,String pherKind){
 		switch(pherKind){
-		case "NEST":
-			setPher(homePher+amt,"NEST");
+		case Ants.NEST:
+			setPher(homePher+amt,Ants.NEST);
 			break;
-		case "FOOD":
-			setPher(foodPher+amt,"FOOD");
+		case Ants.FOOD:
+			setPher(foodPher+amt,Ants.FOOD);
 		}
 	}
 	
 	public void diffuse(){
-		List<GridCell> neighbors = getAllNeighbors();//get neighbors
+		List<GridCell> neighbors = getAllNeighbors();
 		for(GridCell neighbor: neighbors){
-			if(neighbor.getState()=="FOOD" || neighbor.getState()=="OBSTACLE"){
+			if(neighbor.getState()==Ants.FOOD || neighbor.getState()=="OBSTACLE"){
 				continue;
 			}
-			((AntCell)neighbor).addPher(homePher*diffRate,"NEST");
-			((AntCell)neighbor).addPher(foodPher*diffRate,"FOOD");
+			((AntCell)neighbor).addPher(homePher*diffRate,Ants.NEST);
+			((AntCell)neighbor).addPher(foodPher*diffRate,Ants.FOOD);
 		}
-		addPher(-homePher*diffRate,"NEST");
-		addPher(-foodPher*diffRate,"FOOD");
+		addPher(-homePher*diffRate,Ants.NEST);
+		addPher(-foodPher*diffRate,Ants.FOOD);
 		
 	}
 	
@@ -127,9 +120,9 @@ public class AntCell extends AnimalCell {
 	
 	@Override
 	public Color getMyColor(){
-		if(getState()=="GROUND" && getCapacity()>0)
+		if(getState()==Ants.GROUND && getCapacity()>0)
 		{
-			return Color.rgb((int)(255*(getCapacity())/10), 0, 0);
+			return Color.rgb((int)(RED_MAX*(getCapacity())/RED_ADJUST), 0, 0);
 		}
 		return super.getMyColor();
 	}
