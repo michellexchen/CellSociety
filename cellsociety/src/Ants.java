@@ -14,9 +14,6 @@ public class Ants extends Simulation {
 	private static final String ANT_LABEL = "Ants";
 	private static final int ANTCAP = 10; //had to hardcode ant cell capacity because of bug
 	
-	ArrayList<int[]> obstacleCoords;
-	ArrayList<int[]> nestCoords;
-	ArrayList<int[]> foodCoords;
 	ArrayList<GridCell> nestCells;
 	ArrayList<GridCell> cellList = new ArrayList<GridCell>();
 	ArrayList<Ant> ants = new ArrayList<Ant>();
@@ -37,7 +34,7 @@ public class Ants extends Simulation {
 	public Ants(List<String> columns, int size, boolean tor, boolean tri, int maxAnts, int antLife, int antBreed, int numNest, double minPher, 
 		double maxPher, double evaporation, double diffusion, double k, double n){
 		
-		super(columns, TITLE, size, tor, tri);
+		super(TITLE, size, columns.size(), tor, tri);
 		
 		startAnts = numNest;
 		breedPerStep = antBreed;
@@ -50,15 +47,20 @@ public class Ants extends Simulation {
 		KVal = k;
 		NVal = n;
 		
+		init();
+		for(int i = 0; i < getCells().length; i++){
+			for(int j = 0; j < getCells().length; j++){
+				char currentCell = columns.get(i).charAt(j);
+				initExplicit(currentCell, i, j);
+			}
+		}
+		displayGrid();
 		initChart();
 				
 		for(GridCell cell: super.getCellList()){
 			cell.initForwardNeighbors();
 			cell.initBackwardNeighbors();
-		}
-		
-		super.displayGrid();
-		
+		}		
 	}
 	
 	@Override
@@ -71,21 +73,21 @@ public class Ants extends Simulation {
 		}
 
 		if(current == '0'){
-			AntCell temp = new AntCell(NEST, NESTCOLOR, col, row, ANTCAP, pherCap, pherMin, evapRate, diffRate, KVal, NVal);
+			AntCell temp = new AntCell(NEST, NESTCOLOR, col, row, antCap, pherCap, pherMin, evapRate, diffRate, KVal, NVal);
 			nestCells.add(temp);
 			getCells()[col][row] = temp;
 			populateAnts(nestCells, startAnts);
 		}
 		else if(current == '1'){
-			AntCell temp = new AntCell(FOOD, FOODCOLOR, col, row, ANTCAP, pherCap, pherMin, evapRate, diffRate, KVal, NVal);
+			AntCell temp = new AntCell(FOOD, FOODCOLOR, col, row, antCap, pherCap, pherMin, evapRate, diffRate, KVal, NVal);
 			getCells()[col][row] = temp;
 		}
 		else if(current == '2'){
-			AntCell temp = new AntCell(OBSTACLE, OBSTACLECOLOR, col, row, ANTCAP, pherCap, pherMin, evapRate, diffRate, KVal, NVal);
+			AntCell temp = new AntCell(OBSTACLE, OBSTACLECOLOR, col, row, antCap, pherCap, pherMin, evapRate, diffRate, KVal, NVal);
 			getCells()[col][row] = temp;
 		}
 		else if(current == '3'){
-			AntCell ground = new AntCell(GROUND, GROUNDCOLOR, col, row,ANTCAP, pherCap, pherMin, evapRate, diffRate, KVal, NVal);
+			AntCell ground = new AntCell(GROUND, GROUNDCOLOR, col, row,antCap, pherCap, pherMin, evapRate, diffRate, KVal, NVal);
 			getCells()[col][row] = ground;
 
 		}

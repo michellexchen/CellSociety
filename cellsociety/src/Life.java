@@ -1,6 +1,8 @@
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
+
 import javafx.scene.paint.Color;
 /**
  * This class represents the Game of Life simulation
@@ -12,7 +14,9 @@ import javafx.scene.paint.Color;
  */
 
 public class Life extends Simulation {
-	private static final String TITLE = "Game of Life";
+	
+	private static ResourceBundle myResources = ResourceBundle.getBundle("Resources/English");
+	private static final String TITLE = myResources.getString("Life");
 	private final String DEAD = "DEAD";
 	private final String ALIVE = "ALIVE";
 	private final Color DEADCOLOR = Color.GRAY;
@@ -34,13 +38,11 @@ public class Life extends Simulation {
 		numAlive = alive;
 		initialize();
 		initChart();
-		
 	}
 	
 	public Life(List<String> columns, int size, boolean tor, boolean tri){
 		super(columns, TITLE, size, tor, tri);
 		initChart();
-
 	}
 	
 	/**

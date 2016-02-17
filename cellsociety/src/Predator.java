@@ -11,13 +11,14 @@ import java.util.*;
  */
 
 public class Predator extends Simulation {
+	
 	private static final String TITLE = "WA-TOR";
 	private static final String SHARK = "SHARK";
 	private static final String FISH = "FISH";
 	private static final String EMPTY = "EMPTY";
-	private final Color FISHCOLOR = Color.GREEN;
-	private final Color SHARKCOLOR = Color.YELLOW;
-	private final Color BACKGROUND = Color.BLUE;
+	private static final Color FISHCOLOR = Color.GREEN;
+	private static final Color SHARKCOLOR = Color.YELLOW;
+	private static final Color BACKGROUND = Color.BLUE;
 	private int gridSize;
 	private int[][] breedGrid;
 	private int[][] dieGrid;
@@ -86,14 +87,14 @@ public class Predator extends Simulation {
 	@Override
 	public void initExplicit(char current, int col, int row) {
 		if(current == '0'){
-			super.getCells()[col][row] = new GridCell(EMPTY, Color.BLUE, col, row);
+			super.getCells()[col][row] = new GridCell(EMPTY, BACKGROUND, col, row);
 		}
 		else if(current == '1'){
-			super.getCells()[col][row] = new GridCell(FISH, Color.GREEN, col, row);
+			super.getCells()[col][row] = new GridCell(FISH, FISHCOLOR, col, row);
 			numFish++;
 		}
 		else if(current == '2'){
-			super.getCells()[col][row] = new GridCell(SHARK, Color.YELLOW, col, row);
+			super.getCells()[col][row] = new GridCell(SHARK, SHARKCOLOR, col, row);
 			numSharks++;
 		}
 		

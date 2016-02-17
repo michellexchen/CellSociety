@@ -54,19 +54,6 @@ public abstract class Simulation {
 		}
 
 		displayGrid();
-
-	}
-
-
-	/** 
-	 * This method is generally responsible for setting the color that is to be displayed to reflect the current state of a cell
-	 */
-	public void updateColors(){
-		for(GridCell[] a: myCells){
-			for(GridCell b: a){
-				b.setMyColor(getStateMap().get(b.getState()));
-			}
-		}
 	}
 	
 	/**
@@ -84,6 +71,18 @@ public abstract class Simulation {
 		myTitle = title;
 		initAdj();
 	}
+
+	/** 
+	 * This method is generally responsible for setting the color that is to be displayed to reflect the current state of a cell
+	 */
+	public void updateColors(){
+		for(GridCell[] a: myCells){
+			for(GridCell b: a){
+				b.setMyColor(getStateMap().get(b.getState()));
+			}
+		}
+	}
+	
 	
 	/**
 	 * This method is responsible for initializing the 2-D grid of cells and creating the scene for this grid

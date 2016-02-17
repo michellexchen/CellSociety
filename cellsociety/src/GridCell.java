@@ -131,6 +131,7 @@ public class GridCell {
 	
 	public void updateColor() {
 		this.myColor = this.nextColor;
+		this.nextColor = null;
 	}
 	
 

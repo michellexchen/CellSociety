@@ -8,7 +8,7 @@
 	</info> 
 
 	<parameters>
-		<numslime> 10 </numslime>
+		<numslime> 1500 </numslime>
 	</parameters>
 
 </simulation>

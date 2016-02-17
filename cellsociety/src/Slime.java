@@ -1,20 +1,30 @@
-
+/**SAUMYA JAIN
+ * This class is part of my masterpiece. 
+ * Compared with my previous project all of the functions in this class are concise and easy to follow, and I eliminated previous bad practices like using magic numbers and hard coding
+ * This class is also an effective example of using Inheritance. I make use of superclass functions to construct and initialize this class and make the updates fit into the general Simulation abstraction
+ * 
+ * 
+ */
+ 
+ 
 import javafx.scene.paint.Color;
 import java.util.*;
 
 public class Slime extends Simulation{
-	private static final String TITLE = "Slime Molds";
+	private static ResourceBundle myResources = ResourceBundle.getBundle("Resources/English");
+	private static final String TITLE = myResources.getString("Slime");
 	public static final String EMPTY = "EMPTY";
 	public static final String AGENT = "AGENT";
 	public static final Color EMPTYCOLOR = Color.GREEN;
 	public static final Color AGENTCOLOR = Color.RED;
 	private final double DIFF = 1;
 	private final double EVAP = .9;
-	private final double CAMP = 2;
-	private final double threshold = 2;
+	private final double CAMP = 5;
+	private final double THRESHOLD = 2;
+	private final char AGENTCELL = '1';
 	private int numAgents;
-	private List<SlimeAgent> myAgents;
 	private int totalCamp;
+	private List<SlimeAgent> myAgents;
 	
 	public Slime(int size, int numCells, boolean toroidal, boolean triangular, int numSlime) {
 		super(TITLE,size,numCells, toroidal, triangular);
@@ -28,8 +38,8 @@ public class Slime extends Simulation{
 		super(columns, TITLE, size, tor, tri);
 		initChart();
 	}
-
-	public void initialize(){
+	
+	private void initialize(){
 		super.init();
 		List<int[]> agentLocs = super.getRandomCoordinates(numAgents);
 		initAgents(agentLocs);
@@ -43,16 +53,15 @@ public class Slime extends Simulation{
 			myAgents = new ArrayList<SlimeAgent>();
 		}
 		
-		if(current == '0'){
-			getCells()[col][row] = new SlimeCell(EMPTY, EMPTYCOLOR, col, row, DIFF, EVAP);
-		}
-		
-		else if(current == '1'){
+		if(current == AGENTCELL){
 			SlimeCell newCell = new SlimeCell(AGENT, AGENTCOLOR, col, row, DIFF, EVAP);
 			int direction = (int) (Math.random()*8);
-			SlimeAgent temp = new SlimeAgent(newCell, direction, CAMP, threshold);
+			SlimeAgent temp = new SlimeAgent(newCell, direction, CAMP, THRESHOLD);
 			myAgents.add(temp);
 			getCells()[col][row] = newCell;
+		}
+		else{
+			getCells()[col][row] = new SlimeCell(EMPTY, EMPTYCOLOR, col, row, DIFF, EVAP);
 		}
 	}
 
@@ -60,13 +69,13 @@ public class Slime extends Simulation{
 		for(int[] location: locs){
 			int direction = (int) (Math.random()*8);
 			SlimeCell current = new SlimeCell(AGENT, AGENTCOLOR, location[0], location[1], DIFF, EVAP );
-			SlimeAgent temp = new SlimeAgent(current, direction, CAMP, threshold); //Agent contains cell
+			SlimeAgent temp = new SlimeAgent(current, direction, CAMP, THRESHOLD); 
 			myAgents.add(temp);
 			super.getCells()[location[0]][location[1]] = current;
 		}
 	}
 	
-	public void initEmpty(){
+	private void initEmpty(){
 		for(int i = 0; i < super.getGridSize(); i++){
 			for(int j = 0; j < super.getGridSize(); j ++){
 				if(super.getCells()[i][j] == null){
@@ -79,38 +88,26 @@ public class Slime extends Simulation{
 	
 	@Override
 	public void update() {
+
 		totalCamp = 0;
-		Collections.shuffle(myAgents);
 		for(SlimeAgent temp: myAgents){
 			temp.update();
 		}
-		for(GridCell[] c: super.getCells()){
-			for(GridCell d: c){
-				SlimeCell e =  (SlimeCell) d;
-				e.update();
-			}
-		}
 		
-		for(GridCell[] c: super.getCells()){
-			for(GridCell d:c){
-				
-				SlimeCell e = (SlimeCell) d;
-				if(e.getNextState() == EMPTY && e.getState() == EMPTY){
-					if(e.getPrevCamp() > e.getCamp()){
-						e.setNextColor(e.getMyColor().darker());
-					}
-					else if(e.getPrevCamp() < e.getCamp()){
-						e.setNextColor(e.getMyColor().brighter());
-					}
-					else{
-						e.setNextColor(e.getMyColor());
-					}
-				}
-				totalCamp += e.getCamp();
-				e.setPrevCamp(e.getCamp());
-			}
+		for(GridCell c: super.getCellList()){
+			SlimeCell e =  (SlimeCell) c;
+			e.update();
 		}
-		updateStates();
+		updateCamp();
+		super.updateStates();
+
+	}
+	
+	private void updateCamp(){
+		for(GridCell c: super.getCellList()){
+			SlimeCell e = (SlimeCell) c;
+			totalCamp += e.updateCamp();
+		}	
 	}
 
 	@Override

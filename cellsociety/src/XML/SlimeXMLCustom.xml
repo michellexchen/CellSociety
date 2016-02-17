@@ -16,11 +16,18 @@
 	</parameters>
 
 	<matrix>
-		<col states = "11111"></col>
-		<col states = "00000"></col>
-		<col states = "01010"></col>
-		<col states = "00000"></col>
-		<col states = "11111"></col>
+		<col states = "1110100011"></col>
+		<col states = "0000010101"></col>
+		<col states = "0101001001"></col>
+		<col states = "0000010010"></col>
+		<col states = "1000100000"></col>
+		<col states = "0101010101"></col>
+		<col states = "0001100011"></col>
+		<col states = "0000000000"></col>
+		<col states = "0000000000"></col>
+		<col states = "1010101010"></col>
+		
+		
 	</matrix>
 	
 </simulation>

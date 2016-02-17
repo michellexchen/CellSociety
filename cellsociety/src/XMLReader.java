@@ -153,7 +153,7 @@ public class XMLReader {
 
 	
 	private void parseRandom(Map myParams){
-		 gridSize = Integer.parseInt((String) myParams.get("gridSize"));
+		gridSize = Integer.parseInt((String) myParams.get("gridSize"));
 	     numCells = Integer.parseInt((String) myParams.get("numCells"));
 	     if (myParams.get("gridType") == "Finite") {
 	    	 gridType = false;
