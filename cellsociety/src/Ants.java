@@ -6,7 +6,7 @@ public class Ants extends Simulation {
 	public static final String NEST = "NEST";
 	public static final String FOOD = "FOOD";
 	public static final String GROUND = "GROUND";
-	private static final String OBSTACLE = "OBSTACLE";
+	public static final String OBSTACLE = "OBSTACLE";
 	private static final Color OBSTACLECOLOR = Color.DARKGRAY;
 	private static final Color NESTCOLOR = Color.BEIGE;
 	private static final Color FOODCOLOR = Color.BLUE;
@@ -52,13 +52,17 @@ public class Ants extends Simulation {
 		
 		initChart();
 				
+		initOrientedNeighbors();
+		
+		super.displayGrid();
+		
+	}
+
+	private void initOrientedNeighbors() {
 		for(GridCell cell: super.getCellList()){
 			cell.initForwardNeighbors();
 			cell.initBackwardNeighbors();
 		}
-		
-		super.displayGrid();
-		
 	}
 	
 	@Override
@@ -249,7 +253,7 @@ public class Ants extends Simulation {
 		GridCell cell = super.getCells()[ant.getX()][ant.getY()];
 		AntCell antCell = (AntCell) cell;
 		if(antCell.getState()==pherKind){
-			antCell.setPher(pherCap, pherKind);
+			antCell.topPheromones(pherKind);
 		}
 		else{
 			AntCell maxCell = getMaxNeighbor(cell.getAllNeighbors(),pherKind);

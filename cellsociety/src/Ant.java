@@ -9,30 +9,6 @@ public class Ant extends Animal {
 		super(NAME, BREED, antLife, x, y);
 	}
 	
-	public int getX(){
-		return super.getX();
-	}
-	
-	public int getY(){
-		return super.getY();
-	}
-	
-	public void setOrientation(int direction){
-		super.setOrientation(direction);
-	}
-	
-	public void updateDieTime(){
-		super.updateDieTime();
-	}
-	
-	public String getKind(){
-		return super.getKind();
-	}
-	
-	public boolean timeToDie(){
-		return super.timeToDie();
-	}
-	
 	public boolean hasFoodItem(){
 		return hasFood;
 	}

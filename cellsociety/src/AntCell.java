@@ -1,4 +1,26 @@
-import java.util.ArrayList;
+// This entire file is part of my masterpiece.
+// Colette Torres
+/*
+ * This class is responsible for creating a cell that contains one or more ants. 
+ * It extends the AnimalCell class, taking advantage of Inheritance hierarchy by overriding
+ * method implementations where needed, and otherwise simply having functions specific to cells
+ * containing ants in particular, not methods applicable to any other animal cell.  Those are all
+ * contained in its superclass instead.
+ * I also think this class shows good design because it shows off data abstraction by ensuring that all of 
+ * the cell's fields are private and there are only getter and setter methods where absolutely needed.
+ * In fact, I purposefully used encapsulation and eliminated a public setter for the pheromones, making
+ * it private and instead, I just have an addPheromones and topPher method
+ * so that one can't totally reset the pheromones on their own.  I also like that this class is very modular, 
+ * as I purposefully tried to avoid having duplicate code by creating only one method for 
+ * dealing with both kinds of pheromones: home and food by simply making use of a parameter to indicate 
+ * pheromone type and performing the same function on the right variable.
+ * Creating this AntCell was a design decision I made in dealing with the Foraging Ants simulation and 
+ * I think it was a good design decision for the future to keep the program flexible by not just making
+ * an AnimalCell extension of GridCell that would have lots of functions that could be used for Foraging
+ * Ants, but instead extending it one step further to have a class designed for a very specific purpose, and 
+ * keeping AnimalCell general enough for other applications.
+ */
+
 import java.util.List;
 
 import javafx.scene.paint.Color;
@@ -31,7 +53,7 @@ public class AntCell extends AnimalCell {
 		this.N = N;
 	}
 	
-	public void setPher(double amtPher,String pherKind){
+	private void setPher(double amtPher,String pherKind){
 		if(amtPher>maxPher){
 			amtPher = maxPher;
 		}
@@ -46,7 +68,10 @@ public class AntCell extends AnimalCell {
 				foodPher = amtPher;
 				break;
 		}
-		
+	}
+	
+	public void topPheromones(String pherKind){
+		setPher(maxPher,pherKind);
 	}
 	
 	public double getPher(String pherKind){
@@ -58,26 +83,6 @@ public class AntCell extends AnimalCell {
 		default:
 			return -1;
 		}
-	}
-	
-	public void addAnimal(Animal animal){
-		super.addAnimal(animal);
-	}
-	
-	public void removeAnimal(Animal animal){
-		super.removeAnimal(animal);
-	}
-	
-	public Animal getAnimal(){
-		return super.getAnimal();
-	}
-	
-	public ArrayList<Animal> getAnimals(){
-		return super.getAnimals();
-	}
-	
-	public boolean atCapacity(){
-		return super.atCapacity();
 	}
 	
 	public void evaporate(){
@@ -98,7 +103,7 @@ public class AntCell extends AnimalCell {
 	public void diffuse(){
 		List<GridCell> neighbors = getAllNeighbors();
 		for(GridCell neighbor: neighbors){
-			if(neighbor.getState()==Ants.FOOD || neighbor.getState()=="OBSTACLE"){
+			if(neighbor.getState()==Ants.FOOD || neighbor.getState()==Ants.OBSTACLE){
 				continue;
 			}
 			((AntCell)neighbor).addPher(homePher*diffRate,Ants.NEST);
@@ -106,7 +111,6 @@ public class AntCell extends AnimalCell {
 		}
 		addPher(-homePher*diffRate,Ants.NEST);
 		addPher(-foodPher*diffRate,Ants.FOOD);
-		
 	}
 	
 	public double getProbability(){
@@ -115,16 +119,10 @@ public class AntCell extends AnimalCell {
 	
 	@Override
 	public void updateColor(){
-		setMyColor(this.getMyColor());
-	}
-	
-	@Override
-	public Color getMyColor(){
 		if(getState()==Ants.GROUND && getCapacity()>0)
 		{
-			return Color.rgb((int)(RED_MAX*(getCapacity())/RED_ADJUST), 0, 0);
+			super.setMyColor(Color.rgb((int)(RED_MAX*(getCapacity())/RED_ADJUST), 0, 0));
 		}
-		return super.getMyColor();
 	}
 
 }

@@ -32,8 +32,6 @@ public class SplashScreen {
 	private Text welcome;
 	private SimulationOptional simOption;
 	private Scene splash;
-	private boolean gotSim;
-	private Simulation currentSim;
 	private VBox vb;
 	private Text fill;
 	private Label gridSize;
